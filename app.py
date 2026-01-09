@@ -24,28 +24,28 @@ from email.mime.multipart import MIMEMultipart
 import secrets
 
 
+# 1. Create the Flask app
 app = Flask(__name__)
-app.secret_key = os.environ.get("SECRET_KEY") or secrets.token_hex(16)
 
+# 2. Set ALL configuration FIRST
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or 'dev-key-here'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///shopmax.db'  # CRITICAL: Must be here
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-app = Flask(__name__)
-# ... your other app.config settings ...
+# 3. Initialize the database object WITH the configured app
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-# 👇 ADD THESE LINES HERE 👇
+# 4. NOW you can safely initialize tables
 with app.app_context():
-    initialize_database()
-# 👆 This ensures your tables are created when the app starts on Render 👆
+    db.create_all()
+    # You can also call your existing initialize_database() function here if needed
+    # initialize_database()
 
-# ... then your route definitions (like @app.route('/')) start here ...
-
-
-
-# Add these fields to your User/Buyer model:
-# - google_id (String, unique)
-# - profile_picture (String)
-# - auth_method (String) - 'google' or 'email'
+# 5. Define your routes (like @app.route('/'))
+@app.route('/')
+def home():
+    # ... your code
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -4839,5 +4839,6 @@ if __name__ == '__main__':
 
 
     
+
 
 
