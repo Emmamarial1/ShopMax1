@@ -5,7 +5,6 @@ from werkzeug.utils import secure_filename
 from flask_migrate import Migrate
 from sqlalchemy import func, or_
 from datetime import datetime, timedelta
-from zerobounce import email_verifier
 import os
 from flask import jsonify, send_file
 from io import BytesIO
@@ -4822,5 +4821,6 @@ if __name__ == '__main__':
     
     # Run the app
     app.run(debug=True)
+
 
     
