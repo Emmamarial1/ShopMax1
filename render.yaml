@@ -4,6 +4,7 @@ services:
     env: python
     buildCommand: |
       apt-get update
-      apt-get install -y build-essential libffi-dev python3-dev
+      apt-get install -y build-essential libffi-dev python3-dev pandoc
+      pip install --upgrade pip
       pip install -r requirements.txt
     startCommand: gunicorn app:app
