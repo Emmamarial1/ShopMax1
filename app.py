@@ -32,9 +32,6 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') or 'dev-key-here'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///shopmax.db'  # CRITICAL: Must be here
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# 3. Initialize the database object WITH the configured app
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
 
 # 4. NOW you can safely initialize tables
 with app.app_context():
@@ -4838,6 +4835,7 @@ if __name__ == '__main__':
 
 
     
+
 
 
 
