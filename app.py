@@ -28,6 +28,17 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY") or secrets.token_hex(16)
 
 
+app = Flask(__name__)
+# ... your other app.config settings ...
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+# 👇 ADD THESE LINES HERE 👇
+with app.app_context():
+    initialize_database()
+# 👆 This ensures your tables are created when the app starts on Render 👆
+
+# ... then your route definitions (like @app.route('/')) start here ...
 
 
 
@@ -4824,3 +4835,4 @@ if __name__ == '__main__':
 
 
     
+
