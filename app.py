@@ -42,10 +42,9 @@ with app.app_context():
     # You can also call your existing initialize_database() function here if needed
     # initialize_database()
 
-# 5. Define your routes (like @app.route('/'))
 @app.route('/')
 def home():
-    # ... your code
+    return "Welcome to ShopMax - Home page is loading..."
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -4839,6 +4838,7 @@ if __name__ == '__main__':
 
 
     
+
 
 
 
