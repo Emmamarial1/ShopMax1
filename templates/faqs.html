@@ -1,0 +1,968 @@
+{% extends "base.html" %}
+
+{% block title %}FAQs - ShopMax{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto text-center">
+            <h1 class="display-4 fw-bold text-primary mb-4">Frequently Asked Questions</h1>
+            <p class="lead text-muted">Find quick answers to common questions about shopping and selling on ShopMax</p>
+            <div class="alert alert-info">
+                <i class="fas fa-life-ring me-2"></i>
+                Can't find what you're looking for? <a href="{{ url_for('contact_us') }}" class="alert-link">Contact our support team</a> for personalized help.
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <!-- Quick Navigation -->
+            <div class="card shadow-sm mb-5">
+                <div class="card-body text-center">
+                    <h5 class="card-title mb-3">Quick Categories</h5>
+                    <div class="d-flex flex-wrap gap-2 justify-content-center">
+                        <a href="#account" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-user me-1"></i>Account
+                        </a>
+                        <a href="#buying" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-shopping-cart me-1"></i>Buying
+                        </a>
+                        <a href="#selling" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-store me-1"></i>Selling
+                        </a>
+                        <a href="#payments" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-credit-card me-1"></i>Payments
+                        </a>
+                        <a href="#delivery" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-truck me-1"></i>Delivery
+                        </a>
+                        <a href="#safety" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-shield-alt me-1"></i>Safety
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="card mb-5 border-primary">
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <i class="fas fa-search fa-2x text-primary mb-2"></i>
+                        <h5>Search Questions</h5>
+                    </div>
+                    <div class="search-container">
+                        <input type="text" id="faqSearch" class="form-control form-control-lg" placeholder="Type your question here...">
+                        <i class="fas fa-search search-icon"></i>
+                    </div>
+                    <div class="text-center mt-2">
+                        <small class="text-muted">Try searching for "returns", "password", "delivery time", etc.</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account FAQs -->
+            <section id="account" class="mb-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-primary text-white rounded-circle p-3 me-3">
+                        <i class="fas fa-user fa-2x"></i>
+                    </div>
+                    <div>
+                        <h2 class="h3 text-primary mb-1">Account & Registration</h2>
+                        <p class="text-muted">Managing your ShopMax account</p>
+                    </div>
+                </div>
+
+                <div class="accordion" id="accountAccordion">
+                    <!-- Question 1 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#account1">
+                                How do I create a ShopMax account?
+                            </button>
+                        </h2>
+                        <div id="account1" class="accordion-collapse collapse show" data-bs-parent="#accountAccordion">
+                            <div class="accordion-body">
+                                <p>Creating a ShopMax account is easy and free:</p>
+                                <ol>
+                                    <li>Click "Register" in the top navigation</li>
+                                    <li>Choose between "Buyer Account" or "Seller Account"</li>
+                                    <li>Fill in your details (name, email, password)</li>
+                                    <li>Verify your email address by clicking the link we send you</li>
+                                    <li>Complete your profile with additional information</li>
+                                </ol>
+                                <p class="mb-0"><strong>Note:</strong> UCU students and staff should use their university email for verification benefits.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#account2">
+                                I forgot my password. How can I reset it?
+                            </button>
+                        </h2>
+                        <div id="account2" class="accordion-collapse collapse" data-bs-parent="#accountAccordion">
+                            <div class="accordion-body">
+                                <p>To reset your password:</p>
+                                <ol>
+                                    <li>Go to the Login page</li>
+                                    <li>Click "Forgot Password"</li>
+                                    <li>Enter your registered email address</li>
+                                    <li>Check your email for a password reset link</li>
+                                    <li>Click the link and create a new password</li>
+                                </ol>
+                                <div class="alert alert-warning mt-3">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    If you don't receive the email within 10 minutes, check your spam folder or <a href="{{ url_for('contact_us') }}">contact support</a>.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#account3">
+                                Can I have both a buyer and seller account?
+                            </button>
+                        </h2>
+                        <div id="account3" class="accordion-collapse collapse" data-bs-parent="#accountAccordion">
+                            <div class="accordion-body">
+                                <p>Yes! You can use the same email address to create both buyer and seller accounts. However, they will be separate accounts with different functionalities.</p>
+                                <p><strong>Buyer Account:</strong> For shopping, adding to cart, wishlist, and order management.</p>
+                                <p><strong>Seller Account:</strong> For listing products, managing inventory, and processing orders.</p>
+                                <p class="mb-0">You can switch between accounts using the account dropdown in the navigation bar.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 4 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#account4">
+                                How do I update my personal information?
+                            </button>
+                        </h2>
+                        <div id="account4" class="accordion-collapse collapse" data-bs-parent="#accountAccordion">
+                            <div class="accordion-body">
+                                <p>To update your personal information:</p>
+                                <ol>
+                                    <li>Log into your account</li>
+                                    <li>Click on your name in the top navigation and select "My Profile"</li>
+                                    <li>Click "Edit Profile"</li>
+                                    <li>Update your information (name, email, phone, address)</li>
+                                    <li>Click "Save Changes"</li>
+                                </ol>
+                                <p class="mb-0"><strong>Important:</strong> Keeping your delivery address updated ensures smooth order processing.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 5 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#account5">
+                                Why should I verify my UCU email?
+                            </button>
+                        </h2>
+                        <div id="account5" class="accordion-collapse collapse" data-bs-parent="#accountAccordion">
+                            <div class="accordion-body">
+                                <p>Verifying your UCU email provides several benefits:</p>
+                                <ul>
+                                    <li><strong>Priority Support:</strong> Faster response from our support team</li>
+                                    <li><strong>Campus Delivery:</strong> Access to free on-campus delivery</li>
+                                    <li><strong>Student Discounts:</strong> Exclusive deals and promotions</li>
+                                    <li><strong>Trust Verification:</strong> Builds trust with other UCU community members</li>
+                                    <li><strong>Security:</strong> Enhanced account security and recovery options</li>
+                                </ul>
+                                <p class="mb-0">If you're having trouble verifying your email, please contact our support team.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Buying FAQs -->
+            <section id="buying" class="mb-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-success text-white rounded-circle p-3 me-3">
+                        <i class="fas fa-shopping-cart fa-2x"></i>
+                    </div>
+                    <div>
+                        <h2 class="h3 text-primary mb-1">Buying on ShopMax</h2>
+                        <p class="text-muted">Shopping, orders, and returns</p>
+                    </div>
+                </div>
+
+                <div class="accordion" id="buyingAccordion">
+                    <!-- Question 1 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#buying1">
+                                How do I search for products?
+                            </button>
+                        </h2>
+                        <div id="buying1" class="accordion-collapse collapse show" data-bs-parent="#buyingAccordion">
+                            <div class="accordion-body">
+                                <p>You can search for products in several ways:</p>
+                                <ul>
+                                    <li><strong>Search Bar:</strong> Use the search bar at the top of any page to search by product name, brand, or category</li>
+                                    <li><strong>Categories:</strong> Browse through product categories in the navigation menu</li>
+                                    <li><strong>Filters:</strong> Use filters on the products page to narrow by price, condition, location, and seller rating</li>
+                                    <li><strong>Advanced Search:</strong> Use specific keywords like "used laptop" or "new textbooks" for more precise results</li>
+                                </ul>
+                                <p class="mb-0"><strong>Tip:</strong> Save your favorite searches to get notified when new matching products are listed.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#buying2">
+                                How do I contact a seller?
+                            </button>
+                        </h2>
+                        <div id="buying2" class="accordion-collapse collapse" data-bs-parent="#buyingAccordion">
+                            <div class="accordion-body">
+                                <p>To contact a seller:</p>
+                                <ol>
+                                    <li>Go to the product page you're interested in</li>
+                                    <li>Click the "Ask Seller" or "Message Seller" button</li>
+                                    <li>Type your question about the product</li>
+                                    <li>Send your message</li>
+                                </ol>
+                                <p>You'll receive a notification when the seller replies. All communications are stored in your Messages section.</p>
+                                <div class="alert alert-info mt-3">
+                                    <i class="fas fa-lightbulb me-2"></i>
+                                    <strong>Good questions to ask:</strong> Product condition, availability, meeting location, or any specific details not mentioned in the listing.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#buying3">
+                                What is your return policy?
+                            </button>
+                        </h2>
+                        <div id="buying3" class="accordion-collapse collapse" data-bs-parent="#buyingAccordion">
+                            <div class="accordion-body">
+                                <p>Our return policy ensures buyer protection:</p>
+                                <ul>
+                                    <li><strong>7-Day Return Window:</strong> You have 7 days from delivery to request a return</li>
+                                    <li><strong>Valid Reasons:</strong> Item not as described, wrong item received, damaged during shipping</li>
+                                    <li><strong>Condition:</strong> Items must be unused and in original packaging with all tags attached</li>
+                                    <li><strong>Process:</strong> Contact the seller first to resolve issues. If unresolved, contact ShopMax support</li>
+                                </ul>
+                                <p><strong>Not eligible for return:</strong> Change of mind, items used or damaged by buyer, perishable goods, personalized items.</p>
+                                <p class="mb-0">For detailed return instructions, visit our <a href="{{ url_for('buyer_protection') }}">Buyer Protection</a> page.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 4 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#buying4">
+                                Can I cancel my order?
+                            </button>
+                        </h2>
+                        <div id="buying4" class="accordion-collapse collapse" data-bs-parent="#buyingAccordion">
+                            <div class="accordion-body">
+                                <p>Order cancellation depends on the order status:</p>
+                                <ul>
+                                    <li><strong>Before Seller Confirmation:</strong> You can cancel immediately through "My Orders"</li>
+                                    <li><strong>After Seller Confirmation:</strong> Contact the seller directly to request cancellation</li>
+                                    <li><strong>After Shipping:</strong> Cancellation may not be possible. Wait for delivery and use return policy if needed</li>
+                                </ul>
+                                <p><strong>Cancellation Timeframe:</strong> Typically within 1 hour of ordering for automatic cancellation.</p>
+                                <div class="alert alert-warning mt-3">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    If the seller doesn't respond to your cancellation request within 24 hours, contact our support team for assistance.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 5 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#buying5">
+                                How does the wishlist work?
+                            </button>
+                        </h2>
+                        <div id="buying5" class="accordion-collapse collapse" data-bs-parent="#buyingAccordion">
+                            <div class="accordion-body">
+                                <p>The wishlist helps you save products for later:</p>
+                                <ul>
+                                    <li><strong>Add to Wishlist:</strong> Click the heart icon on any product to save it</li>
+                                    <li><strong>Access Wishlist:</strong> Find it in your account menu under "Wishlist"</li>
+                                    <li><strong>Notifications:</strong> Get notified when wishlisted items go on sale or are almost sold out</li>
+                                    <li><strong>Share:</strong> Share your wishlist with friends and family</li>
+                                    <li><strong>Organize:</strong> Create multiple wishlists for different categories (e.g., "Textbooks", "Electronics")</li>
+                                </ul>
+                                <p class="mb-0"><strong>Pro Tip:</strong> Sellers can see how many people have wishlisted their items, which might encourage them to offer discounts!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Selling FAQs -->
+            <section id="selling" class="mb-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-warning text-white rounded-circle p-3 me-3">
+                        <i class="fas fa-store fa-2x"></i>
+                    </div>
+                    <div>
+                        <h2 class="h3 text-primary mb-1">Selling on ShopMax</h2>
+                        <p class="text-muted">Listing products and managing sales</p>
+                    </div>
+                </div>
+
+                <div class="accordion" id="sellingAccordion">
+                    <!-- Question 1 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#selling1">
+                                How do I list a product for sale?
+                            </button>
+                        </h2>
+                        <div id="selling1" class="accordion-collapse collapse show" data-bs-parent="#sellingAccordion">
+                            <div class="accordion-body">
+                                <p>To list a product:</p>
+                                <ol>
+                                    <li>Log into your seller account</li>
+                                    <li>Click "Add Product" in your seller dashboard or navigation</li>
+                                    <li>Fill in product details (title, description, category, price)</li>
+                                    <li>Upload clear photos of your item (minimum 3 recommended)</li>
+                                    <li>Set your location and delivery options</li>
+                                    <li>Review and publish your listing</li>
+                                </ol>
+                                <p><strong>Tips for successful listings:</strong></p>
+                                <ul>
+                                    <li>Use clear, well-lit photos from multiple angles</li>
+                                    <li>Write detailed, honest descriptions</li>
+                                    <li>Research similar items to price competitively</li>
+                                    <li>Be responsive to buyer questions</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#selling2">
+                                What fees do sellers pay?
+                            </button>
+                        </h2>
+                        <div id="selling2" class="accordion-collapse collapse" data-bs-parent="#sellingAccordion">
+                            <div class="accordion-body">
+                                <p>ShopMax offers transparent pricing for sellers:</p>
+                                <ul>
+                                    <li><strong>Subscription Model:</strong> We charge a monthly subscription fee instead of commission</li>
+                                    <li><strong>Starter Plan:</strong> UGX 50,000/month - List up to 20 products</li>
+                                    <li><strong>Business Plan:</strong> UGX 120,000/quarter - List up to 100 products</li>
+                                    <li><strong>Enterprise Plan:</strong> UGX 400,000/year - Unlimited listings</li>
+                                </ul>
+                                <p><strong>No Commission:</strong> Unlike other platforms, we don't take a percentage of your sales. You keep 100% of what you earn.</p>
+                                <p class="mb-0"><strong>Payment Processing:</strong> Standard payment processing fees apply (2.9% for cards, 1% for mobile money).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#selling3">
+                                How do I handle order shipping?
+                            </button>
+                        </h2>
+                        <div id="selling3" class="accordion-collapse collapse" data-bs-parent="#sellingAccordion">
+                            <div class="accordion-body">
+                                <p>When you receive an order:</p>
+                                <ol>
+                                    <li><strong>Order Notification:</strong> You'll receive an email and notification</li>
+                                    <li><strong>Confirm Order:</strong> Review order details in your seller dashboard</li>
+                                    <li><strong>Prepare Item:</strong> Package the item securely</li>
+                                    <li><strong>Delivery Options:</strong>
+                                        <ul>
+                                            <li><strong>Campus Meet-up:</strong> Arrange to meet the buyer at agreed campus location</li>
+                                            <li><strong>ShopMax Delivery:</strong> Use our delivery service (available for UCU campus and Mukono area)</li>
+                                            <li><strong>Self-arranged:</strong> Coordinate directly with buyer for pickup/delivery</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Update Status:</strong> Mark the order as shipped/delivered in your dashboard</li>
+                                </ol>
+                                <p class="mb-0"><strong>Best Practice:</strong> Communicate clearly with buyers about delivery timelines and meeting points.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 4 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#selling4">
+                                What should I do if a buyer wants to return an item?
+                            </button>
+                        </h2>
+                        <div id="selling4" class="accordion-collapse collapse" data-bs-parent="#sellingAccordion">
+                            <div class="accordion-body">
+                                <p>If a buyer requests a return:</p>
+                                <ol>
+                                    <li><strong>Communicate:</strong> Respond to the buyer within 24 hours</li>
+                                    <li><strong>Assess Reason:</strong> Determine if the return reason is valid (item not as described, damaged, wrong item)</li>
+                                    <li><strong>Accept/Decline:</strong> You can accept the return or provide evidence if you believe the claim is invalid</li>
+                                    <li><strong>Return Process:</strong> If accepted, arrange for item return and refund</li>
+                                    <li><strong>ShopMax Support:</strong> If you can't resolve with the buyer, contact our support team for mediation</li>
+                                </ol>
+                                <p><strong>Valid Return Reasons:</strong></p>
+                                <ul>
+                                    <li>Item significantly different from description</li>
+                                    <li>Item damaged during shipping</li>
+                                    <li>Wrong item sent</li>
+                                </ul>
+                                <p class="mb-0"><strong>Tip:</strong> Clear photos and honest descriptions in your listings can prevent most return requests.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Payments FAQs -->
+            <section id="payments" class="mb-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-info text-white rounded-circle p-3 me-3">
+                        <i class="fas fa-credit-card fa-2x"></i>
+                    </div>
+                    <div>
+                        <h2 class="h3 text-primary mb-1">Payments & Pricing</h2>
+                        <p class="text-muted">Payment methods and security</p>
+                    </div>
+                </div>
+
+                <div class="accordion" id="paymentsAccordion">
+                    <!-- Question 1 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#payments1">
+                                What payment methods do you accept?
+                            </button>
+                        </h2>
+                        <div id="payments1" class="accordion-collapse collapse show" data-bs-parent="#paymentsAccordion">
+                            <div class="accordion-body">
+                                <p>We accept multiple secure payment methods:</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>💳 Mobile Money</h6>
+                                        <ul>
+                                            <li>MTN Mobile Money</li>
+                                            <li>Airtel Money</li>
+                                            <li>Instant processing</li>
+                                            <li>No extra fees</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>🏦 Bank Transfer</h6>
+                                        <ul>
+                                            <li>All major Ugandan banks</li>
+                                            <li>1-2 business days processing</li>
+                                            <li>Secure transfer</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <h6>💳 Credit/Debit Cards</h6>
+                                        <ul>
+                                            <li>Visa</li>
+                                            <li>Mastercard</li>
+                                            <li>American Express</li>
+                                            <li>Instant processing</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <p class="mb-0"><strong>Security:</strong> All payments are encrypted and processed through secure payment gateways. We never store your full payment details.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#payments2">
+                                When do sellers receive payment?
+                            </button>
+                        </h2>
+                        <div id="payments2" class="accordion-collapse collapse" data-bs-parent="#paymentsAccordion">
+                            <div class="accordion-body">
+                                <p>Seller payments are released according to this schedule:</p>
+                                <ul>
+                                    <li><strong>Standard Timeline:</strong> 2 business days after successful delivery</li>
+                                    <li><strong>Delivery Confirmation:</strong> Payment is released after buyer confirms receipt</li>
+                                    <li><strong>Automatic Release:</strong> If buyer doesn't confirm within 3 days, payment is automatically released</li>
+                                    <li><strong>Payment Method:</strong> Funds are transferred to your registered payment account</li>
+                                </ul>
+                                <p><strong>Payment Hold Cases:</strong></p>
+                                <ul>
+                                    <li>Disputed orders</li>
+                                    <li>Suspicious activity</li>
+                                    <li>New seller accounts (first 3 sales)</li>
+                                </ul>
+                                <p class="mb-0">You can track your payment status in the "Finance" section of your seller dashboard.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#payments3">
+                                Is there buyer protection for payments?
+                            </button>
+                        </h2>
+                        <div id="payments3" class="accordion-collapse collapse" data-bs-parent="#paymentsAccordion">
+                            <div class="accordion-body">
+                                <p>Yes! ShopMax offers comprehensive buyer protection:</p>
+                                <ul>
+                                    <li><strong>Payment Security:</strong> Your payment is held securely until you confirm receipt</li>
+                                    <li><strong>Item Not Received:</strong> Full refund if item isn't delivered</li>
+                                    <li><strong>Item Not as Described:</strong> Refund if item significantly differs from listing</li>
+                                    <li><strong>Fraud Protection:</strong> 24/7 monitoring for suspicious activity</li>
+                                    <li><strong>Dispute Resolution:</strong> Mediation service for buyer-seller disagreements</li>
+                                </ul>
+                                <p><strong>How to file a claim:</strong></p>
+                                <ol>
+                                    <li>Contact the seller first to resolve the issue</li>
+                                    <li>If no resolution, go to "My Orders" and click "Report Problem"</li>
+                                    <li>Provide details and evidence (photos, messages)</li>
+                                    <li>Our support team will investigate and mediate</li>
+                                </ol>
+                                <p class="mb-0">Most claims are resolved within 3-5 business days.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Delivery FAQs -->
+            <section id="delivery" class="mb-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-secondary text-white rounded-circle p-3 me-3">
+                        <i class="fas fa-truck fa-2x"></i>
+                    </div>
+                    <div>
+                        <h2 class="h3 text-primary mb-1">Delivery & Shipping</h2>
+                        <p class="text-muted">Getting your orders delivered</p>
+                    </div>
+                </div>
+
+                <div class="accordion" id="deliveryAccordion">
+                    <!-- Question 1 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#delivery1">
+                                What are your delivery areas and times?
+                            </button>
+                        </h2>
+                        <div id="delivery1" class="accordion-collapse collapse show" data-bs-parent="#deliveryAccordion">
+                            <div class="accordion-body">
+                                <p>We deliver to these areas with the following timelines:</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>🏢 UCU Campus</h6>
+                                        <ul>
+                                            <li><strong>Delivery Time:</strong> 1-2 business days</li>
+                                            <li><strong>Cost:</strong> FREE for all orders</li>
+                                            <li><strong>Hours:</strong> 8:00 AM - 6:00 PM</li>
+                                            <li><strong>Meet-up Points:</strong> Library, Cafeteria, Main Gate</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>📍 Mukono Area</h6>
+                                        <ul>
+                                            <li><strong>Delivery Time:</strong> 2-3 business days</li>
+                                            <li><strong>Cost:</strong> UGX 5,000</li>
+                                            <li><strong>Free Delivery:</strong> Orders over UGX 50,000</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <p><strong>Delivery Process:</strong></p>
+                                <ol>
+                                    <li>Seller confirms order and prepares item</li>
+                                    <li>Delivery arranged (campus meet-up or delivery service)</li>
+                                    <li>You receive notification with tracking details</li>
+                                    <li>Item delivered and you confirm receipt</li>
+                                </ol>
+                                <p class="mb-0"><strong>Note:</strong> Some sellers may offer special delivery arrangements. Check individual product pages for specific delivery information.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#delivery2">
+                                How can I track my order?
+                            </button>
+                        </h2>
+                        <div id="delivery2" class="accordion-collapse collapse" data-bs-parent="#deliveryAccordion">
+                            <div class="accordion-body">
+                                <p>You can track your order in several ways:</p>
+                                <ul>
+                                    <li><strong>Order Page:</strong> Go to "My Orders" and click on your order to see status updates</li>
+                                    <li><strong>Email Notifications:</strong> Receive updates at each stage (confirmed, shipped, out for delivery, delivered)</li>
+                                    <li><strong>SMS Alerts:</strong> Get text messages for important updates (opt-in required)</li>
+                                    <li><strong>Seller Communication:</strong> Message the seller directly for updates</li>
+                                </ul>
+                                <p><strong>Order Status Meanings:</strong></p>
+                                <ul>
+                                    <li><span class="badge bg-warning">Pending</span> - Order placed, waiting for seller confirmation</li>
+                                    <li><span class="badge bg-info">Confirmed</span> - Seller has accepted the order</li>
+                                    <li><span class="badge bg-primary">Shipped</span> - Item is on its way to you</li>
+                                    <li><span class="badge bg-success">Delivered</span> - Item has been delivered</li>
+                                </ul>
+                                <p class="mb-0">If your order status hasn't updated for more than 2 days, contact the seller or our support team.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Safety & Security FAQs -->
+            <section id="safety" class="mb-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-danger text-white rounded-circle p-3 me-3">
+                        <i class="fas fa-shield-alt fa-2x"></i>
+                    </div>
+                    <div>
+                        <h2 class="h3 text-primary mb-1">Safety & Security</h2>
+                        <p class="text-muted">Staying safe on ShopMax</p>
+                    </div>
+                </div>
+
+                <div class="accordion" id="safetyAccordion">
+                    <!-- Question 1 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#safety1">
+                                What safety tips should I follow when meeting sellers/buyers?
+                            </button>
+                        </h2>
+                        <div id="safety1" class="accordion-collapse collapse show" data-bs-parent="#safetyAccordion">
+                            <div class="accordion-body">
+                                <p>For safe transactions, follow these guidelines:</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>📍 Meeting Location</h6>
+                                        <ul>
+                                            <li>Choose public, well-lit areas on UCU campus</li>
+                                            <li>Recommended spots: Library, Cafeteria, Main Gate</li>
+                                            <li>Avoid isolated or private locations</li>
+                                            <li>Meet during daylight hours when possible</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>👥 Personal Safety</h6>
+                                        <ul>
+                                            <li>Bring a friend if possible</li>
+                                            <li>Tell someone where you're going and when you'll return</li>
+                                            <li>Keep your phone charged and accessible</li>
+                                            <li>Trust your instincts - if something feels wrong, leave</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <h6>💸 Transaction Safety</h6>
+                                        <ul>
+                                            <li>Use ShopMax's secure payment system</li>
+                                            <li>Inspect items thoroughly before payment</li>
+                                            <li>Avoid cash transactions when possible</li>
+                                            <li>Keep all communications on the ShopMax platform</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>🚨 Red Flags</h6>
+                                        <ul>
+                                            <li>Pressure to complete transaction quickly</li>
+                                            <li>Refusal to meet in public places</li>
+                                            <li>Requests for payment outside ShopMax</li>
+                                            <li>Prices that seem too good to be true</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <p class="mb-0"><strong>Emergency:</strong> If you feel unsafe, contact UCU security at +256 XXX XXX XXX or dial 999 for emergency services.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#safety2">
+                                How do I report suspicious activity or users?
+                            </button>
+                        </h2>
+                        <div id="safety2" class="accordion-collapse collapse" data-bs-parent="#safetyAccordion">
+                            <div class="accordion-body">
+                                <p>If you encounter suspicious activity, report it immediately:</p>
+                                <ol>
+                                    <li><strong>User Profile:</strong> Click "Report User" on the user's profile page</li>
+                                    <li><strong>Product Page:</strong> Click "Report Listing" on suspicious product pages</li>
+                                    <li><strong>Messages:</strong> Report inappropriate messages directly from the chat</li>
+                                    <li><strong>Contact Support:</strong> Email safety@shopmax.com with details and evidence</li>
+                                </ol>
+                                <p><strong>What to report:</strong></p>
+                                <ul>
+                                    <li>Fake products or listings</li>
+                                    <li>Suspicious user behavior</li>
+                                    <li>Requests for payment outside ShopMax</li>
+                                    <li>Harassment or inappropriate messages</li>
+                                    <li>Fraudulent activity</li>
+                                </ul>
+                                <p><strong>What happens after reporting:</strong></p>
+                                <ul>
+                                    <li>Our safety team reviews reports within 24 hours</li>
+                                    <li>We may temporarily suspend accounts during investigation</li>
+                                    <li>You'll receive updates on the investigation status</li>
+                                    <li>Confirmed violations result in permanent bans</li>
+                                </ul>
+                                <p class="mb-0"><strong>Confidentiality:</strong> All reports are confidential. We never share reporter information with reported users.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Still Need Help Section -->
+            <div class="card bg-primary text-white text-center py-5">
+                <div class="card-body">
+                    <i class="fas fa-headset fa-3x mb-3"></i>
+                    <h3 class="mb-3">Still Need Help?</h3>
+                    <p class="lead mb-4">Our support team is here to assist you with any questions or issues.</p>
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="{{ url_for('contact_us') }}" class="btn btn-light btn-lg">
+                            <i class="fas fa-envelope me-2"></i>Contact Support
+                        </a>
+                        <a href="{{ url_for('help_center') }}" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-life-ring me-2"></i>Help Center
+                        </a>
+                    </div>
+                    <div class="mt-4">
+                        <p class="mb-1"><i class="fas fa-phone me-2"></i>+256 700 123 456</p>
+                        <p class="mb-0"><i class="fas fa-envelope me-2"></i>support@shopmax.com</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feedback Section -->
+            <div class="text-center mt-4">
+                <p class="text-muted">Was this FAQ page helpful? <a href="#" id="feedbackYes">Yes</a> | <a href="#" id="feedbackNo">No</a></p>
+                <div id="feedbackForm" class="mt-3" style="display: none;">
+                    <textarea class="form-control" placeholder="How can we improve this page?" rows="3"></textarea>
+                    <button class="btn btn-primary mt-2">Submit Feedback</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+section {
+    scroll-margin-top: 100px;
+}
+
+.card {
+    border-radius: 12px;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+/* Search Bar Styles */
+.search-container {
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray);
+}
+
+#faqSearch {
+    padding-right: 45px;
+}
+
+/* Accordion Styles */
+.accordion-button {
+    font-weight: 600;
+    padding: 1rem 1.25rem;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: var(--primary);
+    color: white;
+    box-shadow: none;
+}
+
+.accordion-button:focus {
+    box-shadow: 0 0 0 0.25rem rgba(255, 107, 0, 0.25);
+    border-color: var(--primary);
+}
+
+.accordion-body {
+    padding: 1.25rem;
+}
+
+.accordion-body ol, .accordion-body ul {
+    padding-left: 1.5rem;
+}
+
+.accordion-body li {
+    margin-bottom: 0.5rem;
+}
+
+/* Badge Styles */
+.badge {
+    font-size: 0.7rem;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Print styles */
+@media print {
+    .btn, .alert, .search-container, .text-center {
+        display: none !important;
+    }
+    
+    .accordion-button {
+        background-color: white !important;
+        color: black !important;
+    }
+    
+    .accordion-button::after {
+        display: none;
+    }
+    
+    .accordion-collapse {
+        display: block !important;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // FAQ Search Functionality
+    const faqSearch = document.getElementById('faqSearch');
+    const accordionItems = document.querySelectorAll('.accordion-item');
+    
+    faqSearch.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        
+        accordionItems.forEach(item => {
+            const question = item.querySelector('.accordion-button').textContent.toLowerCase();
+            const answer = item.querySelector('.accordion-body').textContent.toLowerCase();
+            
+            if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                item.style.display = 'block';
+                
+                // Open matching accordion items
+                if (searchTerm.length > 0) {
+                    const collapse = item.querySelector('.accordion-collapse');
+                    if (!collapse.classList.contains('show')) {
+                        const button = item.querySelector('.accordion-button');
+                        button.click();
+                    }
+                }
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+
+    // Add active class to navigation buttons when section is in view
+    const sections = document.querySelectorAll('section');
+    const navButtons = document.querySelectorAll('.btn-outline-primary');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                navButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.getAttribute('href') === `#${id}`) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, {
+        threshold: 0.5,
+        rootMargin: '-100px 0px -100px 0px'
+    });
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+
+    // Feedback functionality
+    const feedbackYes = document.getElementById('feedbackYes');
+    const feedbackNo = document.getElementById('feedbackNo');
+    const feedbackForm = document.getElementById('feedbackForm');
+    
+    feedbackYes.addEventListener('click', function(e) {
+        e.preventDefault();
+        alert('Thank you for your feedback!');
+    });
+    
+    feedbackNo.addEventListener('click', function(e) {
+        e.preventDefault();
+        feedbackForm.style.display = 'block';
+    });
+
+    // Print functionality
+    const printButton = document.createElement('button');
+    printButton.innerHTML = '<i class="fas fa-print me-2"></i>Print FAQs';
+    printButton.className = 'btn btn-outline-secondary position-fixed';
+    printButton.style.bottom = '20px';
+    printButton.style.right = '20px';
+    printButton.style.zIndex = '1000';
+    
+    printButton.addEventListener('click', function() {
+        window.print();
+    });
+    
+    document.body.appendChild(printButton);
+});
+</script>
+{% endblock %}

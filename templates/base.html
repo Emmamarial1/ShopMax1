@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ShopMax - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    
+    <style>
+        /* Your existing CSS remains the same, just updating chatbot styles and color scheme */
+        
+        /* Blue Color Scheme */
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --secondary: #7e22ce;
+            --success: #10b981;
+            --info: #06b6d4;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --light-gray: #e2e8f0;
+            --gray: #64748b;
+        }
+
+        /* Enhanced Chatbot Styles with Blue Theme */
+        .chatbot-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        .chatbot-toggle {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .chatbot-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(37, 99, 235, 0.4);
+        }
+
+        .chatbot-window {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 400px;
+            height: 580px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--light-gray);
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-window.active {
+            display: flex;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 1.2rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 16px 16px 0 0;
+        }
+
+        .chatbot-header-content {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .chatbot-avatar {
+            width: 40px;
+            height: 40px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .chatbot-header h4 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .chatbot-status {
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.3rem;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .chatbot-close:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 1.2rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            background: #f8f9fa;
+        }
+
+        .message {
+            max-width: 85%;
+            padding: 0.8rem 1rem;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            position: relative;
+            animation: messageSlide 0.3s ease;
+        }
+
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.bot {
+            background: white;
+            color: var(--dark);
+            align-self: flex-start;
+            border-bottom-left-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid var(--light-gray);
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 6px;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .quick-action-btn {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(37, 99, 235, 0.3);
+            padding: 0.4rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quick-action-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .chatbot-input-container {
+            padding: 1rem;
+            border-top: 1px solid var(--light-gray);
+            background: white;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .chatbot-input {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--light-gray);
+            border-radius: 25px;
+            outline: none;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .chatbot-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+        }
+
+        .chatbot-send {
+            background: var(--primary);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chatbot-send:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray);
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 2px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--gray);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Knowledge categories styling */
+        .knowledge-category {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        /* Enhanced response styling */
+        .response-highlight {
+            background: rgba(37, 99, 235, 0.1);
+            padding: 0.8rem;
+            border-radius: 8px;
+            margin: 0.5rem 0;
+            border-left: 3px solid var(--primary);
+        }
+
+        .feature-list {
+            margin: 0.5rem 0;
+            padding-left: 1.2rem;
+        }
+
+        .feature-list li {
+            margin: 0.3rem 0;
+        }
+
+        /* Enhanced AI Chatbot Styles */
+        .suggestion {
+            background: rgba(37, 99, 235, 0.1);
+            border-left: 3px solid var(--primary);
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .suggestion strong {
+            color: var(--primary);
+        }
+
+        .chatbot-messages {
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) transparent;
+        }
+
+        .chatbot-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chatbot-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chatbot-messages::-webkit-scrollbar-thumb {
+            background-color: var(--primary);
+            border-radius: 3px;
+        }
+
+        .typing-indicator {
+            padding: 1rem;
+            background: rgba(37, 99, 235, 0.05);
+            border-radius: 12px;
+            margin: 0.5rem 0;
+        }
+
+        /* Context-aware responses */
+        .message.bot.context-aware {
+            border-left: 4px solid #667eea;
+        }
+
+        .message.bot.urgent {
+            border-left: 4px solid #dc3545;
+        }
+
+        .message.bot.helpful {
+            border-left: 4px solid #28a745;
+        }
+
+        /* Modern Navbar with Blue Theme */
+        .modern-nav {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            padding: 0.8rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+
+        .navbar-brand i {
+            margin-right: 0.5rem;
+        }
+
+        /* Search Bar Styles */
+        .nav-search {
+            min-width: 400px;
+            max-width: 600px;
+        }
+
+        .search-form {
+            width: 100%;
+        }
+
+        .search-input {
+            border-radius: 25px 0 0 25px;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+        }
+
+        .search-btn {
+            border-radius: 0 25px 25px 0;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            background: var(--primary);
+        }
+
+        /* Navigation Links */
+        .navbar-nav {
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.9) !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: white !important;
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-1px);
+        }
+
+        /* Dropdown Styles */
+        .dropdown-menu {
+            border: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-radius: 12px;
+            margin-top: 0.5rem;
+        }
+
+        .dropdown-item {
+            padding: 0.7rem 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        /* Cart Styles */
+        .cart-link {
+            position: relative;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: 5px;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.4rem;
+            background: var(--primary);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 991.98px) {
+            .nav-search {
+                min-width: 100%;
+                margin: 1rem 0;
+            }
+            
+            .navbar-nav {
+                gap: 0;
+            }
+            
+            .nav-link {
+                padding: 0.8rem 1rem !important;
+                border-radius: 0;
+            }
+            
+            .dropdown-menu {
+                border: none;
+                box-shadow: none;
+                background: rgba(255,255,255,0.05);
+            }
+            
+            .dropdown-item {
+                color: rgba(255,255,255,0.9);
+                padding-left: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-search {
+                min-width: 100%;
+            }
+            
+            .search-input {
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+        }
+
+        /* Ensure proper spacing */
+        .navbar-collapse {
+            flex-grow: 0;
+        }
+
+        /* Fix for Bootstrap 5 */
+        .navbar-toggler {
+            border: none;
+            color: white;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        /* Ensure body has proper spacing */
+        body {
+            padding-top: 0;
+        }
+
+        .main-content {
+            min-height: calc(100vh - 200px);
+        }
+
+        /* Enhanced Footer Links */
+        .footer-section ul li a {
+            color: #CBD5E0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-section ul li a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .footer-section ul li a i {
+            width: 16px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-container">
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- Modern Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light modern-nav">
+
+                <!-- In your base.html navbar -->
+    <!-- Cart - Show for ALL users (guests and logged-in) on product page -->
+    {% if request.endpoint == 'products' or request.endpoint == 'product_detail' or request.endpoint == 'view_cart' %}
+    <li class="nav-item">
+        <a href="{{ url_for('view_cart') }}" class="nav-link cart-link">
+            <i class="fas fa-shopping-cart"></i>
+
+            <span class="cart-count badge bg-primary" id="cartCount">
+                <!-- Check both logged-in user cart and session cart for guests -->
+                {% if session.user_id and session.user_type == 'buyer' %}
+                    {{ cart_count if cart_count else 0 }}
+                {% elif session.get('cart') %}
+                    {{ session.cart.values()|sum }}
+                {% else %}
+                    0
+                {% endif %}
+            </span>
+        </a>
+    </li>
+    {% endif %}
+
+
+        
+        <div class="container-fluid">
+            <!-- Brand -->
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+                <i class="fas fa-shopping-bag"></i>
+                ShopMax
+            </a>
+
+            <!-- Mobile Toggle -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navbar Content -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <!-- Search Bar - Centered on desktop -->
+                <div class="nav-search mx-lg-auto my-2 my-lg-0">
+                    <form class="search-form d-flex" action="{{ url_for('products') }}" method="GET">
+                        <input type="text" name="q" class="search-input form-control" placeholder="Search for products, brands and categories...">
+                        <button type="submit" class="search-btn btn btn-primary">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Main Navigation Links -->
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+
+                    <!-- In your base.html template, add this to the seller navigation -->
+                    {% if current_user.user_type == 'seller' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('seller_analytics') }}">
+                            <i class="fas fa-chart-line"></i> Analytics
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <!-- Home -->
+                    <li class="nav-item">
+                        <a href="{{ url_for('home') }}" class="nav-link {% if request.endpoint == 'home' %}active{% endif %}">
+                            <i class="fas fa-home"></i>
+                            Home
+                        </a>
+                    </li>
+                    
+                    <!-- Products -->
+                    <li class="nav-item">
+                        <a href="{{ url_for('products') }}" class="nav-link {% if request.endpoint == 'products' %}active{% endif %}">
+                            <i class="fas fa-th-large"></i>
+                            Products
+                        </a>
+                    </li>
+
+                    <!-- Categories Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="categoriesDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-list"></i>
+                            Categories
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('products', category='electronics') }}">
+                                    <i class="fas fa-laptop"></i> Electronics
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('products', category='clothing') }}">
+                                    <i class="fas fa-tshirt"></i> Clothing
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('products', category='books') }}">
+                                    <i class="fas fa-book"></i> Books
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('products', category='home') }}">
+                                    <i class="fas fa-home"></i> Home & Living
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ url_for('products', category='sports') }}">
+                                    <i class="fas fa-basketball-ball"></i> Sports
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <!-- Cart for Buyers -->
+                    {% if session.user_id and session.user_type == 'buyer' %}
+                    <li class="nav-item">
+                        <a href="{{ url_for('view_cart') }}" class="nav-link cart-link">
+                            <i class="fas fa-shopping-cart"></i>
+                            Cart
+                            <span class="cart-count badge bg-primary" id="cartCount">
+                                {{ cart_count if cart_count else 0 }}
+                            </span>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    <!-- User Account Section -->
+                    <li class="nav-item dropdown">
+                        {% if session.user_id %}
+                            <!-- Logged In State -->
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle"></i>
+                                {{ session.user_name }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('profile') }}">
+                                        <i class="fas fa-user"></i> My Profile
+                                    </a>
+                                </li>
+                                {% if session.user_type == 'buyer' %}
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('user_orders') }}">
+                                        <i class="fas fa-clipboard-list"></i> My Orders
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('wishlist') }}">
+                                        <i class="fas fa-heart"></i> Wishlist
+                                    </a>
+                                </li>
+                                {% endif %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('logout') }}">
+                                        <i class="fas fa-sign-out-alt"></i> Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        {% else %}
+                            <!-- Logged Out State -->
+                            <a class="nav-link dropdown-toggle" href="#" id="authDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user"></i>
+                                Account
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('login') }}">
+                                        <i class="fas fa-sign-in-alt"></i> Login
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <h6 class="dropdown-header">Create Account</h6>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('register_buyer') }}">
+                                        <i class="fas fa-shopping-bag"></i> Buyer Account
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ url_for('register_seller') }}">
+                                        <i class="fas fa-store"></i> Seller Account
+                                    </a>
+                                </li>
+                            </ul>
+                        {% endif %}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Seller Quick Links -->
+    {% if session.user_id and session.user_type == 'seller' %}
+    <div class="seller-quick-links">
+        <h4>🚀 Seller Quick Links</h4>
+        <div class="quick-links-container">
+            <a href="{{ url_for('add_product') }}" class="quick-link">
+                <i class="fas fa-plus"></i> Add Product
+            </a>
+            <a href="{{ url_for('manage_products') }}" class="quick-link">
+                <i class="fas fa-box"></i> Manage Products
+            </a>
+            <a href="{{ url_for('dashboard') }}" class="quick-link">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </a>
+            <a href="{{ url_for('seller_orders') }}" class="quick-link">
+                <i class="fas fa-shopping-cart"></i> View Orders
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Modern Footer -->
+    <footer class="modern-footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <div class="footer-logo">
+                    <h3><i class="fas fa-shopping-bag"></i> ShopMax UCU</h3>
+                    <p>Your trusted campus marketplace for buying and selling safely within the UCU community. Quality products, centralized marketplace.</p>
+                </div>
+                <div class="social-links">
+                    <a href="#" class="social-link" title="Facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="social-link" title="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="social-link" title="Twitter">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link" title="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h4>For Buyers</h4>
+                <ul>
+                    <li><a href="{{ url_for('products') }}"><i class="fas fa-search"></i> Browse Products</a></li>
+                    <li><a href="{{ url_for('how_to_buy') }}"><i class="fas fa-shopping-cart"></i> How to Buy</a></li>
+                    <li><a href="{{ url_for('delivery_info') }}"><i class="fas fa-truck"></i> Delivery Information</a></li>
+                    <!-- buyer_protection template currently missing; use placeholder -->
+                    <li><a href="{{ url_for('under_construction') }}" title="Coming soon"><i class="fas fa-shield-alt"></i> Buyer Protection</a></li>
+                    <li><a href="{{ url_for('payment_methods') }}"><i class="fas fa-credit-card"></i> Payment Methods</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>For Sellers</h4>
+                <ul>
+                    <li><a href="{{ url_for('register_seller') }}"><i class="fas fa-store"></i> Start Selling</a></li>
+                   
+                    <!-- pricing_fees template currently missing; use placeholder -->
+                    <li><a href="{{ url_for('under_construction') }}" title="Coming soon"><i class="fas fa-tag"></i> Pricing & Fees</a></li>
+                    <li><a href="{{ url_for('success_stories') }}"><i class="fas fa-trophy"></i> Success Stories</a></li>
+                    <!-- seller_resources template currently missing; use placeholder -->
+                    <li><a href="{{ url_for('under_construction') }}" title="Coming soon"><i class="fas fa-tools"></i> Seller Resources</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Support</h4>
+                <ul>
+                    <li><a href="{{ url_for('help_center') }}"><i class="fas fa-life-ring"></i> Help Center</a></li>
+                    <li><a href="{{ url_for('contact_us') }}"><i class="fas fa-envelope"></i> Contact Us</a></li>
+                
+                    
+                    <li><a href="{{ url_for('faqs') }}"><i class="fas fa-question-circle"></i> FAQs</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="{{ url_for('about_us') }}"><i class="fas fa-info-circle"></i> About Us</a></li>
+                    <li><a href="{{ url_for('careers') }}"><i class="fas fa-briefcase"></i> Careers</a></li>
+                    <li><a href="{{ url_for('terms_of_service') }}"><i class="fas fa-file-contract"></i> Terms of Service</a></li>
+                    <li><a href="{{ url_for('privacy_policy') }}"><i class="fas fa-lock"></i> Privacy Policy</a></li>
+                    <li><a href="{{ url_for('cookie_policy') }}"><i class="fas fa-cookie"></i> Cookie Policy</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="footer-bottom-content">
+                <p>&copy; 2025 ShopMax UCU Marketplace. All rights reserved.</p>
+                <div class="footer-legal">
+                    <a href="{{ url_for('privacy_policy') }}">Privacy Policy</a>
+                    <a href="{{ url_for('terms_of_service') }}">Terms of Service</a>
+                    <a href="{{ url_for('cookie_policy') }}">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Enhanced Super Chatbot -->
+    <div class="chatbot-container">
+        <button class="chatbot-toggle" id="chatbotToggle">
+            <i class="fas fa-robot"></i>
+        </button>
+        <div class="chatbot-window" id="chatbotWindow">
+            <div class="chatbot-header">
+                <div class="chatbot-header-content">
+                    <div class="chatbot-avatar">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div>
+                        <h4>ShopMax UCU Assistant</h4>
+                        <div class="chatbot-status">Online • UCU Expert</div>
+                    </div>
+                </div>
+                <button class="chatbot-close" id="chatbotClose">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="message bot">
+                    <div class="knowledge-category">UCU CAMPUS EXPERT</div>
+                    <strong>🎓 Hello! I'm your ShopMax UCU Assistant</strong><br><br>
+                    I specialize in UCU campus information, Computing and technology department, e-commerce, and our ShopMax project! How can I help you today?
+                    <div class="quick-actions">
+                        <button class="quick-action-btn" data-question="How to register on ShopMax?">👤 Registration</button>
+                        <button class="quick-action-btn" data-question="Tell me about UCU IT department">💻 UCU IT Dept</button>
+                        <button class="quick-action-btn" data-question="How to buy products?">🛒 Buying Guide</button>
+                        <button class="quick-action-btn" data-question="About ShopMax project">🎓 Our Project</button>
+                    </div>
+                </div>
+            </div>
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="typing-dots">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+                <span>Assistant is thinking...</span>
+            </div>
+            <div class="chatbot-input-container">
+                <input type="text" id="chatbotInput" placeholder="Ask about UCU, IT department, buying, selling..." class="chatbot-input">
+                <button class="chatbot-send" id="chatbotSend">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+    // SUPER ENHANCED AI Knowledge Base for ShopMax UCU
+    const chatbotKnowledge = {
+        // UCU & ACADEMICS
+        ucu: {
+            "ucu email benefits": `<strong>🎓 UCU Email Benefits on ShopMax:</strong><br><br>
+            <div class="response-highlight">
+            • <strong>Priority Verification</strong>: Instant account approval<br>
+            • <strong>Campus Delivery</strong>: Unlimited delivery across UCU charges base you seller<br>
+            • <strong>Enhanced Trust</strong>: Verified UCU community member status<br>
+            • <strong>Student Discounts</strong>: Exclusive deals for UCU students<br>
+            • <strong>Emergency Support</strong>: 24/7 campus security integration<br>
+            • <strong>Academic Integration</strong>: Access to course materials exchange
+            </div>`,
+
+            "ucu it department": `<strong>💻 UCU computing & IT Department:</strong><br><br>
+            <div class="response-highlight">
+            <strong>Department of Computing & Technology</strong><br><br>
+            • <strong>Programs Offered</strong>: BSc Computer Science, BSc IT, MSc Computer Science<br>
+            • <strong>Location</strong>: Tech Lab Building, Main Campus<br>
+            • <strong>Key Faculty</strong>: Dr. Innocent. (HOD), Madam Justin Mukerele., Dr. Recheal Ssembatya.<br>
+            • <strong>Research Areas</strong>: AI, Web Technologies, Cybersecurity, Data Science<br>
+            • <strong>Projects</strong>: ShopMax is our current End of project!<br>
+            • <strong>Contact</strong>: emamarialdomk@gmail.com | +256 782 713 764
+            </div>`,
+
+            "IT Courses": `<strong>📚 UCU IT Courses:</strong><br><br>
+            <div class="response-highlight">
+            <strong>Core Courses Include:</strong><br><br>
+            • Programming Fundamentals (Python, C)<br>
+            • Web Development & Design<br>
+            • Database Management Systems<br>
+            • Software Engineering<br>
+            • Artificial Intelligence<br>
+            • Mobile Application Development<br>
+            • Network Security<br>
+            • Data Structures & Algorithms<br><br>
+            <strong>Capstone Projects</strong>: Like ShopMax - real-world applications!
+            </div>`,
+
+            "ucu campus": `<strong>🏫 Uganda Christian University (UCU):</strong><br><br>
+            <div class="response-highlight">
+            • <strong>Location</strong>: Mukono, Uganda<br>
+            • <strong>Founded</strong>: 1997<br>
+            • <strong>Motto</strong>: "Centre of Excellence in the Heart of Africa"<br>
+            • <strong>Schools</strong>: Business, Law, Social Sciences, Computing & Technology<br>
+            • <strong>Campus Features</strong>: Modern library, Tech labs, Sports facilities<br>
+            • <strong>Student Life</strong>: Active clubs, entrepreneurship programs<br>
+            • <strong>Vision</strong>: Transforming society through quality education
+            </div>`
+        },
+
+        // SHOPMAX PROJECT DETAILS
+        project: {
+            "shopmax project": `<strong>🎓 ShopMax UCU Capstone Project:</strong><br><br>
+            <div class="response-highlight">
+            <strong>Project Overview:</strong><br><br>
+            • <strong>Developers</strong>: Final Year Information technology Students<br>
+            • <strong>Supervisor</strong>: Department of Computing & Technology<br>
+            • <strong>Duration</strong>: 5-months capstone project<br>
+            • <strong>Objective</strong>: Create campus-focused e-commerce platform<br>
+            • <strong>Tech Stack</strong>: Python Flask, JavaScript, Bootstrap, SQLite<br>
+            • <strong>Innovation</strong>: UCU community verification system<br>
+            • <strong>Impact</strong>: Supporting student entrepreneurship
+            </div>`,
+
+            "project purpose": `<strong>🎯 ShopMax Project Purpose:</strong><br><br>
+            <div class="response-highlight">
+            <strong>Academic & Practical Objectives:</strong><br><br>
+            • <strong>Academic</strong>: Demonstrate full-stack development skills<br>
+            • <strong>Problem Solving</strong>: Address campus buying/selling challenges by creating a centralized market <br>
+            • <strong>Community</strong>: Create safe UCU-only marketplace<br>
+            • <strong>Innovation</strong>: Implement modern e-commerce features<br>
+            • <strong>Entrepreneurship</strong>: Enable student business opportunities<br>
+            • <strong>Security</strong>: Campus-focused safety measures<br>
+            • <strong>Sustainability</strong>: Potential real-world business model
+            </div>`,
+
+            "technology used": `<strong>💻 ShopMax Technical Stack:</strong><br><br>
+            <div class="response-highlight">
+            <strong>Frontend Technologies:</strong><br>
+            • HTML5, CSS3, JavaScript (ES6+)<br>
+            • Bootstrap 5 for responsive design<br>
+            • Font Awesome icons<br>
+            • DataTables for data management<br><br>
+
+            <strong>Backend Technologies:</strong><br>
+            • Python Flask framework<br>
+            • SQLite/PostgreSQL database<br>
+            • RESTful API architecture<br>
+            • JWT authentication<br><br>
+
+            <strong>Advanced Features:</strong><br>
+            • Real-time chatbot (this one!)<br>
+            • Secure payment processing<br>
+            • Image upload & management<br>
+            • Email verification system
+            </div>`,
+
+            "developers": `<strong>👨‍💻 ShopMax Development Team:</strong><br><br>
+            <div class="response-highlight">
+            <strong>Final Year IT Students:</strong><br><br>
+            • <strong>Team Lead</strong>: Ema Marial - Full Stack Development<br>
+            • <strong>Backend Developer</strong>: Ema Marial Database & API design<br>
+            • <strong>Frontend Developer</strong>: MukisaUI/UX implementation<br>
+            • <strong>Security Specialist</strong>: Akurut Joseline Platform security features<br>
+            • <strong>Project Manager</strong>: Bruno Agile development coordination<br><br>
+            <strong>Supervised by</strong>:Madam Justin Mukerele UCU Computing & Technology Faculty<br>
+            <strong>Contact</strong>: emamarialdomk@gmail.com
+            </div>`
+        },
+
+        // ACCOUNT MANAGEMENT
+        account: {
+            "register": `<strong>👤 How to Register on ShopMax:</strong><br><br>
+            <div class="response-highlight">
+            <strong>Step-by-Step Registration:</strong><br><br>
+            1. <strong>Click 'Account'</strong> in navigation bar<br>
+            2. <strong>Choose Account Type</strong>: Buyer or Seller<br>
+            3. <strong>Fill Registration Form</strong>:<br>
+               - Use UCU email (@ucu.ac.ug) for verification<br>
+               - Create secure password<br>
+               - Provide basic information<br>
+            4. <strong>Email Verification</strong>: Check inbox for verification link<br>
+            5. <strong>Complete Profile</strong>: Add delivery address & preferences<br>
+            6. <strong>Start Using</strong>: Begin shopping or selling!<br><br>
+            <strong>UCU Benefit</strong>: Verified emails get instant approval!
+            </div>`,
+
+            "create account": `<strong>📝 Creating Your ShopMax Account:</strong><br><br>
+            <div class="response-highlight">
+            <strong>Account Options:</strong><br><br>
+            • <strong>Buyer Account</strong>: For shopping only<br>
+            • <strong>Seller Account</strong>: For selling products<br>
+            • <strong>Dual Account</strong>: Can have both!<br><br>
+
+            <strong>Required Information:</strong><br>
+            • UCU Email Address (@ucu.ac.ug)<br>
+            • Full Name (as in UCU records)<br>
+            • Phone Number (for delivery)<br>
+            • Secure Password<br><br>
+
+            <strong>Verification Process:</strong><br>
+            • UCU email verification (instant)<br>
+            • Profile completion (recommended)<br>
+            • Campus address setup (for delivery)
+            </div>`,
+
+            "login problems": `<strong>🔐 Login Issue Solutions:</strong><br><br>
+            <div class="response-highlight">
+            <strong>Common Solutions:</strong><br><br>
+            1. <strong>Forgot Password</strong>: Use 'Reset Password' feature<br>
+            2. <strong>Email Verification</strong>: Check spam folder for verification link<br>
+            3. <strong>Browser Issues</strong>: Clear cache or try different browser<br>
+            4. <strong>UCU Email</strong>: Ensure you're using @ucu.ac.ug email<br>
+            5. <strong>Account Lock</strong>: Contact support if locked out<br><br>
+
+            <strong>Emergency Support:</strong><br>
+            • Email: support@shopmaxucu.com<br>
+            • Phone: +256 700 123 456<br>
+            • Campus Office: Library Ground Floor
+            </div>`
+        },
+
+        // BUYING PROCESS
+        buying: {
+            "how to buy": `<strong>🛒 Complete Buying Guide:</strong><br><br>
+            <div class="response-highlight">
+            <strong>Step-by-Step Buying Process:</strong><br><br>
+            1. <strong>Browse & Search</strong>: Use categories or search bar<br>
+            2. <strong>Product Research</strong>: Read descriptions and seller reviews<br>
+            3. <strong>Contact Seller</strong>: Message for more details<br>
+            4. <strong>Add to Cart</strong>: Select quantity and options<br>
+            5. <strong>Secure Checkout</strong>: Multiple payment options<br>
+            6. <strong>Campus Delivery</strong>: Free delivery across UCU<br>
+            7. <strong>Receive & Review</strong>: Confirm receipt and leave feedback<br><br>
+
+            <strong>UCU Benefits:</strong><br>
+            • Free campus delivery<br>
+            • Verified UCU sellers only<br>
+            • Campus security integration
+            </div>`,
+
+            "payment methods": `<strong>💳 Accepted Payment Methods:</strong><br><br>
+            <div class="response-highlight">
+            <strong>Secure Payment Options:</strong><br><br>
+            • <strong>Mobile Money</strong>: MTN & Airtel Mobile Money<br>
+            • <strong>Bank Transfer</strong>: All major Ugandan banks<br>
+            • <strong>Credit/Debit Cards</strong>: Visa, Mastercard, Amex<br>
+            • <strong>Campus Cash</strong>: UCU payment points<br><br>
+
+            <strong>Security Features:</strong><br>
+            • End-to-end encryption<br>
+            • Payment verification<br>
+            • Fraud protection<br>
+            • Buyer protection policy
+            </div>`,
+
+            "delivery information": `<strong>🚚 Delivery & Pickup Options:</strong><br><br>
+            <div class="response-highlight">
+            <strong>UCU Campus Delivery:</strong><br><br>
+            • <strong>Free Campus Delivery</strong>: All UCU locations<br>
+            • <strong>Delivery Time</strong>: 1-2 business days<br>
+            • <strong>Meet-up Spots</strong>: Library, Cafeteria, Main Gate<br>
+            • <strong>Mukono Area</strong>: UGX 5,000 (free over UGX 50,000)<br><br>
+
+            <strong>Safety Features:</strong><br>
+            • Campus security integration<br>
+            • Public meet-up locations<br>
+            • Delivery tracking<br>
+            • Emergency contact system
+            </div>`
+        },
+
+        // SELLING PROCESS
+        selling: {
+            "become seller": `<strong>🏪 How to Become a Seller:</strong><br><br>
+            <div class="response-highlight">
+            <strong>Seller Registration Process:</strong><br><br>
+            1. <strong>Register as Seller</strong>: Choose seller account type<br>
+            2. <strong>UCU Verification</strong>: Verify with UCU email<br>
+            3. <strong>Subscription Plan</strong>: Choose suitable plan<br>
+            4. <strong>Complete Profile</strong>: Add business information<br>
+            5. <strong>Start Listing</strong>: Add your first product!<br><br>
+
+            <strong>Student Seller Benefits:</strong><br>
+            • No commission fees<br>
+            • Keep 100% of sales<br>
+            • Campus-focused audience<br>
+            • Free business training
+            </div>`,
+
+            "seller fees": `<strong>💰 Seller Fees & Pricing:</strong><br><br>
+            <div class="response-highlight">
+            <strong>Subscription Plans (NO COMMISSION):</strong><br><br>
+            • <strong>Starter</strong>: UGX 50k/month (20 products)<br>
+            • <strong>Business</strong>: UGX 120k/quarter (100 products)<br>
+            • <strong>Enterprise</strong>: UGX 400k/year (unlimited)<br><br>
+
+            <strong>Payment Processing Fees:</strong><br>
+            • Cards: 2.9% transaction fee<br>
+            • Mobile Money: 1% transaction fee<br>
+            • Bank Transfer: 0.5% transaction fee<br><br>
+
+            <strong>Key Advantage</strong>: You keep 100% of your sales revenue!
+            </div>`,
+
+            "list product": `<strong>📦 How to List Products:</strong><br><br>
+            <div class="response-highlight">
+            <strong>Product Listing Best Practices:</strong><br><br>
+            1. <strong>Clear Photos</strong>: 3+ high-quality images<br>
+            2. <strong>Detailed Description</strong>: Be honest and thorough<br>
+            3. <strong>Competitive Pricing</strong>: Research similar products<br>
+            4. <strong>Proper Category</strong>: Helps buyers find your items<br>
+            5. <strong>Delivery Options</strong>: Set clear delivery terms<br>
+            6. <strong>Return Policy</strong>: Define your return terms<br><br>
+
+            <strong>Pro Tips:</strong><br>
+            • Respond quickly to buyer questions<br>
+            • Maintain good ratings<br>
+            • Update inventory regularly
+            </div>`
+        },
+
+        // E-COMMERCE & TECHNOLOGY
+        ecommerce: {
+            "ecommerce platform": `<strong>🛍️ ShopMax E-Commerce Features:</strong><br><br>
+            <div class="response-highlight">
+            <strong>Advanced E-Commerce Capabilities:</strong><br><br>
+            • <strong>User Management</strong>: Buyer/seller accounts with verification<br>
+            • <strong>Product Catalog</strong>: Categories, search, filters<br>
+            • <strong>Shopping Cart</strong>: Persistent cart with save feature<br>
+            • <strong>Secure Payments</strong>: Multiple payment gateways<br>
+            • <strong>Order Management</strong>: Complete order lifecycle<br>
+            • <strong>Messaging System</strong>: Buyer-seller communication<br>
+            • <strong>Reviews & Ratings</strong>: Trust building system<br>
+            • <strong>Analytics</strong>: Sales and performance tracking<br><br>
+
+            <strong>UCU Innovation</strong>: Campus-specific security features
+            </div>`,
+
+            "security features": `<strong>🛡️ Platform Security Features:</strong><br><br>
+            <div class="response-highlight">
+            <strong>Multi-Layer Security:</strong><br><br>
+            • <strong>UCU Verification</strong>: @ucu.ac.ug email requirement<br>
+            • <strong>Data Encryption</strong>: End-to-end encryption<br>
+            • <strong>Secure Payments</strong>: PCI-compliant payment processing<br>
+            • <strong>User Ratings</strong>: Community-based trust system<br>
+            • <strong>Dispute Resolution</strong>: Mediation system for issues<br>
+            • <strong>Emergency Integration</strong>: Campus security coordination<br>
+            • <strong>Privacy Protection</strong>: GDPR-compliant data handling<br><br>
+
+            <strong>Campus Safety</strong>: Designed specifically for UCU environment
+            </div>`,
+
+            "mobile access": `<strong>📱 Mobile Accessibility:</strong><br><br>
+            <div class="response-highlight">
+            <strong>Fully Responsive Design:</strong><br><br>
+            • <strong>Mobile Optimized</strong>: Works perfectly on all devices<br>
+            • <strong>Progressive Web App</strong>: App-like experience<br>
+            • <strong>Touch-Friendly</strong>: Optimized for mobile touch<br>
+            • <strong>Fast Loading</strong>: Optimized for mobile networks<br>
+            • <strong>Mobile Payments</strong>: Mobile Money integration<br>
+            • <strong>Push Notifications</strong>: Real-time updates<br><br>
+
+            <strong>No App Required</strong>: Access via mobile browser
+            </div>`
+        }
+    };
+
+    // Enhanced Chatbot Intelligence
+    document.addEventListener('DOMContentLoaded', function() {
+        const chatbotToggle = document.getElementById('chatbotToggle');
+        const chatbotWindow = document.getElementById('chatbotWindow');
+        const chatbotClose = document.getElementById('chatbotClose');
+        const chatbotMessages = document.getElementById('chatbotMessages');
+        const chatbotInput = document.getElementById('chatbotInput');
+        const chatbotSend = document.getElementById('chatbotSend');
+        const typingIndicator = document.getElementById('typingIndicator');
+
+        // Enhanced intent detection
+        function detectIntent(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // UCU & Academic Intent
+            if (lowerMessage.match(/(ucu|university|campus|student|academic|college|school)/)) {
+                if (lowerMessage.match(/(email|benefit|advantage|verify)/)) return 'ucu_email';
+                if (lowerMessage.match(/(computer|it|technology|department|cs|programming)/)) return 'ucu_it';
+                if (lowerMessage.match(/(course|class|study|program)/)) return 'ucu_courses';
+                return 'ucu_general';
+            }
+            
+            // Project Intent
+            if (lowerMessage.match(/(project|develop|create|build|student|capstone|final year)/)) {
+                if (lowerMessage.match(/(technology|stack|code|programming)/)) return 'project_tech';
+                if (lowerMessage.match(/(purpose|goal|objective|aim)/)) return 'project_purpose';
+                if (lowerMessage.match(/(team|developer|student|who made)/)) return 'project_team';
+                return 'project_general';
+            }
+            
+            // Account Intent
+            if (lowerMessage.match(/(account|register|sign up|login|password|profile)/)) {
+                if (lowerMessage.match(/(create|make|new|register)/)) return 'account_create';
+                if (lowerMessage.match(/(problem|issue|error|can't|forgot)/)) return 'account_issues';
+                return 'account_general';
+            }
+            
+            // Buying Intent
+            if (lowerMessage.match(/(buy|purchase|shop|order|cart)/)) {
+                if (lowerMessage.match(/(how|process|step|guide)/)) return 'buying_guide';
+                if (lowerMessage.match(/(payment|pay|money|cost)/)) return 'buying_payment';
+                if (lowerMessage.match(/(deliver|ship|pickup|receive)/)) return 'buying_delivery';
+                return 'buying_general';
+            }
+            
+            // Selling Intent
+            if (lowerMessage.match(/(sell|seller|vendor|business|product)/)) {
+                if (lowerMessage.match(/(become|start|begin|register)/)) return 'selling_start';
+                if (lowerMessage.match(/(fee|price|cost|commission)/)) return 'selling_fees';
+                if (lowerMessage.match(/(list|add|post|product)/)) return 'selling_list';
+                return 'selling_general';
+            }
+            
+            // E-commerce Intent
+            if (lowerMessage.match(/(ecommerce|platform|website|site|online)/)) {
+                if (lowerMessage.match(/(feature|function|what can)/)) return 'ecommerce_features';
+                if (lowerMessage.match(/(security|safe|trust|protection)/)) return 'ecommerce_security';
+                if (lowerMessage.match(/(mobile|phone|app|android|ios)/)) return 'ecommerce_mobile';
+                return 'ecommerce_general';
+            }
+            
+            return 'general';
+        }
+
+        // Enhanced response generator
+        function generateEnhancedResponse(message) {
+            const intent = detectIntent(message);
+            const lowerMessage = message.toLowerCase();
+            
+            const intentMap = {
+                // UCU Intents
+                'ucu_email': chatbotKnowledge.ucu["ucu email benefits"],
+                'ucu_it': chatbotKnowledge.ucu["ucu it department"],
+                'ucu_courses': chatbotKnowledge.ucu["computer science courses"],
+                'ucu_general': chatbotKnowledge.ucu["ucu campus"],
+                
+                // Project Intents
+                'project_general': chatbotKnowledge.project["shopmax project"],
+                'project_tech': chatbotKnowledge.project["technology used"],
+                'project_purpose': chatbotKnowledge.project["project purpose"],
+                'project_team': chatbotKnowledge.project["developers"],
+                
+                // Account Intents
+                'account_create': chatbotKnowledge.account["create account"],
+                'account_issues': chatbotKnowledge.account["login problems"],
+                'account_general': chatbotKnowledge.account["register"],
+                
+                // Buying Intents
+                'buying_guide': chatbotKnowledge.buying["how to buy"],
+                'buying_payment': chatbotKnowledge.buying["payment methods"],
+                'buying_delivery': chatbotKnowledge.buying["delivery information"],
+                'buying_general': chatbotKnowledge.buying["how to buy"],
+                
+                // Selling Intents
+                'selling_start': chatbotKnowledge.selling["become seller"],
+                'selling_fees': chatbotKnowledge.selling["seller fees"],
+                'selling_list': chatbotKnowledge.selling["list product"],
+                'selling_general': chatbotKnowledge.selling["become seller"],
+                
+                // E-commerce Intents
+                'ecommerce_features': chatbotKnowledge.ecommerce["ecommerce platform"],
+                'ecommerce_security': chatbotKnowledge.ecommerce["security features"],
+                'ecommerce_mobile': chatbotKnowledge.ecommerce["mobile access"],
+                'ecommerce_general': chatbotKnowledge.ecommerce["ecommerce platform"]
+            };
+
+            // Direct matches for specific questions
+            for (const [category, questions] of Object.entries(chatbotKnowledge)) {
+                for (const [key, response] of Object.entries(questions)) {
+                    if (lowerMessage.includes(key)) {
+                        return response;
+                    }
+                }
+            }
+
+            // Intent-based response
+            if (intentMap[intent]) {
+                return intentMap[intent];
+            }
+
+            // Default intelligent response
+            return `<strong>🤔 I understand you're asking about: "${message}"</strong><br><br>
+            <div class="response-highlight">
+            I'm your specialized UCU ShopMax assistant! I can help you with:<br><br>
+            • <strong>UCU Information</strong>: Campus, IT department, courses<br>
+            • <strong>ShopMax Project</strong>: Our CS capstone project details<br>
+            • <strong>Account Help</strong>: Registration, login issues<br>
+            • <strong>Buying Guide</strong>: How to purchase safely<br>
+            • <strong>Selling</strong>: Start your campus business<br>
+            • <strong>E-commerce</strong>: Platform features & security<br><br>
+            Can you be more specific about what you need help with?
+            </div>`;
+        }
+
+        // Add message to chat
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.innerHTML = text;
+            chatbotMessages.appendChild(messageDiv);
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        // Send message function
+        function sendMessage() {
+            const message = chatbotInput.value.trim();
+            if (message) {
+                addMessage(message, 'user');
+                chatbotInput.value = '';
+                
+                // Show typing indicator
+                typingIndicator.style.display = 'flex';
+                
+                // Generate response with realistic delay
+                setTimeout(() => {
+                    typingIndicator.style.display = 'none';
+                    const response = generateEnhancedResponse(message);
+                    addMessage(response, 'bot');
+                }, 1500 + Math.random() * 1000);
+            }
+        }
+
+        // Chatbot toggle
+        chatbotToggle.addEventListener('click', function() {
+            chatbotWindow.classList.add('active');
+            chatbotInput.focus();
+        });
+
+        chatbotClose.addEventListener('click', function() {
+            chatbotWindow.classList.remove('active');
+        });
+
+        // Quick action buttons
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('quick-action-btn')) {
+                const question = e.target.getAttribute('data-question');
+                chatbotInput.value = question;
+                sendMessage();
+            }
+        });
+
+        // Event listeners for sending messages
+        chatbotSend.addEventListener('click', sendMessage);
+        chatbotInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Close chatbot when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!chatbotWindow.contains(e.target) && !chatbotToggle.contains(e.target)) {
+                chatbotWindow.classList.remove('active');
+            }
+        });
+
+        // Auto-hide flash messages
+        const flashMessages = document.querySelectorAll('.flash');
+        flashMessages.forEach(flash => {
+            setTimeout(() => {
+                flash.style.opacity = '0';
+                setTimeout(() => {
+                    if (flash.parentElement) {
+                        flash.remove();
+                    }
+                }, 500);
+            }, 5000);
+        });
+    });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

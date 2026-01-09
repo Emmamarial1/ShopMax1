@@ -1,0 +1,550 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Product - ShopMax{% endblock %}
+
+{% block content %}
+<div class="product-management-container">
+    <div class="management-header">
+        <h1>✏️ Edit Product</h1>
+        <p>Update your product information</p>
+    </div>
+
+    <div class="management-content">
+        <div class="product-form-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash-message {{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('edit_product', product_id=product.id) }}" enctype="multipart/form-data" class="product-form">
+                
+                <!-- Essential Fields -->
+                <div class="form-section">
+                    <h3>📝 Basic Info (Required)</h3>
+                    
+                    <div class="form-group">
+                        <label>Product Name *</label>
+                        <input type="text" name="name" required 
+                               placeholder="e.g., iPhone 13 Pro Max" 
+                               value="{{ product.name }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description *</label>
+                        <textarea name="description" required rows="3" 
+                                  placeholder="Brief description of your product...">{{ product.description }}</textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Price (UGX) *</label>
+                            <input type="number" name="price" required 
+                                   placeholder="e.g., 150000" min="0" step="0.01"
+                                   value="{{ product.price }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Category *</label>
+                            <select name="category" required>
+                                <option value="">Select Category</option>
+                                <option value="electronics" {% if product.category == 'electronics' %}selected{% endif %}>Electronics</option>
+                                <option value="clothing" {% if product.category == 'clothing' %}selected{% endif %}>Clothing</option>
+                                <option value="books" {% if product.category == 'books' %}selected{% endif %}>Books</option>
+                                <option value="home" {% if product.category == 'home' %}selected{% endif %}>Home</option>
+                                <option value="sports" {% if product.category == 'sports' %}selected{% endif %}>Sports</option>
+                                <option value="beauty" {% if product.category == 'beauty' %}selected{% endif %}>Beauty</option>
+                                <option value="phones" {% if product.category == 'phones' %}selected{% endif %}>Phones</option>
+                                <option value="other" {% if product.category == 'other' %}selected{% endif %}>Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Stock Quantity</label>
+                        <input type="number" name="stock" 
+                               placeholder="e.g., 10" min="0" 
+                               value="{{ product.stock }}">
+                        <small>Current stock available</small>
+                    </div>
+                </div>
+
+                <!-- Additional Details -->
+                <div class="form-section">
+                    <h3>🎁 Additional Details</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Brand</label>
+                            <input type="text" name="brand" 
+                                   placeholder="e.g., Apple, Nike"
+                                   value="{{ product.brand or '' }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Condition</label>
+                            <select name="condition">
+                                <option value="new" {% if product.condition == 'new' %}selected{% endif %}>New</option>
+                                <option value="used" {% if product.condition == 'used' %}selected{% endif %}>Used</option>
+                                <option value="refurbished" {% if product.condition == 'refurbished' %}selected{% endif %}>Refurbished</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Product Image</label>
+                        <div class="file-upload-container">
+                            <input type="file" name="image" accept="image/*" 
+                                   class="file-upload" id="imageUpload">
+                            <label for="imageUpload" class="file-upload-label">
+                                <span class="upload-icon">📁</span>
+                                <span class="upload-text">Change product image (optional)</span>
+                            </label>
+                            <div class="image-preview" id="imagePreview">
+                                {% if product.image %}
+                                    <img src="{{ url_for('static', filename='uploads/' + product.image) }}" alt="{{ product.name }}">
+                                    <p>Current image</p>
+                                {% else %}
+                                    <span>No image selected</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <small>Leave empty to keep current image. Supported: JPG, PNG, GIF. Max: 5MB</small>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">
+                        💾 Update Product
+                    </button>
+                    <a href="{{ url_for('manage_products') }}" class="cancel-btn">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <div class="form-guidelines">
+            <h3>📊 Product Stats</h3>
+            <div class="product-stats">
+                <div class="stat-item">
+                    <span class="stat-label">Created:</span>
+                    <span class="stat-value">{{ product.created_at.strftime('%b %d, %Y') }}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Last Updated:</span>
+                    <span class="stat-value">{{ product.updated_at.strftime('%b %d, %Y') }}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Status:</span>
+                    <span class="stat-value {% if product.is_active %}status-active{% else %}status-inactive{% endif %}">
+                        {{ 'Active' if product.is_active else 'Inactive' }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="quick-actions" style="margin-top: 2rem;">
+                <h4>Quick Actions</h4>
+                <div class="action-buttons">
+                    {% if product.is_active %}
+                        <a href="{{ url_for('toggle_product', product_id=product.id) }}" class="action-btn deactivate-btn">
+                            ⏸️ Deactivate
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('toggle_product', product_id=product.id) }}" class="action-btn activate-btn">
+                            ▶️ Activate
+                        </a>
+                    {% endif %}
+                    <form method="POST" action="{{ url_for('delete_product', product_id=product.id) }}" 
+                          onsubmit="return confirm('Are you sure you want to delete this product? This action cannot be undone.');"
+                          style="display: inline;">
+                        <button type="submit" class="action-btn delete-btn">
+                            🗑️ Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.product-management-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.management-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.management-header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.management-header p {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+}
+
+.management-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.product-form-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.form-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.form-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.form-section h3 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.form-group small {
+    color: #7f8c8d;
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+    display: block;
+}
+
+.file-upload-container {
+    margin-top: 0.5rem;
+}
+
+.file-upload {
+    display: none;
+}
+
+.file-upload-label {
+    display: inline-block;
+    padding: 12px 20px;
+    background: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 100%;
+}
+
+.file-upload-label:hover {
+    border-color: #3498db;
+    background: #ebf5fb;
+}
+
+.upload-icon {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+}
+
+.image-preview {
+    margin-top: 1rem;
+    text-align: center;
+    padding: 1rem;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #7f8c8d;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 150px;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+.submit-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 14px 30px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+.cancel-btn {
+    background: #6c757d;
+    color: white;
+    padding: 14px 30px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.cancel-btn:hover {
+    background: #545b62;
+    transform: translateY(-2px);
+    color: white;
+}
+
+.form-guidelines {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    height: fit-content;
+    position: sticky;
+    top: 2rem;
+}
+
+.product-stats {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: between;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.stat-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.stat-label {
+    font-weight: 600;
+    color: #2c3e50;
+    flex: 1;
+}
+
+.stat-value {
+    color: #7f8c8d;
+}
+
+.status-active {
+    color: #27ae60;
+    font-weight: 600;
+}
+
+.status-inactive {
+    color: #e74c3c;
+    font-weight: 600;
+}
+
+.quick-actions h4 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    display: block;
+    padding: 10px 15px;
+    border-radius: 6px;
+    text-decoration: none;
+    text-align: center;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.activate-btn {
+    background: #27ae60;
+    color: white;
+}
+
+.activate-btn:hover {
+    background: #219a52;
+}
+
+.deactivate-btn {
+    background: #f39c12;
+    color: white;
+}
+
+.deactivate-btn:hover {
+    background: #e67e22;
+}
+
+.delete-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+.delete-btn:hover {
+    background: #c0392b;
+}
+
+.flash-messages {
+    margin-bottom: 1.5rem;
+}
+
+.flash-message {
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.flash-message.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.flash-message.danger {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+@media (max-width: 768px) {
+    .product-management-container {
+        padding: 1rem;
+    }
+    
+    .management-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .submit-btn,
+    .cancel-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const imageUpload = document.getElementById('imageUpload');
+    const imagePreview = document.getElementById('imagePreview');
+    
+    // Store current image information using data attributes
+    const currentImage = "{% if product.image %}{{ product.image }}{% endif %}";
+    const productName = "{{ product.name }}";
+    
+    function resetToCurrentImage() {
+        if (currentImage && currentImage !== "") {
+            imagePreview.innerHTML = `<img src="/static/uploads/${currentImage}" alt="${productName}"><p>Current image</p>`;
+        } else {
+            imagePreview.innerHTML = '<span>No image selected</span>';
+        }
+    }
+    
+    imageUpload.addEventListener('change', function() {
+        const file = this.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            
+            reader.addEventListener('load', function() {
+                imagePreview.innerHTML = `<img src="${this.result}" alt="Preview">`;
+            });
+            
+            reader.readAsDataURL(file);
+        } else {
+            // No file selected, reset to current image
+            resetToCurrentImage();
+        }
+    });
+    
+    // Initialize the preview
+    resetToCurrentImage();
+});
+</script>
+{% endblock %}

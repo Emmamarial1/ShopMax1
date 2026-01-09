@@ -1,0 +1,442 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Analytics - ShopMax{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Analytics Dashboard</h1>
+        <div class="d-none d-sm-inline-block">
+            <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary btn-sm">
+                <i class="fas fa-arrow-left fa-sm"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row">
+        <!-- Total Revenue -->
+        <div class="col-xl-2 col-md-4 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Revenue</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">₦{{ "{:,.2f}".format(total_sales) }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-money-bill-wave fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Month Revenue -->
+        <div class="col-xl-2 col-md-4 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                This Month</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">₦{{ "{:,.2f}".format(current_month_revenue) }}</div>
+                            {% if revenue_growth > 0 %}
+                            <div class="text-xs font-weight-bold text-success">
+                                +{{ "%.1f"|format(revenue_growth) }}% <i class="fas fa-arrow-up fa-xs"></i>
+                            </div>
+                            {% elif revenue_growth < 0 %}
+                            <div class="text-xs font-weight-bold text-danger">
+                                {{ "%.1f"|format(revenue_growth) }}% <i class="fas fa-arrow-down fa-xs"></i>
+                            </div>
+                            {% else %}
+                            <div class="text-xs font-weight-bold text-secondary">
+                                0.0%
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Orders -->
+        <div class="col-xl-2 col-md-4 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Total Orders</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_orders }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Users -->
+        <div class="col-xl-2 col-md-4 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Total Users</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_users }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Products -->
+        <div class="col-xl-2 col-md-4 mb-4">
+            <div class="card border-left-secondary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+                                Total Products</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_products }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-box fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Sellers -->
+        <div class="col-xl-2 col-md-4 mb-4">
+            <div class="card border-left-dark shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
+                                Active Sellers</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_sellers }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-store fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row">
+        <!-- Revenue Chart -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Current Month Revenue</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Distribution -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">User Distribution</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="userDistributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Status Distribution -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-success">Order Status Distribution</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for status, count in order_status_counts.items() %}
+                        <div class="col-md-2 col-6 mb-3">
+                            <div class="card border-left-{{ 
+                                'warning' if status == 'pending' 
+                                else 'info' if status == 'confirmed' 
+                                else 'primary' if status == 'shipped' 
+                                else 'success' if status == 'delivered' 
+                                else 'danger' 
+                            }} shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs font-weight-bold text-{{ 
+                                                'warning' if status == 'pending' 
+                                                else 'info' if status == 'confirmed' 
+                                                else 'primary' if status == 'shipped' 
+                                                else 'success' if status == 'delivered' 
+                                                else 'danger' 
+                                            }} text-uppercase mb-1">
+                                                {{ status|title }}
+                                            </div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ count }}</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-{{ 
+                                                'clock' if status == 'pending'
+                                                else 'check' if status == 'confirmed'
+                                                else 'shipping-fast' if status == 'shipped'
+                                                else 'box' if status == 'delivered'
+                                                else 'times'
+                                            }} fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row">
+        <!-- Recent Orders -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-success">Recent Orders</h6>
+                </div>
+                <div class="card-body">
+                    {% if recent_orders %}
+                        {% for order in recent_orders %}
+                        <div class="mb-3">
+                            <div class="font-weight-bold">Order #{{ order.id }}</div>
+                            <div class="small text-muted">
+                                Customer: {{ order.user.fullname if order.user else 'Guest' }}
+                                • ₦{{ "{:,.2f}".format(order.total_amount) if order.total_amount else '0.00' }}
+                            </div>
+                            <div class="small">
+                                <span class="badge bg-{{ 
+                                    'warning' if order.status == 'pending' 
+                                    else 'info' if order.status == 'confirmed' 
+                                    else 'primary' if order.status == 'shipped' 
+                                    else 'success' if order.status == 'delivered' 
+                                    else 'danger' 
+                                }}">
+                                    {{ order.status|title if order.status else 'Unknown' }}
+                                </span>
+                                <span class="text-muted ml-2">
+                                    {% if order.created_at %}
+                                        {{ order.created_at.strftime('%b %d, %H:%M') }}
+                                    {% else %}
+                                        Date unknown
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                        {% if not loop.last %}<hr>{% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">No recent orders found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Users -->
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-info">Recent Users</h6>
+                </div>
+                <div class="card-body">
+                    {% if recent_users %}
+                        {% for user in recent_users %}
+                        <div class="mb-3 d-flex align-items-center">
+                            <div class="mr-3">
+                                <div class="icon-circle bg-{{ 'success' if user.user_type == 'seller' else 'info' }}">
+                                    <i class="fas fa-{{ 'store' if user.user_type == 'seller' else 'user' }} text-white"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="font-weight-bold">{{ user.fullname }}</div>
+                                <div class="small text-muted">{{ user.email }}</div>
+                                <div class="small">
+                                    <span class="badge bg-{{ 'success' if user.user_type == 'seller' else 'info' }}">
+                                        {{ user.user_type|title if user.user_type else 'User' }}
+                                    </span>
+                                    <span class="text-muted ml-2">
+                                        {% if user.created_at %}
+                                            {{ user.created_at.strftime('%b %d') }}
+                                        {% else %}
+                                            Recently
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        {% if not loop.last %}<hr>{% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-muted">No recent users found.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% block extra_css %}
+<style>
+
+</style>
+{% endblock %}
+
+
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize charts
+    initAnalyticsCharts();
+});
+
+function initAnalyticsCharts() {
+    // Revenue Chart - REAL DATA from platform
+    const revenueCtx = document.getElementById('revenueChart');
+    if (revenueCtx) {
+        const revenueChart = new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: {{ revenue_labels | tojson }},
+                datasets: [{
+                    label: 'Daily Revenue (₦)',
+                    data: {{ revenue_data | tojson }},
+                    borderColor: '#4e73df',
+                    backgroundColor: 'rgba(78, 115, 223, 0.05)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#4e73df',
+                    pointBorderColor: '#ffffff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `₦${context.parsed.y.toLocaleString()}`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                if (value >= 1000) {
+                                    return '₦' + (value / 1000).toFixed(0) + 'K';
+                                }
+                                return '₦' + value;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // User Distribution Chart - REAL DATA
+    const userCtx = document.getElementById('userDistributionChart');
+    if (userCtx) {
+        new Chart(userCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Sellers', 'Buyers', 'Admins'],
+                datasets: [{
+                    data: [
+                        {{ total_sellers }}, 
+                        {{ total_buyers }},
+                        {{ total_admins }}
+                    ],
+                    backgroundColor: ['#1cc88a', '#36b9cc', '#6f42c1'],
+                    hoverBackgroundColor: ['#17a673', '#2c9faf', '#5a359a'],
+                    borderWidth: 3,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '60%',
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 20,
+                            usePointStyle: true,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed;
+                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                const percentage = Math.round((value / total) * 100);
+                                return `${label}: ${value} (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+}
+</script>
+{% endblock %}

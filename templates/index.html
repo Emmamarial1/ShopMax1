@@ -1,0 +1,1332 @@
+{% extends "base.html" %}
+{% block title %}Home - ShopMax UCU Marketplace{% endblock %}
+
+{% block content %}
+<!-- Modern Hero Section with Dynamic Background -->
+<section class="modern-hero">
+    <div class="hero-background">
+        <div class="background-slide active" style="background-image: url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');">
+            <div class="slide-overlay"></div>
+        </div>
+        <div class="background-slide" style="background-image: url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');">
+            <div class="slide-overlay"></div>
+        </div>
+        <div class="background-slide" style="background-image: url('https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');">
+            <div class="slide-overlay"></div>
+        </div>
+        <div class="background-slide" style="background-image: url('https://images.unsplash.com/photo-1563013546-7eab76c7c1e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');">
+            <div class="slide-overlay"></div>
+        </div>
+    </div>
+    
+    <div class="hero-content">
+        <div class="container">
+            <div class="hero-text">
+                <div class="badge">🎓 UCU Community Marketplace</div>
+                
+                <h1 class="hero-headline">
+                    <span class="gradient-text">Campus Shopping</span> 
+                    <span class="highlight">Made Simple</span>
+                </h1>
+                
+                <p class="hero-description">
+                    Shop from verified UCU students and local sellers. Get fast delivery right to your dorm with cash on delivery.
+                </p>
+
+            
+                <!-- CTA Buttons -->
+                <div class="hero-actions">
+                    {% if session.user_id %}
+                        {% if session.user_type == 'seller' %}
+                            <a href="{{ url_for('dashboard') }}" class="cta-btn primary">
+                                <span class="btn-icon">🚀</span>
+                                Seller Dashboard
+                            </a>
+                        {% else %}
+                            <a href="{{ url_for('register_seller') }}" class="cta-btn primary">
+                                <span class="btn-icon">🏪</span>
+                                Become a Seller
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="cta-btn primary">
+                            <span class="btn-icon">🚀</span>
+                            Start Shopping
+                        </a>
+                    {% endif %}
+                    
+                    <a href="{{ url_for('products') }}" class="cta-btn secondary">
+                        <span class="btn-icon">🔍</span>
+                        Browse Products
+                    </a>
+                </div>
+            </div>
+            
+            <div class="hero-visual">
+                <div class="floating-card card-1">
+                    <div class="card-icon">📱</div>
+                    <div class="card-text">Easy Ordering</div>
+                </div>
+                <div class="floating-card card-2">
+                    <div class="card-icon">🚚</div>
+                    <div class="card-text">Fast Delivery</div>
+                </div>
+                <div class="floating-card card-3">
+                    <div class="card-icon">💵</div>
+                    <div class="card-text">Cash on Delivery</div>
+                </div>
+                <div class="floating-card card-4">
+                    <div class="card-icon">🛡️</div>
+                    <div class="card-text">Verified Sellers</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="scroll-indicator">
+        <span>Scroll to explore</span>
+        <div class="arrow"></div>
+    </div>
+</section>
+
+<!-- Search Section -->
+<section class="search-section">
+    <div class="container">
+        <div class="search-container">
+            <h2>Find exactly what you need</h2>
+            <p>Search from thousands of products by UCU students and local sellers</p>
+            
+            <form id="searchForm" action="{{ url_for('products') }}" method="GET" class="modern-search">
+                <div class="search-box">
+                    <div class="search-icon">🔍</div>
+                    <input type="text" name="q" placeholder="Search for textbooks, electronics, fashion, dorm essentials..." 
+                           class="search-input" id="searchInput">
+                    <button type="submit" class="search-btn">Search</button>
+                </div>
+                <div class="search-tags">
+                    <span class="search-tag" onclick="quickSearch('textbooks')">📚 Textbooks</span>
+                    <span class="search-tag" onclick="quickSearch('electronics')">📱 Electronics</span>
+                    <span class="search-tag" onclick="quickSearch('fashion')">👕 Fashion</span>
+                    <span class="search-tag" onclick="quickSearch('dorm')">🛏️ Dorm Essentials</span>
+                    <span class="search-tag" onclick="quickSearch('notes')">📝 Study Notes</span>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Why Choose ShopMax?</h2>
+            <p>Experience the best campus marketplace with these amazing features</p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🚚</div>
+                <h3>Cash on Delivery</h3>
+                <p>Pay only when you receive your item. Safe and trusted delivery right to your dorm.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3>Verified Community</h3>
+                <p>All sellers are verified UCU students and community members. Shop with confidence.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">⏱️</div>
+                <h3>Local & Fast</h3>
+                <p>Quick delivery within UCU campus and nearby Mukono areas. Get your items in hours.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">💬</div>
+                <h3>Direct Chat</h3>
+                <p>Message sellers directly to ask questions and negotiate prices before buying.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<!-- Horizontal How It Works Section -->
+<section class="how-it-works">
+    <div class="blurry-background"></div>
+    <div class="container">
+        <div class="section-header">
+            <h2>How ShopMax Works</h2>
+            <p>Simple steps to buy and sell on our platform</p>
+        </div>
+        
+        <div class="steps-horizontal">
+            <div class="step-horizontal">
+                <div class="step-number-horizontal">1</div>
+                <div class="step-icon-horizontal">🛍️</div>
+                <h3>Browse or List Products</h3>
+                <p>Explore thousands of items or easily list your own products to sell to the campus community.</p>
+            </div>
+            
+            <div class="step-connector">→</div>
+            
+            <div class="step-horizontal">
+                <div class="step-number-horizontal">2</div>
+                <div class="step-icon-horizontal">💬</div>
+                <h3>Connect & Communicate</h3>
+                <p>Message sellers directly, ask questions, and confirm details before making a purchase.</p>
+            </div>
+            
+            <div class="step-connector">→</div>
+            
+            <div class="step-horizontal">
+                <div class="step-number-horizontal">3</div>
+                <div class="step-icon-horizontal">🚚</div>
+                <h3>Order & Delivery</h3>
+                <p>Place your order with cash on delivery and get fast campus delivery within hours.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<<!-- Categories Section with Real Data -->
+<section class="categories-section">
+    <div class="blurry-background"></div>
+    <div class="container">
+        <div class="section-header">
+            <h2>Popular Categories</h2>
+            <p>Explore products by category</p>
+        </div>
+        
+        <div class="categories-grid">
+            <a href="{{ url_for('products', category='electronics') }}" class="category-card">
+                <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1498049794561-7780e7231661?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');"></div>
+                <div class="category-content">
+                    <div class="category-icon">📱</div>
+                    <h3>Electronics</h3>
+                    <p>Phones, laptops, accessories and more</p>
+                    <span class="product-count">{{ stats.electronics_count }}+ products</span>
+                </div>
+            </a>
+            
+            <a href="{{ url_for('products', category='clothing') }}" class="category-card">
+                <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');"></div>
+                <div class="category-content">
+                    <div class="category-icon">👕</div>
+                    <h3>Fashion</h3>
+                    <p>Clothing, shoes, and accessories</p>
+                    <span class="product-count">{{ stats.clothing_count }}+ products</span>
+                </div>
+            </a>
+            
+            <a href="{{ url_for('products', category='books') }}" class="category-card">
+                <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');"></div>
+                <div class="category-content">
+                    <div class="category-icon">📚</div>
+                    <h3>Books & Notes</h3>
+                    <p>Textbooks, study materials, and notes</p>
+                    <span class="product-count">{{ stats.books_count }}+ products</span>
+                </div>
+            </a>
+            
+            <a href="{{ url_for('products', category='home') }}" class="category-card">
+                <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80');"></div>
+                <div class="category-content">
+                    <div class="category-icon">🏠</div>
+                    <h3>Dorm Essentials</h3>
+                    <p>Everything you need for your dorm room</p>
+                    <span class="product-count">{{ stats.home_count }}+ products</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+<!-- Testimonials Section -->
+<section class="testimonials-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>What Our Community Says</h2>
+            <p>Hear from students and sellers using ShopMax</p>
+        </div>
+        
+        <div class="testimonials-slider">
+            <div class="testimonial-card active">
+                <div class="testimonial-content">
+                    <p>"I've made over UGX 300,000 selling my old textbooks and dorm supplies on ShopMax. It's so easy to use and the campus delivery is super fast!"</p>
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">S</div>
+                    <div class="author-info">
+                        <h4>Sarah K.</h4>
+                        <span>3rd Year Business Student</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <p>"As an international student, finding affordable items was tough until I found ShopMax. Got everything I needed within hours of ordering!"</p>
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">D</div>
+                    <div class="author-info">
+                        <h4>David M.</h4>
+                        <span>1st Year Computer Science</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-card">
+                <div class="testimonial-content">
+                    <p>"I started selling handmade crafts on ShopMax and now it's my side hustle. The UCU community is so supportive and the platform is easy to manage."</p>
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">J</div>
+                    <div class="author-info">
+                        <h4>Joyce N.</h4>
+                        <span>Art Student & Seller</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="testimonial-dots">
+            <span class="dot active" data-slide="0"></span>
+            <span class="dot" data-slide="1"></span>
+            <span class="dot" data-slide="2"></span>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Ready to Join Our Campus Marketplace?</h2>
+            <p>Start buying from fellow students or turn your unused items into cash today</p>
+            
+            <div class="cta-buttons">
+                {% if not session.user_id %}
+                    <a href="{{ url_for('register_buyer') }}" class="cta-btn primary">Create Buyer Account</a>
+                    <a href="{{ url_for('register_seller') }}" class="cta-btn secondary">Become a Seller</a>
+                {% else %}
+                    <a href="{{ url_for('products') }}" class="cta-btn primary">Browse Products</a>
+                    {% if session.user_type == 'buyer' %}
+                        <a href="{{ url_for('register_seller') }}" class="cta-btn secondary">Start Selling</a>
+                    {% else %}
+                        <a href="{{ url_for('add_product') }}" class="cta-btn secondary">Add New Product</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Debug Section (Remove this after testing) -->
+{% if stats %}
+<div style="background: #f8f9fa; padding: 1rem; margin: 1rem; border-radius: 8px; display: none;">
+    <h4>Debug - Real Category Counts:</h4>
+    <p>Electronics: {{ stats.electronics_count }}</p>
+    <p>Clothing: {{ stats.clothing_count }}</p>
+    <p>Books: {{ stats.books_count }}</p>
+    <p>Home: {{ stats.home_count }}</p>
+    <p>Total Products: {{ stats.total_products }}</p>
+</div>
+{% endif %}
+
+<style>
+/* Modern Hero Section */
+.modern-hero {
+    position: relative;
+    height: 100vh;
+    min-height: 700px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.background-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+}
+
+.background-slide.active {
+    opacity: 1;
+}
+
+.slide-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(26, 32, 44, 0.8) 0%, rgba(45, 55, 72, 0.6) 100%);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    color: white;
+}
+
+.hero-content .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.hero-text {
+    flex: 1;
+    max-width: 600px;
+}
+
+.badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero-headline {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.highlight {
+    color: #ffd700;
+}
+
+.hero-description {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+.platform-stats {
+    display: flex;
+    gap: 2rem;
+    margin: 2.5rem 0;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffd700;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.cta-btn.primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+}
+
+.cta-btn.primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+}
+
+.cta-btn.secondary {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.cta-btn.secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-3px);
+}
+
+.hero-visual {
+    flex: 1;
+    position: relative;
+    height: 400px;
+}
+
+.floating-card {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    padding: 1.5rem;
+    text-align: center;
+    width: 140px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: float 6s ease-in-out infinite;
+}
+
+.floating-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+.card-1 {
+    top: 0;
+    left: 0;
+    animation-delay: 0s;
+}
+
+.card-2 {
+    top: 0;
+    right: 0;
+    animation-delay: 1.5s;
+}
+
+.card-3 {
+    bottom: 0;
+    left: 0;
+    animation-delay: 3s;
+}
+
+.card-4 {
+    bottom: 0;
+    right: 0;
+    animation-delay: 4.5s;
+}
+
+.card-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.card-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    text-align: center;
+    color: white;
+    opacity: 0.7;
+    animation: bounce 2s infinite;
+}
+
+.arrow {
+    width: 20px;
+    height: 20px;
+    border-right: 2px solid white;
+    border-bottom: 2px solid white;
+    transform: rotate(45deg);
+    margin: 0.5rem auto 0;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+    40% { transform: translateY(-10px) translateX(-50%); }
+    60% { transform: translateY(-5px) translateX(-50%); }
+}
+
+/* Search Section */
+.search-section {
+    padding: 4rem 0;
+    background: #f8fafc;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.search-container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.search-container h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #2d3748;
+}
+
+.search-container p {
+    font-size: 1.1rem;
+    color: #718096;
+    margin-bottom: 2rem;
+}
+
+.modern-search {
+    width: 100%;
+}
+
+.search-box {
+    display: flex;
+    background: white;
+    border-radius: 50px;
+    padding: 0.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.search-icon {
+    padding: 0.5rem 1rem;
+    font-size: 1.2rem;
+    color: #718096;
+}
+
+.search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    padding: 0.5rem;
+}
+
+.search-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.search-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.search-tags {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.search-tag {
+    background: white;
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    color: #4a5568;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.search-tag:hover {
+    background: #667eea;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Features Section */
+.features-section {
+    padding: 5rem 0;
+    background: white;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.section-header h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #2d3748;
+}
+
+.section-header p {
+    font-size: 1.1rem;
+    color: #718096;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.feature-card {
+    background: white;
+    padding: 2.5rem 1.5rem;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid #f1f5f9;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+}
+
+.feature-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #2d3748;
+}
+
+.feature-card p {
+    color: #718096;
+    line-height: 1.6;
+}
+
+//* Horizontal How It Works Section */
+.how-it-works {
+    padding: 5rem 0;
+    background: #f8fafc;
+    position: relative;
+}
+
+.steps-horizontal {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.step-horizontal {
+    flex: 1;
+    text-align: center;
+    padding: 2rem 1.5rem;
+    position: relative;
+}
+
+.step-number-horizontal {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 auto 1rem;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.step-icon-horizontal {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.9;
+}
+
+.step-horizontal h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    color: #2d3748;
+    font-weight: 600;
+}
+
+.step-horizontal p {
+    color: #718096;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.step-connector {
+    font-size: 2.5rem;
+    color: #cbd5e0;
+    font-weight: 300;
+    margin: 3rem 0.5rem 0;
+    opacity: 0.7;
+}
+
+/* Responsive Design for Horizontal Steps */
+@media (max-width: 768px) {
+    .steps-horizontal {
+        flex-direction: column;
+        gap: 2rem;
+    }
+    
+    .step-connector {
+        display: none;
+    }
+    
+    .step-horizontal {
+        padding: 1.5rem;
+    }
+}
+
+
+/* Categories Section */
+.categories-section {
+    padding: 5rem 0;
+    background: white;
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.category-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+.category-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.category-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+}
+
+.category-content {
+    padding: 1.5rem;
+}
+
+.category-icon {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.category-content h3 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    color: #2d3748;
+}
+
+.category-content p {
+    color: #718096;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.product-count {
+    color: #667eea;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+/* Testimonials Section */
+.testimonials-section {
+    padding: 5rem 0;
+    background: #f8fafc;
+}
+
+.testimonials-slider {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto 2rem;
+    height: 300px;
+    overflow: hidden;
+}
+
+.testimonial-card {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.testimonial-card.active {
+    opacity: 1;
+}
+
+.testimonial-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.testimonial-content:after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid white;
+}
+
+.testimonial-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #4a5568;
+    font-style: italic;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-left: 2rem;
+}
+
+.author-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.author-info h4 {
+    margin: 0;
+    color: #2d3748;
+}
+
+.author-info span {
+    color: #718096;
+    font-size: 0.9rem;
+}
+
+.testimonial-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #cbd5e0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    background: #667eea;
+    transform: scale(1.2);
+}
+
+/* CTA Section */
+.cta-section {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-align: center;
+}
+
+.cta-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.cta-content p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.cta-section .cta-btn.primary {
+    background: white;
+    color: #667eea;
+}
+
+.cta-section .cta-btn.secondary {
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+}
+
+.cta-section .cta-btn.secondary:hover {
+    background: white;
+    color: #667eea;
+}
+
+/* Footer Styles */
+.modern-footer {
+    background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+    color: white;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem 2rem;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    gap: 3rem;
+}
+
+.footer-section h4 {
+    color: #ffd700;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section li {
+    margin-bottom: 0.8rem;
+}
+
+.footer-section a {
+    color: #cbd5e0;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.footer-section a:hover {
+    color: #ffd700;
+    transform: translateX(5px);
+}
+
+.footer-logo h3 {
+    color: #ffd700;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.footer-logo p {
+    color: #cbd5e0;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.social-link:hover {
+    border-bottom-color: #ffd700;
+}
+
+.footer-bottom {
+    border-top: 1px solid #4a5568;
+    margin-top: 2rem;
+    padding: 2rem 0;
+}
+
+.footer-bottom-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-bottom p {
+    color: #a0aec0;
+    margin: 0;
+}
+
+.footer-legal {
+    display: flex;
+    gap: 2rem;
+}
+
+.footer-legal a {
+    color: #a0aec0;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.footer-legal a:hover {
+    color: #ffd700;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-content .container {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .hero-headline {
+        font-size: 2.5rem;
+    }
+    
+    .platform-stats {
+        justify-content: center;
+    }
+    
+    .hero-visual {
+        height: 300px;
+    }
+    
+    .step, .step:nth-child(even) {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .search-box {
+        flex-direction: column;
+        border-radius: 15px;
+        gap: 0.5rem;
+    }
+    
+    .search-input {
+        padding: 1rem;
+    }
+    
+    .search-btn {
+        border-radius: 15px;
+    }
+    
+    .footer-container {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .footer-bottom-content {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .platform-stats {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .hero-actions {
+        flex-direction: column;
+    }
+    
+    .cta-btn {
+        justify-content: center;
+    }
+}
+</style>
+
+<script>
+// Background Slider
+document.addEventListener('DOMContentLoaded', function() {
+    // Background image slider
+    const slides = document.querySelectorAll('.background-slide');
+    let currentSlide = 0;
+    
+    function showNextSlide() {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
+    }
+    
+    // Change slide every 5 seconds
+    setInterval(showNextSlide, 5000);
+    
+    // Testimonial slider
+    const testimonialCards = document.querySelectorAll('.testimonial-card');
+    const dots = document.querySelectorAll('.dot');
+    let currentTestimonial = 0;
+    
+    function showTestimonial(index) {
+        testimonialCards.forEach(card => card.classList.remove('active'));
+        dots.forEach(dot => dot.classList.remove('active'));
+        
+        testimonialCards[index].classList.add('active');
+        dots[index].classList.add('active');
+        currentTestimonial = index;
+    }
+    
+    // Add click events to dots
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            showTestimonial(index);
+        });
+    });
+    
+    // Auto-rotate testimonials
+    setInterval(() => {
+        let next = (currentTestimonial + 1) % testimonialCards.length;
+        showTestimonial(next);
+    }, 6000);
+    
+    // Search functionality
+    function quickSearch(term) {
+        document.getElementById('searchInput').value = term;
+        document.getElementById('searchForm').submit();
+    }
+    
+    // Make quickSearch function available globally
+    window.quickSearch = quickSearch;
+    
+    // Add keyboard shortcut for search
+    document.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+            e.preventDefault();
+            document.getElementById('searchInput').focus();
+        }
+    });
+    
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+    
+    // Scroll animation for elements
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+    
+    // Observe elements for animation
+    document.querySelectorAll('.feature-card, .step, .category-card').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(el);
+    });
+});
+</script>
+{% endblock %}

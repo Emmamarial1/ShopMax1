@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Products - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Manage Products</h1>
+        <div class="d-none d-sm-inline-block">
+            <span class="text-muted">Total Products: {{ products|length }}</span>
+        </div>
+    </div>
+
+    <!-- Products Table -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">All Products</h6>
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
+                    <i class="fas fa-filter fa-sm"></i> Filter
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item filter-btn active" href="#" data-filter="all">All Products</a></li>
+                    <li><a class="dropdown-item filter-btn" href="#" data-filter="in_stock">In Stock</a></li>
+                    <li><a class="dropdown-item filter-btn" href="#" data-filter="out_of_stock">Out of Stock</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="card-body">
+            {% if products %}
+            <div class="table-responsive">
+                <table class="table table-bordered" id="productsTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Product Name</th>
+                            <th>Seller</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in products %}
+                        <tr class="product-row" data-stock="{{ product.stock }}">
+                            <td>{{ product.id }}</td>
+                            <td>
+                                <div class="font-weight-bold">{{ product.name }}</div>
+                                {% if product.description %}
+                                <small class="text-muted">{{ product.description[:50] }}{% if product.description|length > 50 %}...{% endif %}</small>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if product.user %}
+                                    {{ product.user.business_name or product.user.fullname }}
+                                    <br>
+                                    <small class="text-muted">{{ product.user.email }}</small>
+                                {% else %}
+                                    <span class="text-muted">Unknown</span>
+                                {% endif %}
+                            </td>
+                            <td class="font-weight-bold">₦{{ "{:,.2f}".format(product.price) }}</td>
+                            <td>
+                                <span class="badge bg-{{ 'success' if product.stock > 10 else 'warning' if product.stock > 0 else 'danger' }}">
+                                    {{ product.stock }}
+                                </span>
+                            </td>
+                            <td>{{ product.category or 'Uncategorized' }}</td>
+                            <td>
+                                <span class="badge bg-{{ 'success' if product.is_active else 'secondary' }}">
+                                    {{ 'Active' if product.is_active else 'Inactive' }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if product.created_at %}
+                                    {{ product.created_at.strftime('%Y-%m-%d') }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-outline-info view-product" data-product-id="{{ product.id }}">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-outline-warning">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="btn btn-outline-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-4">
+                <i class="fas fa-box fa-3x text-muted mb-3"></i>
+                <h4 class="text-muted">No Products Found</h4>
+                <p class="text-muted">There are no products in the system yet.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Product Detail Modal -->
+<div class="modal fade" id="productDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Product Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="productDetailContent">
+                <!-- Content will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Filter functionality
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const productRows = document.querySelectorAll('.product-row');
+    
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const filter = this.getAttribute('data-filter');
+            
+            // Update active state
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Filter rows
+            productRows.forEach(row => {
+                const stock = parseInt(row.getAttribute('data-stock'));
+                
+                switch(filter) {
+                    case 'all':
+                        row.style.display = '';
+                        break;
+                    case 'in_stock':
+                        row.style.display = stock > 0 ? '' : 'none';
+                        break;
+                    case 'out_of_stock':
+                        row.style.display = stock === 0 ? '' : 'none';
+                        break;
+                }
+            });
+        });
+    });
+    
+    // View product details
+    const viewButtons = document.querySelectorAll('.view-product');
+    viewButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const productId = this.getAttribute('data-product-id');
+            showProductDetails(productId);
+        });
+    });
+    
+    function showProductDetails(productId) {
+        // Simple implementation - in real app, fetch from API
+        const modalContent = document.getElementById('productDetailContent');
+        modalContent.innerHTML = `
+            <div class="text-center py-4">
+                <i class="fas fa-box fa-3x text-primary mb-3"></i>
+                <h4>Product Details</h4>
+                <p>Detailed view for product ID: ${productId}</p>
+                <p class="text-muted">Full product details will be implemented with API integration.</p>
+            </div>
+        `;
+        
+        // Show modal using Bootstrap 5
+        const modal = new bootstrap.Modal(document.getElementById('productDetailModal'));
+        modal.show();
+    }
+});
+</script>
+{% endblock %}

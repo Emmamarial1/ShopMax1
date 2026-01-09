@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Order #{{ order.id }} - ShopMax{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <!-- Back Button -->
+            <a href="{{ url_for('user_orders') }}" class="btn btn-outline-secondary mb-3">
+                <i class="fas fa-arrow-left me-2"></i>Back to Orders
+            </a>
+            
+            <!-- Order Header -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <h4 class="mb-0">
+                                <i class="fas fa-receipt me-2"></i>Order #{{ order.id }}
+                            </h4>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <span class="badge bg-light text-dark fs-6">{{ order.status|title }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Order Date:</strong> {{ order.created_at.strftime('%B %d, %Y at %H:%M') }}</p>
+                            <p><strong>Total Amount:</strong> ₦{{ "{:,.2f}".format(order.total_amount) }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            {% if order.delivery_confirmed_at %}
+                            <p><strong>Delivery Confirmed:</strong> {{ order.delivery_confirmed_at.strftime('%B %d, %Y') }}</p>
+                            {% if order.buyer_rating %}
+                            <p><strong>Your Rating:</strong> {{ "⭐" * order.buyer_rating }}</p>
+                            {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delivery Status Card -->
+            {% if order.status in ['shipped', 'delivered'] and not order.delivery_confirmed_at %}
+            <div class="card border-warning shadow mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">
+                        <i class="fas fa-truck me-2"></i>Ready for Delivery Confirmation
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p>Your order has been shipped and should arrive soon. Please confirm delivery once you receive your items.</p>
+                    <a href="{{ url_for('delivery_confirmation', order_id=order.id) }}" class="btn btn-success btn-lg">
+                        <i class="fas fa-clipboard-check me-2"></i>Confirm Delivery
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if order.delivery_confirmed_at %}
+            <div class="card border-success shadow mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-check-circle me-2"></i>Delivery Confirmed
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p>You confirmed delivery on <strong>{{ order.delivery_confirmed_at.strftime('%B %d, %Y at %H:%M') }}</strong></p>
+                    {% if order.buyer_rating %}
+                    <p><strong>Your Rating:</strong> {{ "⭐" * order.buyer_rating }}</p>
+                    {% endif %}
+                    {% if order.buyer_feedback %}
+                    <p><strong>Your Feedback:</strong> "{{ order.buyer_feedback }}"</p>
+                    {% endif %}
+                    {% if order.delivery_proof %}
+                    <p><strong>Delivery Proof:</strong> 
+                        <a href="{{ url_for('static', filename=order.delivery_proof) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-download me-1"></i>View Proof
+                        </a>
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if order.issues_reported %}
+            <div class="card border-danger shadow mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Issue Reported
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Issue Description:</strong> {{ order.issue_description }}</p>
+                    <p class="text-muted">Our support team has been notified and will contact you shortly.</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+{% if order.status == 'shipped' and order.user_id == user.id %}
+<div class="alert alert-warning mt-4">
+    <h5><i class="fas fa-truck-loading me-2"></i>Delivery Pending Confirmation</h5>
+    <p>Your order has been shipped. Please confirm delivery once you receive your items.</p>
+    <a href="{{ url_for('delivery_confirmation', order_id=order.id) }}" class="btn btn-success">
+        <i class="fas fa-clipboard-check me-2"></i>
+        Confirm Delivery
+    </a>
+</div>
+{% endif %}
+
+{% if order.status == 'completed' %}
+<div class="alert alert-success mt-4">
+    <h5><i class="fas fa-check-circle me-2"></i>Delivery Confirmed</h5>
+    <p>You confirmed delivery on {{ order.delivery_confirmed_at.strftime('%B %d, %Y at %H:%M') }}</p>
+    {% if order.buyer_rating %}
+    <p><strong>Your Rating:</strong> {{ '⭐' * order.buyer_rating }}</p>
+    {% endif %}
+</div>
+{% endif %}

@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Analytics - ShopMax</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+        }
+        
+        .analytics-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .page-header {
+            margin-bottom: 30px;
+        }
+        
+        .page-header h1 {
+            color: #2c3e50;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .page-subtitle {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+        
+        .stat-card h3 {
+            color: #495057;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+        
+        .stat-change {
+            font-size: 0.85rem;
+            margin-top: 8px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: 500;
+        }
+        
+        .positive { 
+            background-color: rgba(16, 185, 129, 0.1); 
+            color: #10b981; 
+        }
+        
+        .negative { 
+            background-color: rgba(239, 68, 68, 0.1); 
+            color: #ef4444; 
+        }
+        
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 992px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .chart-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e9ecef;
+        }
+        
+        .chart-card h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chart-container {
+            height: 350px;
+            position: relative;
+            width: 100%;
+        }
+        
+        .tables-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .tables-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .table-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border: 1px solid #e9ecef;
+        }
+        
+        .table-card h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table thead {
+            background-color: #f8fafc;
+        }
+        
+        .data-table th {
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #e9ecef;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .data-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e9ecef;
+            color: #495057;
+        }
+        
+        .data-table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+        
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .badge-success { background-color: #10b981; color: white; }
+        .badge-warning { background-color: #f59e0b; color: white; }
+        .badge-danger { background-color: #ef4444; color: white; }
+        .badge-info { background-color: #3b82f6; color: white; }
+        .badge-secondary { background-color: #6b7280; color: white; }
+        
+        .no-data {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6b7280;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .no-data-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        
+        .no-data h4 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #495057;
+        }
+        
+        .no-data p {
+            font-size: 0.95rem;
+            max-width: 400px;
+            line-height: 1.5;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            display: none;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .refresh-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s ease;
+            float: right;
+            margin-bottom: 20px;
+        }
+        
+        .refresh-btn:hover {
+            background: var(--primary-dark);
+        }
+        
+        .date-range {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+        
+        .date-input {
+            padding: 8px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        
+        .apply-date-btn {
+            background: var(--info);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    {% extends "base.html" %}
+    
+    {% block content %}
+    <div class="analytics-container">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>📊 Seller Analytics Dashboard</h1>
+            <p class="page-subtitle">Monitor your store performance, track sales, and analyze customer behavior</p>
+            
+            <!-- Refresh Button -->
+            <button class="refresh-btn" onclick="refreshAnalytics()">
+                <i class="fas fa-sync-alt"></i> Refresh Data
+            </button>
+            
+            <!-- Date Range Filter -->
+            <div class="date-range">
+                <input type="date" id="startDate" class="date-input" value="{{ start_date }}">
+                <span>to</span>
+                <input type="date" id="endDate" class="date-input" value="{{ end_date }}">
+                <button class="apply-date-btn" onclick="filterByDate()">Apply</button>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="spinner"></div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>💰 Total Revenue</h3>
+                <div class="stat-value">UGX {{ "{:,.0f}".format(analytics_data.total_revenue) }}</div>
+                <div class="stat-change {% if analytics_data.revenue_change >= 0 %}positive{% else %}negative{% endif %}">
+                    <i class="fas fa-{% if analytics_data.revenue_change >= 0 %}arrow-up{% else %}arrow-down{% endif %}"></i>
+                    {{ "%.1f"|format(analytics_data.revenue_change|abs) }}% from last period
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>📦 Total Orders</h3>
+                <div class="stat-value">{{ analytics_data.total_orders }}</div>
+                <div class="stat-change {% if analytics_data.orders_change >= 0 %}positive{% else %}negative{% endif %}">
+                    <i class="fas fa-{% if analytics_data.orders_change >= 0 %}arrow-up{% else %}arrow-down{% endif %}"></i>
+                    {{ "%.1f"|format(analytics_data.orders_change|abs) }}% from last period
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>🛍️ Products Sold</h3>
+                <div class="stat-value">{{ analytics_data.products_sold }}</div>
+                <div class="stat-change">Total units sold</div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>⭐ Store Rating</h3>
+                <div class="stat-value">
+                    {% if analytics_data.store_rating > 0 %}
+                        {{ "%.1f"|format(analytics_data.store_rating) }}/5.0
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </div>
+                <div class="stat-change">{{ analytics_data.reviews_count }} reviews</div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-grid">
+            <!-- Revenue Line Chart -->
+            <div class="chart-card">
+                <h3><i class="fas fa-chart-line"></i> Revenue Trends</h3>
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Category Pie Chart -->
+            <div class="chart-card">
+                <h3><i class="fas fa-chart-pie"></i> Sales by Category</h3>
+                <div class="chart-container">
+                    <canvas id="categoryChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tables Section -->
+        <div class="tables-grid">
+            <!-- Top Products Table -->
+            <div class="table-card">
+                <h3><i class="fas fa-fire"></i> Top Selling Products</h3>
+                {% if analytics_data.top_products and analytics_data.top_products|length > 0 %}
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Units Sold</th>
+                            <th>Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in analytics_data.top_products[:5] %}
+                        <tr>
+                            <td><strong>{{ product.name }}</strong></td>
+                            <td>{{ product.total_sold }}</td>
+                            <td>UGX {{ "{:,.0f}".format(product.revenue) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="no-data">
+                    <div class="no-data-icon">📦</div>
+                    <h4>No Sales Yet</h4>
+                    <p>Your top-selling products will appear here once you start making sales.</p>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Recent Orders Table -->
+            <div class="table-card">
+                <h3><i class="fas fa-clock"></i> Recent Orders</h3>
+                {% if analytics_data.recent_orders and analytics_data.recent_orders|length > 0 %}
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Order #</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in analytics_data.recent_orders[:5] %}
+                        <tr>
+                            <td><strong>#{{ order.order_number or order.id }}</strong></td>
+                            <td>{{ order.created_at.strftime('%b %d') }}</td>
+                            <td>
+                                {% if order.status == 'delivered' %}
+                                    <span class="badge badge-success">Delivered</span>
+                                {% elif order.status == 'processing' %}
+                                    <span class="badge badge-warning">Processing</span>
+                                {% elif order.status == 'pending' %}
+                                    <span class="badge badge-info">Pending</span>
+                                {% elif order.status == 'cancelled' %}
+                                    <span class="badge badge-danger">Cancelled</span>
+                                {% else %}
+                                    <span class="badge badge-secondary">{{ order.status|title }}</span>
+                                {% endif %}
+                            </td>
+                            <td>UGX {{ "{:,.0f}".format(order.total_amount) }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="no-data">
+                    <div class="no-data-icon">🛒</div>
+                    <h4>No Recent Orders</h4>
+                    <p>Recent orders from customers will appear here.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Show loading overlay
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+        
+        // Hide loading overlay
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+        
+        // Refresh analytics data
+        function refreshAnalytics() {
+            showLoading();
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        }
+        
+        // Filter by date range
+        function filterByDate() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            if (startDate && endDate) {
+                showLoading();
+                window.location.href = `?start_date=${startDate}&end_date=${endDate}`;
+            }
+        }
+        
+        // Initialize Charts when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Initializing analytics charts...');
+            
+            // Check if Chart.js is loaded
+            if (typeof Chart === 'undefined') {
+                console.error('Chart.js not loaded! Loading now...');
+                loadChartJS();
+                return;
+            }
+            
+            initializeCharts();
+        });
+        
+        // Load Chart.js dynamically if not loaded
+        function loadChartJS() {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+            script.onload = initializeCharts;
+            script.onerror = function() {
+                console.error('Failed to load Chart.js');
+                showChartError();
+            };
+            document.head.appendChild(script);
+        }
+        
+        // Show error if charts fail to load
+        function showChartError() {
+            const chartContainers = document.querySelectorAll('.chart-container');
+            chartContainers.forEach(container => {
+                container.innerHTML = `
+                    <div class="no-data">
+                        <div class="no-data-icon">⚠️</div>
+                        <h4>Chart Error</h4>
+                        <p>Failed to load chart library. Please refresh the page.</p>
+                    </div>
+                `;
+            });
+            hideLoading();
+        }
+        
+        // Initialize all charts
+        function initializeCharts() {
+            console.log('Chart.js loaded, creating charts...');
+            
+            // Create Revenue Chart
+            createRevenueChart();
+            
+            // Create Category Chart
+            createCategoryChart();
+            
+            hideLoading();
+        }
+        
+        // Create Revenue Line Chart
+        function createRevenueChart() {
+            const ctx = document.getElementById('revenueChart');
+            if (!ctx) {
+                console.error('Revenue chart canvas not found');
+                return;
+            }
+            
+            // Get data from Flask template
+            const chartLabels = {{ analytics_data.line_chart_labels|tojson }};
+            const chartData = {{ analytics_data.line_chart_data|tojson }};
+            
+            console.log('Revenue Chart Data:', { labels: chartLabels, data: chartData });
+            
+            // Check if we have data
+            if (!chartData || chartData.length === 0 || chartData.every(val => val === 0)) {
+                ctx.parentElement.innerHTML = `
+                    <div class="no-data">
+                        <div class="no-data-icon">📈</div>
+                        <h4>No Revenue Data</h4>
+                        <p>Revenue data will appear here once you make sales.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            try {
+                const chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: chartLabels,
+                        datasets: [{
+                            label: 'Daily Revenue',
+                            data: chartData,
+                            borderColor: '#2563eb',
+                            backgroundColor: 'rgba(37, 99, 235, 0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#2563eb',
+                            pointBorderColor: '#ffffff',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            pointHoverRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                labels: {
+                                    color: '#374151',
+                                    font: {
+                                        size: 12,
+                                        weight: '600'
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `UGX ${context.raw.toLocaleString()}`;
+                                    }
+                                },
+                                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                                titleColor: '#ffffff',
+                                bodyColor: '#ffffff'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                },
+                                ticks: {
+                                    color: '#6b7280',
+                                    callback: function(value) {
+                                        return 'UGX ' + value.toLocaleString();
+                                    }
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Revenue (UGX)',
+                                    color: '#6b7280',
+                                    font: {
+                                        weight: '600'
+                                    }
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                },
+                                ticks: {
+                                    color: '#6b7280'
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Date',
+                                    color: '#6b7280',
+                                    font: {
+                                        weight: '600'
+                                    }
+                                }
+                            }
+                        },
+                        interaction: {
+                            intersect: false,
+                            mode: 'index'
+                        },
+                        animation: {
+                            duration: 1000,
+                            easing: 'easeOutQuart'
+                        }
+                    }
+                });
+                
+                console.log('Revenue chart created successfully');
+            } catch (error) {
+                console.error('Error creating revenue chart:', error);
+                ctx.parentElement.innerHTML = `
+                    <div class="no-data">
+                        <div class="no-data-icon">❌</div>
+                        <h4>Chart Error</h4>
+                        <p>Failed to create revenue chart: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Create Category Pie Chart
+        function createCategoryChart() {
+            const ctx = document.getElementById('categoryChart');
+            if (!ctx) {
+                console.error('Category chart canvas not found');
+                return;
+            }
+            
+            // Get data from Flask template
+            const categoryData = {{ analytics_data.category_sales|tojson }};
+            
+            console.log('Category Chart Data:', categoryData);
+            
+            // Check if we have data
+            if (!categoryData || categoryData.length === 0 || categoryData.every(item => item.revenue === 0)) {
+                ctx.parentElement.innerHTML = `
+                    <div class="no-data">
+                        <div class="no-data-icon">📊</div>
+                        <h4>No Category Data</h4>
+                        <p>Category sales data will appear here once you make sales.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Prepare data for chart
+            const labels = categoryData.map(item => item.category || 'Uncategorized');
+            const data = categoryData.map(item => item.revenue || 0);
+            
+            // Color palette
+            const colorPalette = [
+                '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6',
+                '#06b6d4', '#84cc16', '#f97316', '#ec4899', '#64748b',
+                '#14b8a6', '#f43f5e', '#8b5cf6', '#84cc16', '#0ea5e9'
+            ];
+            
+            try {
+                const chart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: colorPalette.slice(0, labels.length),
+                            borderWidth: 2,
+                            borderColor: '#ffffff',
+                            hoverOffset: 20
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: {
+                                    color: '#374151',
+                                    font: {
+                                        size: 11
+                                    },
+                                    padding: 20,
+                                    usePointStyle: true,
+                                    pointStyle: 'circle'
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.raw || 0;
+                                        const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                        const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                                        return `${label}: UGX ${value.toLocaleString()} (${percentage}%)`;
+                                    }
+                                },
+                                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                                titleColor: '#ffffff',
+                                bodyColor: '#ffffff'
+                            }
+                        },
+                        cutout: '65%',
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true,
+                            duration: 1000
+                        }
+                    }
+                });
+                
+                console.log('Category chart created successfully');
+            } catch (error) {
+                console.error('Error creating category chart:', error);
+                ctx.parentElement.innerHTML = `
+                    <div class="no-data">
+                        <div class="no-data-icon">❌</div>
+                        <h4>Chart Error</h4>
+                        <p>Failed to create category chart: ${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Auto-refresh every 2 minutes if on analytics page
+        setTimeout(function() {
+            console.log('Auto-refreshing analytics data...');
+            refreshAnalytics();
+        }, 120000); // 2 minutes
+        
+    </script>
+    {% endblock %}
+</body>
+</html>

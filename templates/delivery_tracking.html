@@ -1,0 +1,722 @@
+{% extends "base.html" %}
+
+{% block title %}Delivery Tracking - ShopMax{% endblock %}
+
+{% block content %}
+<div class="delivery-tracking-page">
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>🚚 Delivery Tracking</h1>
+        <p>Real-time updates on your order delivery</p>
+    </div>
+
+    <!-- Tracking Search -->
+    <div class="tracking-search">
+        <div class="search-card">
+            <h3>Track Your Order</h3>
+            <p>Enter your order number to track delivery status</p>
+            <div class="search-form">
+                <input type="text" placeholder="Enter Order Number (e.g., UCU-2024-0012)" class="tracking-input">
+                <button class="track-btn">Track Order</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Delivery -->
+    <div class="active-delivery">
+        <h2>📦 Active Delivery</h2>
+        <div class="delivery-card">
+            <div class="delivery-header">
+                <div class="delivery-info">
+                    <h3>Order #UCU-2024-0012</h3>
+                    <p>Wireless Bluetooth Headphones • ₦25,000</p>
+                </div>
+                <div class="delivery-status">
+                    <span class="status-badge on-the-way">🚚 On the Way</span>
+                </div>
+            </div>
+
+            <!-- Progress Timeline -->
+            <div class="delivery-timeline">
+                <div class="timeline-step completed">
+                    <div class="step-icon">📦</div>
+                    <div class="step-content">
+                        <h4>Order Confirmed</h4>
+                        <p>March 15, 2024 • 10:30 AM</p>
+                        <p>Your order has been confirmed and is being processed</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-step completed">
+                    <div class="step-icon">🏪</div>
+                    <div class="step-content">
+                        <h4>Picked Up from Seller</h4>
+                        <p>March 15, 2024 • 2:15 PM</p>
+                        <p>Package collected from TechGadgets Store</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-step completed">
+                    <div class="step-icon">🚚</div>
+                    <div class="step-content">
+                        <h4>Out for Delivery</h4>
+                        <p>March 16, 2024 • 8:00 AM</p>
+                        <p>Your package is out for delivery</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-step current">
+                    <div class="step-icon">📍</div>
+                    <div class="step-content">
+                        <h4>In Your Area</h4>
+                        <p>Expected: Today by 2:00 PM</p>
+                        <p>Driver is in your area. Please be available for delivery</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-step upcoming">
+                    <div class="step-icon">✅</div>
+                    <div class="step-content">
+                        <h4>Delivered</h4>
+                        <p>Not yet delivered</p>
+                        <p>Your package will be delivered shortly</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delivery Map (Placeholder) -->
+            <div class="delivery-map">
+                <div class="map-placeholder">
+                    <div class="map-icon">🗺️</div>
+                    <h4>Live Tracking Map</h4>
+                    <p>Real-time delivery tracking coming soon!</p>
+                    <div class="driver-info">
+                        <div class="driver-avatar">🚗</div>
+                        <div class="driver-details">
+                            <h5>Driver: John M.</h5>
+                            <p>Vehicle: Motorcycle • UCU-DEL-001</p>
+                            <p>Estimated Arrival: 1:45 PM (15 minutes)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delivery Actions -->
+            <div class="delivery-actions">
+                <button class="action-btn contact-driver">📞 Contact Driver</button>
+                <button class="action-btn delivery-instructions">📋 Delivery Instructions</button>
+                <button class="action-btn reschedule">🕐 Reschedule Delivery</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delivery History -->
+    <div class="delivery-history">
+        <h2>📊 Delivery History</h2>
+        <div class="history-grid">
+            <div class="history-card">
+                <div class="history-header">
+                    <h4>#UCU-2024-0011</h4>
+                    <span class="status delivered">✅ Delivered</span>
+                </div>
+                <p>Smartphone Accessories</p>
+                <p class="delivery-date">Delivered: March 14, 2024</p>
+                <button class="view-details">View Details</button>
+            </div>
+            
+            <div class="history-card">
+                <div class="history-header">
+                    <h4>#UCU-2024-0010</h4>
+                    <span class="status delivered">✅ Delivered</span>
+                </div>
+                <p>Programming Books</p>
+                <p class="delivery-date">Delivered: March 13, 2024</p>
+                <button class="view-details">View Details</button>
+            </div>
+            
+            <div class="history-card">
+                <div class="history-header">
+                    <h4>#UCU-2024-0009</h4>
+                    <span class="status delivered">✅ Delivered</span>
+                </div>
+                <p>University Textbooks</p>
+                <p class="delivery-date">Delivered: March 10, 2024</p>
+                <button class="view-details">View Details</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delivery Support -->
+    <div class="delivery-support">
+        <h2>💁 Need Help?</h2>
+        <div class="support-options">
+            <div class="support-card">
+                <div class="support-icon">📞</div>
+                <h4>Contact Support</h4>
+                <p>Get immediate assistance with your delivery</p>
+                <button class="support-btn">Call Support</button>
+            </div>
+            
+            <div class="support-card">
+                <div class="support-icon">💬</div>
+                <h4>Live Chat</h4>
+                <p>Chat with our delivery support team</p>
+                <button class="support-btn">Start Chat</button>
+            </div>
+            
+            <div class="support-card">
+                <div class="support-icon">📧</div>
+                <h4>Email Support</h4>
+                <p>Send us an email for non-urgent queries</p>
+                <button class="support-btn">Send Email</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.delivery-tracking-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.page-header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.page-header p {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+}
+
+/* Tracking Search */
+.tracking-search {
+    margin-bottom: 3rem;
+}
+
+.search-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.search-card h3 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.search-card p {
+    color: #7f8c8d;
+    margin-bottom: 1.5rem;
+}
+
+.search-form {
+    display: flex;
+    gap: 1rem;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.tracking-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.track-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.track-btn:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+/* Active Delivery */
+.active-delivery {
+    margin-bottom: 3rem;
+}
+
+.active-delivery h2 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+}
+
+.delivery-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+.delivery-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.delivery-info h3 {
+    color: #2c3e50;
+    margin: 0 0 0.5rem 0;
+}
+
+.delivery-info p {
+    color: #7f8c8d;
+    margin: 0;
+}
+
+.status-badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.status-badge.on-the-way {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* Delivery Timeline */
+.delivery-timeline {
+    padding: 2rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.timeline-step {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.timeline-step:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-step::before {
+    content: '';
+    position: absolute;
+    left: 25px;
+    top: 40px;
+    bottom: -2rem;
+    width: 2px;
+    background: #e9ecef;
+    z-index: 1;
+}
+
+.timeline-step:last-child::before {
+    display: none;
+}
+
+.step-icon {
+    width: 50px;
+    height: 50px;
+    background: #f8f9fa;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    z-index: 2;
+    position: relative;
+}
+
+.timeline-step.completed .step-icon {
+    background: #27ae60;
+    color: white;
+}
+
+.timeline-step.current .step-icon {
+    background: #3498db;
+    color: white;
+    animation: pulse 2s infinite;
+}
+
+.timeline-step.upcoming .step-icon {
+    background: #f8f9fa;
+    color: #bdc3c7;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-content h4 {
+    color: #2c3e50;
+    margin: 0 0 0.5rem 0;
+}
+
+.step-content p {
+    color: #7f8c8d;
+    margin: 0.2rem 0;
+    font-size: 0.9rem;
+}
+
+.timeline-step.completed .step-content h4,
+.timeline-step.completed .step-content p {
+    color: #27ae60;
+}
+
+.timeline-step.current .step-content h4,
+.timeline-step.current .step-content p {
+    color: #3498db;
+}
+
+.timeline-step.upcoming .step-content h4,
+.timeline-step.upcoming .step-content p {
+    color: #bdc3c7;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Delivery Map */
+.delivery-map {
+    padding: 2rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.map-placeholder {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    color: #7f8c8d;
+}
+
+.map-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.driver-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.driver-avatar {
+    font-size: 2rem;
+}
+
+.driver-details h5 {
+    color: #2c3e50;
+    margin: 0 0 0.3rem 0;
+}
+
+.driver-details p {
+    margin: 0.2rem 0;
+    font-size: 0.8rem;
+}
+
+/* Delivery Actions */
+.delivery-actions {
+    padding: 1.5rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    padding: 10px 20px;
+    border: 2px solid #3498db;
+    background: white;
+    color: #3498db;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.action-btn:hover {
+    background: #3498db;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Delivery History */
+.delivery-history {
+    margin-bottom: 3rem;
+}
+
+.delivery-history h2 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+}
+
+.history-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.history-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.history-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.history-header h4 {
+    color: #2c3e50;
+    margin: 0;
+}
+
+.status {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.status.delivered {
+    background: #d1f7e9;
+    color: #0d5c3e;
+}
+
+.history-card p {
+    color: #7f8c8d;
+    margin: 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+.delivery-date {
+    color: #27ae60 !important;
+    font-weight: 600;
+}
+
+.view-details {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 1rem;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.view-details:hover {
+    background: #2980b9;
+}
+
+/* Delivery Support */
+.delivery-support h2 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+}
+
+.support-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.support-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.support-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.support-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.support-card h4 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.support-card p {
+    color: #7f8c8d;
+    margin-bottom: 1.5rem;
+}
+
+.support-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.support-btn:hover {
+    background: #219a52;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .delivery-tracking-page {
+        padding: 1rem;
+    }
+    
+    .search-form {
+        flex-direction: column;
+    }
+    
+    .delivery-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .timeline-step {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+    
+    .timeline-step::before {
+        left: 50%;
+        top: 50px;
+        bottom: -1rem;
+    }
+    
+    .delivery-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .driver-info {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .history-grid,
+    .support-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .step-content h4 {
+        font-size: 1rem;
+    }
+    
+    .step-content p {
+        font-size: 0.8rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Track order functionality
+    const trackBtn = document.querySelector('.track-btn');
+    const trackingInput = document.querySelector('.tracking-input');
+    
+    trackBtn.addEventListener('click', function() {
+        const orderNumber = trackingInput.value.trim();
+        if (orderNumber) {
+            alert(`Tracking order: ${orderNumber}\n\nThis feature is coming soon! For now, you can view the sample tracking above.`);
+        } else {
+            alert('Please enter an order number to track.');
+        }
+    });
+    
+    // Support buttons
+    document.querySelectorAll('.support-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const service = this.closest('.support-card').querySelector('h4').textContent;
+            alert(`${service} feature coming soon!`);
+        });
+    });
+    
+    // Delivery action buttons
+    document.querySelectorAll('.action-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const action = this.textContent;
+            alert(`${action} feature coming soon!`);
+        });
+    });
+    
+    // View details buttons in history
+    document.querySelectorAll('.view-details').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const orderNumber = this.closest('.history-card').querySelector('h4').textContent;
+            alert(`Viewing details for ${orderNumber}\n\nOrder details feature coming soon!`);
+        });
+    });
+    
+    // Simulate live updates
+    function simulateLiveUpdate() {
+        const currentStep = document.querySelector('.timeline-step.current .step-content p:last-child');
+        if (currentStep) {
+            const messages = [
+                'Driver is in your area. Please be available for delivery',
+                'Driver is 5 minutes away',
+                'Driver is approaching your location',
+                'Driver has arrived at your building'
+            ];
+            const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+            currentStep.textContent = randomMessage;
+        }
+    }
+    
+    // Update every 30 seconds for demo purposes
+    setInterval(simulateLiveUpdate, 30000);
+});
+</script>
+{% endblock %}

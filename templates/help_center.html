@@ -1,0 +1,580 @@
+{% extends "base.html" %}
+
+{% block title %}Help Center - ShopMax UCU{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto text-center">
+            <div class="ucu-badge mb-4">
+                <span class="badge bg-primary">UCU Community Exclusive</span>
+            </div>
+            <h1 class="display-4 fw-bold text-primary mb-4">ShopMax UCU Help Center</h1>
+            <p class="lead text-muted">Get help with buying, selling, and navigating our campus marketplace</p>
+            <div class="alert alert-info">
+                <i class="fas fa-university me-2"></i>
+                <strong>UCU Students & Staff:</strong> This help center is specifically designed for our university community. Priority support for verified UCU email addresses.
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <!-- Emergency Support Banner -->
+            <div class="card border-warning mb-5">
+                <div class="card-header bg-warning text-dark">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Urgent Support Needed?</strong>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <p class="mb-3">For immediate assistance with active orders, safety concerns, or urgent issues:</p>
+                            <div class="d-flex flex-wrap gap-2">
+                                <a href="tel:+256700123456" class="btn btn-danger">
+                                    <i class="fas fa-phone me-2"></i>Call UCU Support: +256 700 123 456
+                                </a>
+                                <a href="mailto:support@shopmaxucu.com" class="btn btn-outline-danger">
+                                    <i class="fas fa-envelope me-2"></i>Email Emergency Support
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <i class="fas fa-headset fa-3x text-warning"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Help Cards -->
+            <div class="row mb-5">
+                <div class="col-12">
+                    <h2 class="text-center mb-4">Quick Help Resources</h2>
+                    <div class="row g-4">
+                        <!-- Card 1 -->
+                        <div class="col-md-4">
+                            <div class="card help-card h-100 text-center">
+                                <div class="card-icon bg-primary">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Buying Guide</h5>
+                                    <p class="card-text">Learn how to shop safely on campus, find great deals, and complete purchases.</p>
+                                    <a href="{{ url_for('how_to_buy') }}" class="btn btn-outline-primary">View Guide</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card 2 -->
+                        <div class="col-md-4">
+                            <div class="card help-card h-100 text-center">
+                                <div class="card-icon bg-success">
+                                    <i class="fas fa-store"></i>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Selling Guide</h5>
+                                    <p class="card-text">Start your campus business, list products, and manage orders as a student seller.</p>
+                                    <a href="{{ url_for('seller_guidelines') }}" class="btn btn-outline-success">Start Selling</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Card 3 -->
+                        <div class="col-md-4">
+                            <div class="card help-card h-100 text-center">
+                                <div class="card-icon bg-warning">
+                                    <i class="fas fa-shield-alt"></i>
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Safety Center</h5>
+                                    <p class="card-text">UCU-specific safety tips, meeting spots, and emergency contacts.</p>
+                                    <a href="{{ url_for('safety_tips') }}" class="btn btn-outline-warning">Stay Safe</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Help -->
+            <div class="card mb-5">
+                <div class="card-body text-center py-4">
+                    <i class="fas fa-search fa-2x text-primary mb-3"></i>
+                    <h3>Search Help Articles</h3>
+                    <p class="text-muted">Find answers to common questions about using ShopMax at UCU</p>
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-lg" placeholder="Type your question...">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search"></i> Search
+                                </button>
+                            </div>
+                            <div class="mt-2">
+                                <small class="text-muted">Try: "How to reset password", "Delivery times", "Seller fees"</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UCU Community Help Sections -->
+            <div class="row">
+                <!-- Getting Started -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-primary text-white">
+                            <i class="fas fa-play-circle me-2"></i>Getting Started
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-primary me-2"></i>
+                                        How to create your UCU student account
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-primary me-2"></i>
+                                        Verifying your UCU email address
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-primary me-2"></i>
+                                        Setting up your campus delivery address
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-primary me-2"></i>
+                                        Downloading the mobile app
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-primary me-2"></i>
+                                        UCU student benefits and discounts
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buying Help -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-success text-white">
+                            <i class="fas fa-shopping-bag me-2"></i>Buying Help
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-success me-2"></i>
+                                        Finding textbooks and course materials
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-success me-2"></i>
+                                        Safe meeting spots on UCU campus
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-success me-2"></i>
+                                        Payment methods for students
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-success me-2"></i>
+                                        Free campus delivery information
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-success me-2"></i>
+                                        Returning items as a student
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selling Help -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-warning text-dark">
+                            <i class="fas fa-store me-2"></i>Selling Help
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-warning me-2"></i>
+                                        Student seller registration process
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-warning me-2"></i>
+                                        What can I sell as a UCU student?
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-warning me-2"></i>
+                                        Student seller subscription plans
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-warning me-2"></i>
+                                        Managing orders during class hours
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-warning me-2"></i>
+                                        Tax information for student sellers
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technical Help -->
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-info text-white">
+                            <i class="fas fa-laptop me-2"></i>Technical Help
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-info me-2"></i>
+                                        Troubleshooting login issues
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-info me-2"></i>
+                                        App not working on campus WiFi
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-info me-2"></i>
+                                        Uploading product photos
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-info me-2"></i>
+                                        Notification settings
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-info me-2"></i>
+                                        Browser compatibility
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- UCU Campus Support Section -->
+            <div class="card mt-5 border-primary">
+                <div class="card-header bg-primary text-white">
+                    <i class="fas fa-university me-2"></i>UCU Campus Support
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5>Dedicated UCU Student Support Team</h5>
+                            <p>Our support team includes fellow UCU students who understand campus life and can help with:</p>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <ul>
+                                        <li>Course material exchanges</li>
+                                        <li>Dorm room sales</li>
+                                        <li>Campus event tickets</li>
+                                        <li>Student club fundraisers</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <ul>
+                                        <li>Graduation gown sales</li>
+                                        <li>Textbook buybacks</li>
+                                        <li>Internship opportunities</li>
+                                        <li>Student business support</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="bg-light p-3 rounded border">
+                                <i class="fas fa-users fa-3x text-primary mb-2"></i>
+                                <p class="mb-0">Student-to-Student Support</p>
+                                <small class="text-muted">By students, for students</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Methods -->
+            <div class="row mt-5">
+                <div class="col-md-4 mb-4">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="fas fa-phone fa-2x text-primary mb-3"></i>
+                            <h5>Phone Support</h5>
+                            <p class="text-muted">Speak directly with our UCU support team</p>
+                            <div class="support-info">
+                                <strong>+256 700 123 456</strong>
+                                <p class="small mt-2">Mon-Fri: 8:00 AM - 8:00 PM<br>Sat-Sun: 9:00 AM - 5:00 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="fas fa-envelope fa-2x text-success mb-3"></i>
+                            <h5>Email Support</h5>
+                            <p class="text-muted">Send us detailed questions and get written responses</p>
+                            <div class="support-info">
+                                <strong>support@shopmaxucu.com</strong>
+                                <p class="small mt-2">Response within 4 hours during support hours</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="fas fa-comments fa-2x text-warning mb-3"></i>
+                            <h5>Live Chat</h5>
+                            <p class="text-muted">Instant messaging with our support team</p>
+                            <div class="support-info">
+                                <strong>Available 24/7</strong>
+                                <p class="small mt-2">Click the chat icon in the bottom right to start</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campus Visit Section -->
+            <div class="card bg-light mt-5">
+                <div class="card-body text-center py-5">
+                    <i class="fas fa-map-marker-alt fa-3x text-primary mb-3"></i>
+                    <h3 class="mb-3">Visit Our Campus Help Desk</h3>
+                    <p class="lead mb-4">Get in-person help at the UCU Main Library - Ground Floor</p>
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="row text-start">
+                                <div class="col-md-6">
+                                    <h6>📍 Location</h6>
+                                    <p>UCU Main Library, Ground Floor<br>Next to the Computer Lab</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>🕒 Hours</h6>
+                                    <p>Monday - Friday: 9:00 AM - 5:00 PM<br>Saturday: 10:00 AM - 2:00 PM</p>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <a href="#" class="btn btn-primary me-2">
+                                    <i class="fas fa-directions me-2"></i>Get Directions
+                                </a>
+                                <a href="#" class="btn btn-outline-primary">
+                                    <i class="fas fa-calendar me-2"></i>Book Appointment
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Information -->
+            <div class="card mt-5 border-info">
+                <div class="card-header bg-info text-white">
+                    <i class="fas fa-graduation-cap me-2"></i>About This Project
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5>ShopMax UCU - Student Project</h5>
+                            <p>This platform was developed as part of a final year Computer Science project at Uganda Christian University.</p>
+                            <p><strong>Project Vision:</strong> To create a safe, efficient marketplace exclusively for the UCU community where students and staff can buy, sell, and trade items within the campus ecosystem.</p>
+                            <p><strong>Development Team:</strong> Final Year Computer Science Students</p>
+                            <p><strong>Supervisor:</strong> Department of Computing & Technology</p>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="bg-white p-3 rounded border text-center">
+                                <img src="https://via.placeholder.com/100x100/003366/ffffff?text=UCU" alt="UCU Logo" class="img-fluid mb-2">
+                                <p class="small mb-0">Uganda Christian University<br>Department of Computing & Technology</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feedback Section -->
+            <div class="text-center mt-5 p-4 bg-primary text-white rounded">
+                <h4 class="mb-3">Help Us Improve</h4>
+                <p class="mb-4">As a student project, your feedback helps us make ShopMax better for the entire UCU community.</p>
+                <a href="#" class="btn btn-light me-2">
+                    <i class="fas fa-comment me-2"></i>Submit Feedback
+                </a>
+                <a href="#" class="btn btn-outline-light">
+                    <i class="fas fa-bug me-2"></i>Report a Bug
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.ucu-badge {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.help-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.help-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+}
+
+.card-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: -35px auto 20px;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.support-info {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+/* UCU Color Theme */
+:root {
+    --ucu-blue: #003366;
+    --ucu-gold: #FFD700;
+}
+
+.bg-ucu {
+    background-color: var(--ucu-blue) !important;
+}
+
+.text-ucu {
+    color: var(--ucu-blue) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-icon {
+        width: 60px;
+        height: 60px;
+        margin: -30px auto 15px;
+        font-size: 1.25rem;
+    }
+    
+    .display-4 {
+        font-size: 2rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Simple search functionality
+    const searchInput = document.querySelector('input[type="text"]');
+    const searchButton = document.querySelector('.btn-primary');
+    
+    searchButton.addEventListener('click', function() {
+        const searchTerm = searchInput.value.toLowerCase();
+        if (searchTerm) {
+            // In a real implementation, this would search through help articles
+            alert(`Searching for: "${searchTerm}"\n\nThis would display relevant help articles in a real implementation.`);
+            searchInput.value = '';
+        }
+    });
+    
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            searchButton.click();
+        }
+    });
+
+    // Add interactive elements to help cards
+    const helpCards = document.querySelectorAll('.help-card');
+    helpCards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+
+    // Emergency support phone number click tracking
+    const emergencyPhone = document.querySelector('a[href^="tel:"]');
+    emergencyPhone.addEventListener('click', function() {
+        // In a real implementation, this would track emergency calls
+        console.log('Emergency support call initiated');
+    });
+
+    // Feedback form interaction
+    const feedbackBtn = document.querySelector('.btn-light');
+    feedbackBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        alert('Thank you for your interest in providing feedback! In a full implementation, this would open a feedback form.');
+    });
+});
+</script>
+{% endblock %}

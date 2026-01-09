@@ -1,0 +1,389 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout - ShopMax{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <!-- Checkout Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 mb-1">
+                        <i class="fas fa-shopping-cart text-primary me-2"></i>Checkout
+                    </h1>
+                    <p class="text-muted mb-0">Complete your purchase securely</p>
+                </div>
+                <div class="text-muted">
+                    <i class="fas fa-lock me-1 text-success"></i>Secure Checkout
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Order Summary -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list-alt me-2"></i>Order Summary
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if cart_items %}
+                    <div class="table-responsive">
+                        <table class="table table-borderless">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Product</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th class="text-end">Price</th>
+                                    <th class="text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cart_item, product in cart_items %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if product.image %}
+                                                <img src="{{ url_for('static', filename='uploads/' + product.image) }}" 
+                                                     alt="{{ product.name }}" 
+                                                     class="rounded me-3"
+                                                     style="width: 60px; height: 60px; object-fit: cover;">
+                                            {% else %}
+                                                <div class="bg-light rounded d-flex align-items-center justify-content-center me-3"
+                                                     style="width: 60px; height: 60px;">
+                                                    <i class="fas fa-box text-muted"></i>
+                                                </div>
+                                            {% endif %}
+                                            <div>
+                                                <h6 class="mb-1">{{ product.name }}</h6>
+                                                <small class="text-muted">Seller: {{ product.seller.business_name or product.seller.fullname }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-primary rounded-pill">{{ cart_item.quantity }}</span>
+                                    </td>
+                                    <td class="text-end">UGX {{ "{:,.0f}".format(product.price) }}</td>
+                                    <td class="text-end fw-bold">UGX {{ "{:,.0f}".format(product.price * cart_item.quantity) }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Your cart is empty</p>
+                        <a href="{{ url_for('products') }}" class="btn btn-primary">Continue Shopping</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Delivery Information -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="fas fa-truck me-2"></i>Delivery Information
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form id="checkoutForm" method="POST" action="{{ url_for('place_order') }}">
+                        <!-- Customer Information -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="fullname" class="form-label">Full Name *</label>
+                                    <input type="text" class="form-control" id="fullname" name="fullname" 
+                                           value="{{ user.fullname }}" required readonly>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">Phone Number *</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" 
+                                           value="{{ user.phone }}" required>
+                                    <div class="form-text">We'll contact you for delivery updates</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Delivery Address -->
+                        <div class="mb-4">
+                            <label for="delivery_address" class="form-label">Delivery Address *</label>
+                            <textarea class="form-control" id="delivery_address" name="delivery_address" 
+                                      rows="4" placeholder="Enter your complete delivery address including landmarks, street name, building number, etc." 
+                                      required>{{ user.delivery_address or '' }}</textarea>
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Please provide detailed address for smooth delivery
+                            </div>
+                        </div>
+
+                        <!-- Delivery Instructions -->
+                        <div class="mb-4">
+                            <label for="delivery_instructions" class="form-label">Delivery Instructions (Optional)</label>
+                            <textarea class="form-control" id="delivery_instructions" name="delivery_instructions" 
+                                      rows="2" placeholder="Any special delivery instructions?"></textarea>
+                            <div class="form-text">
+                                E.g., "Call before delivery", "Leave at security", etc.
+                            </div>
+                        </div>
+
+                        <!-- Payment Method -->
+                        <div class="mb-4">
+                            <label class="form-label">Payment Method *</label>
+                            <div class="border rounded p-3">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="radio" name="payment_method" 
+                                           id="cash_on_delivery" value="cash_on_delivery" checked>
+                                    <label class="form-check-label" for="cash_on_delivery">
+                                        <i class="fas fa-money-bill-wave me-2 text-success"></i>
+                                        <strong>Cash on Delivery</strong>
+                                        <small class="text-muted d-block">Pay when you receive your order</small>
+                                    </label>
+                                </div>
+                                
+                            </div>
+                        </div>
+
+                        <!-- Order Notes -->
+                        <div class="mb-3">
+                            <label for="order_notes" class="form-label">Order Notes (Optional)</label>
+                            <textarea class="form-control" id="order_notes" name="order_notes" 
+                                      rows="2" placeholder="Any additional notes for your order?"></textarea>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Summary Sidebar -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm sticky-top" style="top: 20px;">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="fas fa-receipt me-2"></i>Order Total
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <!-- Price Breakdown -->
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal:</span>
+                        <span>UGX {{ "{:,.0f}".format(subtotal) }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Delivery Fee:</span>
+                        <span class="text-success">UGX {{ "{:,.0f}".format(delivery_fee) }}</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between mb-3">
+                        <strong>Total:</strong>
+                        <strong class="text-success fs-5">UGX {{ "{:,.0f}".format(total) }}</strong>
+                    </div>
+
+                   
+
+                    <!-- Security Badges -->
+                    <div class="text-center mb-3">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <div class="border rounded p-2">
+                                    <i class="fas fa-shield-alt text-success"></i>
+                                    <small class="d-block">Secure Payment</small>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="border rounded p-2">
+                                    <i class="fas fa-undo text-primary"></i>
+                                    <small class="d-block">Easy Returns</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Place Order Button -->
+                    <button type="submit" form="checkoutForm" class="btn btn-primary btn-lg w-100 mb-3">
+                        <i class="fas fa-lock me-2"></i>
+                        Place Order
+                    </button>
+
+                    <!-- Continue Shopping -->
+                    <a href="{{ url_for('products') }}" class="btn btn-outline-secondary w-100">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Continue Shopping
+                    </a>
+
+                    <!-- Trust Indicators -->
+                    <div class="mt-3 text-center">
+                        <small class="text-muted">
+                            <i class="fas fa-lock me-1"></i>
+                            Your personal information is secure and encrypted
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border-radius: 12px;
+}
+
+.form-control:read-only {
+    background-color: #f8f9fa;
+    border-color: #e9ecef;
+}
+
+.sticky-top {
+    position: sticky;
+    z-index: 10;
+}
+
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.table th {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.alert {
+    border-radius: 8px;
+}
+
+.form-check-input:checked {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.form-text {
+    font-size: 0.8rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .table-responsive {
+        font-size: 0.9rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Form validation
+    const form = document.getElementById('checkoutForm');
+    const deliveryAddress = document.getElementById('delivery_address');
+    
+    form.addEventListener('submit', function(e) {
+        if (!deliveryAddress.value.trim()) {
+            e.preventDefault();
+            showAlert('Please enter your delivery address', 'error');
+            deliveryAddress.focus();
+            return false;
+        }
+        
+        if (!document.querySelector('input[name="payment_method"]:checked')) {
+            e.preventDefault();
+            showAlert('Please select a payment method', 'error');
+            return false;
+        }
+        
+        // Show loading state
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Processing...';
+    });
+    
+    // Phone number validation
+    const phoneInput = document.getElementById('phone');
+    phoneInput.addEventListener('blur', function() {
+        const phoneRegex = /^[0-9+-\s()]{10,}$/;
+        if (!phoneRegex.test(this.value)) {
+            this.classList.add('is-invalid');
+            showAlert('Please enter a valid phone number', 'error');
+        } else {
+            this.classList.remove('is-invalid');
+        }
+    });
+    
+    // Delivery address character count
+    deliveryAddress.addEventListener('input', function() {
+        const charCount = this.value.length;
+        const minChars = 10;
+        
+        if (charCount < minChars && charCount > 0) {
+            this.classList.add('is-invalid');
+        } else {
+            this.classList.remove('is-invalid');
+        }
+    });
+    
+    function showAlert(message, type) {
+        // Remove existing alerts
+        const existingAlerts = document.querySelectorAll('.custom-alert');
+        existingAlerts.forEach(alert => alert.remove());
+        
+        const alert = document.createElement('div');
+        alert.className = `custom-alert alert alert-${type === 'error' ? 'danger' : 'success'} alert-dismissible fade show position-fixed`;
+        alert.style.cssText = `
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            min-width: 300px;
+        `;
+        alert.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        document.body.appendChild(alert);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+            if (alert.parentNode) {
+                alert.remove();
+            }
+        }, 5000);
+    }
+    
+    // Add some sample delivery addresses for convenience
+    const sampleAddresses = [
+        "UCU Main Campus, Mukono - Student Hostels",
+        "Mukono Town, Shop near Mukono Police Station",
+        "Kampala Road, Opposite Garden City Mall",
+        "Najjera, Near Najjera Shopping Centre"
+    ];
+    
+    // Uncomment to add sample addresses as datalist
+    /*
+    const addressDatalist = document.createElement('datalist');
+    addressDatalist.id = 'sampleAddresses';
+    sampleAddresses.forEach(address => {
+        const option = document.createElement('option');
+        option.value = address;
+        addressDatalist.appendChild(option);
+    });
+    deliveryAddress.setAttribute('list', 'sampleAddresses');
+    document.body.appendChild(addressDatalist);
+    */
+});
+</script>
+{% endblock %}

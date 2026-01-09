@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+
+{% block title %}Payment - {{ plan.name }} - ShopMax{% endblock %}
+
+{% block content %}
+<div class="payment-container">
+    <div class="payment-background"></div>
+    <div class="payment-content">
+        <div class="payment-card">
+            <div class="payment-header">
+                <div class="payment-icon">💳</div>
+                <h1>Complete Your Subscription</h1>
+                <p>You're subscribing to: <strong>{{ plan.name }}</strong></p>
+            </div>
+
+            <div class="plan-summary">
+                <h3>Plan Details</h3>
+                <div class="summary-item">
+                    <span>Plan:</span>
+                    <span>{{ plan.name }}</span>
+                </div>
+                <div class="summary-item">
+                    <span>Duration:</span>
+                    <span>{{ plan.duration|title }}</span>
+                </div>
+                <div class="summary-item">
+                    <span>Amount:</span>
+                    <span class="amount">₦{{ "{:,.0f}".format(plan.price) }}</span>
+                </div>
+            </div>
+
+            <form method="POST" action="{{ url_for('process_payment', plan_id=plan.id) }}" class="payment-form">
+                <div class="payment-methods">
+                    <h3>Select Payment Method</h3>
+                    
+                    <label class="payment-option">
+                        <input type="radio" name="payment_method" value="bank" required>
+                        <div class="payment-method-card">
+                            <span class="method-icon">🏦</span>
+                            <span class="method-name">Bank Transfer</span>
+                        </div>
+                    </label>
+
+                    <label class="payment-option">
+                        <input type="radio" name="payment_method" value="momo" required>
+                        <div class="payment-method-card">
+                            <span class="method-icon">📱</span>
+                            <span class="method-name">Mobile Money (Momo)</span>
+                        </div>
+                    </label>
+
+                    <label class="payment-option">
+                        <input type="radio" name="payment_method" value="airtel" required>
+                        <div class="payment-method-card">
+                            <span class="method-icon">📞</span>
+                            <span class="method-name">Airtel Money</span>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="payment-instructions">
+                    <h4>Payment Instructions:</h4>
+                    <p>After selecting your payment method, you'll receive payment details to complete your subscription.</p>
+                </div>
+
+                <button type="submit" class="payment-btn">
+                    Proceed to Payment
+                </button>
+            </form>
+
+            <div class="payment-footer">
+                <p>🔒 Your payment is secure and encrypted</p>
+                <p><a href="{{ url_for('seller_subscription') }}">← Back to plans</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.payment-container {
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    position: relative;
+}
+
+.payment-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(135deg, rgba(39, 174, 96, 0.9) 0%, rgba(46, 204, 113, 0.9) 100%),
+        url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+.payment-content {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.payment-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.payment-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.payment-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.payment-header h1 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.payment-header p {
+    color: #7f8c8d;
+}
+
+.plan-summary {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+.plan-summary h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+.amount {
+    font-weight: bold;
+    color: #27ae60;
+    font-size: 1.2rem;
+}
+
+.payment-methods {
+    margin-bottom: 2rem;
+}
+
+.payment-methods h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.payment-option {
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.payment-option input {
+    display: none;
+}
+
+.payment-method-card {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.payment-option input:checked + .payment-method-card {
+    border-color: #3498db;
+    background: #ebf5fb;
+}
+
+.method-icon {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+}
+
+.method-name {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.payment-instructions {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    color: #856404;
+}
+
+.payment-instructions h4 {
+    margin-bottom: 0.5rem;
+}
+
+.payment-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.payment-btn:hover {
+    background: #219a52;
+    transform: translateY(-2px);
+}
+
+.payment-footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e9ecef;
+}
+
+.payment-footer p {
+    margin: 0.5rem 0;
+    color: #7f8c8d;
+}
+
+.payment-footer a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.payment-footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+    .payment-card {
+        padding: 1.5rem;
+    }
+}
+</style>
+{% endblock %}

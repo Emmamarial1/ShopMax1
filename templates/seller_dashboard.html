@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard - ShopMax</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            background-color: #343a40;
+            color: white;
+            height: 100vh;
+            position: fixed;
+        }
+        .sidebar .nav-link {
+            color: white;
+            padding: 15px 20px;
+            border-bottom: 1px solid #495057;
+        }
+        .sidebar .nav-link:hover {
+            background-color: #495057;
+        }
+        .sidebar .nav-link.active {
+            background-color: #007bff;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+        }
+        .stat-card {
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .bg-primary { background-color: #007bff !important; }
+        .bg-success { background-color: #28a745 !important; }
+        .bg-info { background-color: #17a2b8 !important; }
+        .bg-warning { background-color: #ffc107 !important; }
+        .percentage-up { color: #28a745; }
+        .percentage-down { color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <div class="text-center mb-4">
+                        <h4>ShopMax Seller</h4>
+                        <p class="text-muted">Welcome, {{ user.fullname }}</p>
+                    </div>
+                    
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ url_for('dashboard') }}">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('manage_products') }}">
+                                <i class="fas fa-box me-2"></i>
+                                Products
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('user_orders') }}">
+                                <i class="fas fa-shopping-cart me-2"></i>
+                                Orders
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('seller_analytics') }}">
+                                <i class="fas fa-chart-bar me-2"></i>
+                                Analytics
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('store_settings') }}">
+                                <i class="fas fa-cog me-2"></i>
+                                Store Settings
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('profile') }}">
+                                <i class="fas fa-user me-2"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout') }}">
+                                <i class="fas fa-sign-out-alt me-2"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 main-content">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Seller Dashboard</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <a href="{{ url_for('add_product') }}" class="btn btn-primary">
+                            <i class="fas fa-plus me-1"></i>
+                            Add Product
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Store Stats -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="stat-card bg-primary text-white">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4>{{ store_stats.products }}</h4>
+                                    <p>Total Products</p>
+                                </div>
+                                <i class="fas fa-box fa-2x"></i>
+                            </div>
+                            <small class="{% if store_stats.products_change >= 0 %}percentage-up{% else %}percentage-down{% endif %}">
+                                {% if store_stats.products_change >= 0 %}↗️{% else %}↘️{% endif %}
+                                {{ "%.1f"|format(store_stats.products_change|abs) }}% from last month
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card bg-success text-white">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4>UGX {{ "%.0f"|format(store_stats.total_sales) }}</h4>
+                                    <p>Total Sales</p>
+                                </div>
+                                <i class="fas fa-chart-line fa-2x"></i>
+                            </div>
+                            <small class="{% if store_stats.sales_change >= 0 %}percentage-up{% else %}percentage-down{% endif %}">
+                                {% if store_stats.sales_change >= 0 %}↗️{% else %}↘️{% endif %}
+                                {{ "%.1f"|format(store_stats.sales_change|abs) }}% from last month
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card bg-info text-white">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4>{{ store_stats.customers }}</h4>
+                                    <p>Customers</p>
+                                </div>
+                                <i class="fas fa-users fa-2x"></i>
+                            </div>
+                            <small class="{% if store_stats.customers_change >= 0 %}percentage-up{% else %}percentage-down{% endif %}">
+                                {% if store_stats.customers_change >= 0 %}↗️{% else %}↘️{% endif %}
+                                {{ "%.1f"|format(store_stats.customers_change|abs) }}% from last month
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="stat-card bg-warning text-white">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4>{{ store_stats.rating }}/5</h4>
+                                    <p>Store Rating</p>
+                                </div>
+                                <i class="fas fa-star fa-2x"></i>
+                            </div>
+                            <small>Based on customer reviews</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <h4>Today's Performance</h4>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title text-success">UGX {{ "%.0f"|format(quick_stats.today_revenue) }}</h5>
+                                <p class="card-text">Today's Revenue</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title text-warning">{{ quick_stats.pending_orders }}</h5>
+                                <p class="card-text">Pending Orders</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title text-info">{{ quick_stats.rating }}/5</h5>
+                                <p class="card-text">Store Rating</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title text-primary">{{ quick_stats.products_sold }}</h5>
+                                <p class="card-text">Products Sold Today</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders & Low Stock Products -->
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Recent Orders</h5>
+                                <a href="{{ url_for('user_orders') }}" class="btn btn-sm btn-outline-primary">View All</a>
+                            </div>
+                            <div class="card-body">
+                                {% if recent_orders %}
+                                    <div class="list-group">
+                                        {% for order in recent_orders %}
+                                        <div class="list-group-item">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h6 class="mb-1">Order #{{ order.id }}</h6>
+                                                <small>{{ order.created_at.strftime('%Y-%m-%d') }}</small>
+                                            </div>
+                                            <p class="mb-1">UGX {{ "%.0f"|format(order.total_amount) }} 
+                                                <span class="badge 
+                                                    {% if order.status == 'completed' %}bg-success
+                                                    {% elif order.status == 'pending' %}bg-warning
+                                                    {% elif order.status == 'cancelled' %}bg-danger
+                                                    {% else %}bg-info{% endif %}">
+                                                    {{ order.status }}
+                                                </span>
+                                            </p>
+                                            <small class="text-muted">
+                                                {% if order.delivery_address %}
+                                                    {{ order.delivery_address[:50] }}{% if order.delivery_address|length > 50 %}...{% endif %}
+                                                {% else %}
+                                                    No delivery address
+                                                {% endif %}
+                                            </small>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <p class="text-muted text-center py-3">No recent orders</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Low Stock Products</h5>
+                                <a href="{{ url_for('manage_products') }}" class="btn btn-sm btn-outline-primary">Manage</a>
+                            </div>
+                            <div class="card-body">
+                                {% if low_stock_products %}
+                                    <div class="list-group">
+                                        {% for product in low_stock_products %}
+                                        <a href="{{ url_for('edit_product', product_id=product.id) }}" class="list-group-item list-group-item-action">
+                                            <div class="d-flex w-100 justify-content-between">
+                                                <h6 class="mb-1">{{ product.name }}</h6>
+                                                <span class="badge bg-danger">Only {{ product.stock }} left</span>
+                                            </div>
+                                            <p class="mb-1">UGX {{ "%.0f"|format(product.price) }}</p>
+                                            <small class="text-muted">Category: {{ product.category }}</small>
+                                        </a>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <p class="text-muted text-center py-3">All products have sufficient stock</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Reviews -->
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Recent Reviews</h5>
+                                <span class="badge bg-primary">{{ recent_reviews|length }} reviews</span>
+                            </div>
+                            <div class="card-body">
+                                {% if recent_reviews %}
+                                    {% for review in recent_reviews %}
+                                    <div class="border-bottom pb-3 mb-3">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">{{ review.product.name }}</h6>
+                                                <div class="text-warning mb-2">
+                                                    {% for i in range(5) %}
+                                                        {% if i < review.rating %}
+                                                            ★
+                                                        {% else %}
+                                                            ☆
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    <span class="text-muted ms-2">({{ review.rating }}/5)</span>
+                                                </div>
+                                                <p class="mb-1">{{ review.comment or "No comment provided" }}</p>
+                                                <small class="text-muted">
+                                                    By {{ review.user.fullname }} on {{ review.created_at.strftime('%Y-%m-%d') }}
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <p class="text-muted text-center py-3">No recent reviews</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

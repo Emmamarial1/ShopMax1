@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}Choose Account Type - ShopMax{% endblock %}
+
+{% block content %}
+<div class="choice-container">
+    <div class="choice-background"></div>
+    <div class="choice-content">
+        <div class="choice-header">
+            <h1>Join ShopMax</h1>
+            <p>Choose how you want to experience our platform</p>
+        </div>
+
+        <div class="account-type-cards">
+            <div class="account-card buyer-card">
+                <div class="card-image buyer-image"></div>
+                <div class="card-content">
+                    <div class="card-icon">🛒</div>
+                    <h3>Shopper</h3>
+                    <p>Discover amazing products with seamless shopping</p>
+                    <ul class="features-list">
+                        <li>Browse thousands of products</li>
+                        <li>Secure payment options</li>
+                        <li>Fast delivery service</li>
+                        <li>Order tracking</li>
+                    </ul>
+                    <a href="{{ url_for('register_buyer') }}" class="card-btn buyer-btn">
+                        Start Shopping
+                    </a>
+                </div>
+            </div>
+
+            <div class="account-card seller-card">
+                <div class="card-image seller-image"></div>
+                <div class="card-content">
+                    <div class="card-icon">🏪</div>
+                    <h3>Seller</h3>
+                    <p>Grow your business and reach customers</p>
+                    <ul class="features-list">
+                        <li>List unlimited products</li>
+                        <li>Reach global audience</li>
+                        <li>Secure payments</li>
+                        <li>Seller dashboard</li>
+                    </ul>
+                    <a href="{{ url_for('register_seller') }}" class="card-btn seller-btn">
+                        Start Selling
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="choice-footer">
+            <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+        </div>
+    </div>
+</div>
+
+<style>
+.choice-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.choice-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%),
+        url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+.choice-content {
+    width: 100%;
+    max-width: 1000px;
+    padding: 1rem;
+}
+
+.choice-header {
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.choice-header h1 {
+    color: white;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.choice-header p {
+    color: rgba(255,255,255,0.9);
+    font-size: 1.1rem;
+}
+
+.account-type-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 0 auto;
+    max-width: 900px;
+}
+
+.account-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.account-card:hover {
+    transform: translateY(-5px);
+}
+
+.card-image {
+    height: 120px;
+    background-size: cover;
+    background-position: center;
+}
+
+.buyer-image {
+    background: 
+        linear-gradient(135deg, rgba(52, 152, 219, 0.8) 0%, rgba(41, 128, 185, 0.8) 100%),
+        url('https://images.unsplash.com/photo-1563013544-824ae1b704d3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');
+}
+
+.seller-image {
+    background: 
+        linear-gradient(135deg, rgba(231, 76, 60, 0.8) 0%, rgba(192, 57, 43, 0.8) 100%),
+        url('https://images.unsplash.com/photo-1565688534245-05d6b5be184a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');
+}
+
+.card-content {
+    padding: 1.5rem;
+}
+
+.card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.account-card h3 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+}
+
+.account-card p {
+    color: #7f8c8d;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.features-list {
+    margin: 1rem 0;
+    padding: 0;
+    list-style: none;
+}
+
+.features-list li {
+    padding: 0.3rem 0;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.card-btn {
+    display: block;
+    padding: 12px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.buyer-btn {
+    background: #3498db;
+    color: white;
+}
+
+.buyer-btn:hover {
+    background: #2980b9;
+    color: white;
+}
+
+.seller-btn {
+    background: #e74c3c;
+    color: white;
+}
+
+.seller-btn:hover {
+    background: #c0392b;
+    color: white;
+}
+
+.choice-footer {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.choice-footer p {
+    color: white;
+}
+
+.choice-footer a {
+    color: #f1c40f;
+    text-decoration: none;
+}
+
+.choice-footer a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .account-type-cards {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+    }
+    
+    .choice-header h1 {
+        font-size: 2rem;
+    }
+}
+</style>
+{% endblock %}

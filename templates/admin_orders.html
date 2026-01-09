@@ -1,0 +1,348 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Orders - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Manage Orders</h1>
+    </div>
+
+    <!-- Orders with Issues Alert -->
+    {% set orders_with_issues = orders|selectattr('issues_reported')|list %}
+    {% if orders_with_issues %}
+    <div class="alert alert-warning">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        There are {{ orders_with_issues|length }} orders with reported issues that need attention.
+    </div>
+    {% endif %}
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">All Orders ({{ orders|length }})</h6>
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
+                    <i class="fas fa-filter fa-sm"></i> Filter
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item filter-btn active" href="#" data-filter="all">All Orders</a></li>
+                    <li><a class="dropdown-item filter-btn" href="#" data-filter="pending">Pending</a></li>
+                    <li><a class="dropdown-item filter-btn" href="#" data-filter="shipped">Shipped</a></li>
+                    <li><a class="dropdown-item filter-btn" href="#" data-filter="completed">Completed</a></li>
+                    <li><a class="dropdown-item filter-btn" href="#" data-filter="issue_reported">With Issues</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="ordersTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Delivery Confirmed</th>
+                            <th>Rating</th>
+                            <th>Issues</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        <tr class="order-row" data-status="{{ order.status }}">
+                            <td class="fw-bold">#{{ order.id }}</td>
+                            <td>
+                                {{ order.user.fullname if order.user else 'Guest' }}
+                                <br>
+                                <small class="text-muted">{{ order.user.email if order.user else 'N/A' }}</small>
+                            </td>
+                            <td class="fw-bold">₦{{ "{:,.2f}".format(order.total_amount) }}</td>
+                            <td>
+                                <span class="badge bg-{{ 
+                                    'secondary' if order.status == 'pending' 
+                                    else 'info' if order.status == 'confirmed' 
+                                    else 'primary' if order.status == 'shipped' 
+                                    else 'success' if order.status == 'completed' 
+                                    else 'warning' if order.status == 'issue_reported'
+                                    else 'danger' 
+                                }}">
+                                    {{ order.status|title }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if order.delivery_confirmed_at %}
+                                    <span class="badge bg-success">Yes</span>
+                                    <small class="text-muted d-block">{{ order.delivery_confirmed_at.strftime('%m/%d/%Y') }}</small>
+                                {% else %}
+                                    <span class="badge bg-warning">No</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if order.buyer_rating %}
+                                    {{ "⭐" * order.buyer_rating }}
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if order.issues_reported %}
+                                    <span class="badge bg-danger">Yes</span>
+                                {% else %}
+                                    <span class="badge bg-success">No</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="btn-group btn-group-sm">
+                                    <a href="{{ url_for('order_details', order_id=order.id) }}" class="btn btn-info" title="View Details">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    {% if order.status == 'confirmed' %}
+                                    <form method="POST" action="{{ url_for('mark_order_shipped', order_id=order.id) }}" class="d-inline">
+                                        <button type="submit" class="btn btn-success" title="Mark as Shipped">
+                                            <i class="fas fa-shipping-fast"></i>
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                    {% if order.issues_reported %}
+                                    <button class="btn btn-warning resolve-issue" data-order-id="{{ order.id }}" 
+                                            data-bs-toggle="modal" data-bs-target="#resolveIssueModal" title="Resolve Issue">
+                                        <i class="fas fa-wrench"></i>
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Resolve Issue Modal -->
+<div class="modal fade" id="resolveIssueModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Resolve Order Issue</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="resolveIssueForm" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="resolution" class="form-label">Resolution Type</label>
+                        <select class="form-select" id="resolution" name="resolution" required>
+                            <option value="">Select resolution...</option>
+                            <option value="refund_issued">Full Refund Issued</option>
+                            <option value="partial_refund">Partial Refund</option>
+                            <option value="replacement_sent">Replacement Sent</option>
+                            <option value="credit_issued">Store Credit Issued</option>
+                            <option value="issue_resolved">Issue Resolved</option>
+                            <option value="customer_satisfied">Customer Satisfied</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="admin_notes" class="form-label">Resolution Notes</label>
+                        <textarea class="form-control" id="admin_notes" name="admin_notes" rows="3" 
+                                  placeholder="Describe how the issue was resolved..." required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">Resolve Issue</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Admin Delivery Management Functions
+
+function markAsDelivered(orderId) {
+    if (!confirm('Mark this order as delivered? This will notify the customer to confirm receipt.')) {
+        return;
+    }
+    
+    showLoading();
+    
+    fetch(`/api/admin/orders/${orderId}/mark-delivered`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        hideLoading();
+        if (data.success) {
+            showToast(data.message, 'success');
+            // Update the row in the table
+            updateOrderStatus(orderId, 'delivered', data.delivery_confirmed);
+        } else {
+            showToast(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        hideLoading();
+        console.error('Error:', error);
+        showToast('Something went wrong!', 'error');
+    });
+}
+
+function checkDeliveryConfirmation(orderId) {
+    showLoading();
+    
+    fetch(`/api/admin/orders/${orderId}/delivery-status`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        hideLoading();
+        if (data.error) {
+            showToast(data.error, 'error');
+            return;
+        }
+        
+        // Update the delivery confirmation cell
+        const deliveryCell = document.querySelector(`tr[data-order-id="${orderId}"] .delivery-confirmed-cell`);
+        if (deliveryCell) {
+            if (data.delivery_confirmed) {
+                deliveryCell.innerHTML = `
+                    <span class="badge bg-success">
+                        <i class="fas fa-check-circle"></i> Yes
+                        ${data.buyer_rating ? `<br><small>Rating: ${'⭐'.repeat(data.buyer_rating)}</small>` : ''}
+                        ${data.delivery_confirmed_at ? `<br><small>${new Date(data.delivery_confirmed_at).toLocaleString()}</small>` : ''}
+                    </span>
+                `;
+            } else if (data.issues_reported) {
+                deliveryCell.innerHTML = `
+                    <span class="badge bg-danger">
+                        <i class="fas fa-exclamation-triangle"></i> Issue Reported
+                        <br><small>Click for details</small>
+                    </span>
+                    <button class="btn btn-sm btn-outline-danger mt-1" onclick="showIssueDetails(${orderId})">
+                        <i class="fas fa-eye"></i> View Issue
+                    </button>
+                `;
+            } else {
+                deliveryCell.innerHTML = `
+                    <span class="badge bg-warning">
+                        <i class="fas fa-clock"></i> Awaiting Confirmation
+                        ${data.status === 'delivered' ? '<br><small>Click to refresh</small>' : ''}
+                    </span>
+                    ${data.status === 'delivered' ? 
+                        `<button class="btn btn-sm btn-outline-primary mt-1" onclick="checkDeliveryConfirmation(${orderId})">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>` : ''
+                    }
+                `;
+            }
+        }
+        
+        // Show issue details in a modal
+        if (data.issues_reported && data.issue_description) {
+            showToast('Customer reported a delivery issue', 'warning');
+        }
+        
+    })
+    .catch(error => {
+        hideLoading();
+        console.error('Error:', error);
+    });
+}
+
+function showIssueDetails(orderId) {
+    fetch(`/api/admin/orders/${orderId}/delivery-status`)
+    .then(response => response.json())
+    .then(data => {
+        if (data.issues_reported && data.issue_description) {
+            Swal.fire({
+                title: `Issue Details - Order #${orderId}`,
+                html: `
+                    <div class="text-start">
+                        <p><strong>Issue Description:</strong></p>
+                        <div class="alert alert-danger">${data.issue_description}</div>
+                        ${data.buyer_feedback ? `<p><strong>Customer Feedback:</strong> ${data.buyer_feedback}</p>` : ''}
+                        <p><strong>Reported At:</strong> ${data.delivery_confirmed_at ? new Date(data.delivery_confirmed_at).toLocaleString() : 'N/A'}</p>
+                    </div>
+                `,
+                icon: 'warning',
+                confirmButtonText: 'Close'
+            });
+        }
+    });
+}
+
+function updateOrderStatus(orderId, status, deliveryConfirmed = null) {
+    const row = document.querySelector(`tr[data-order-id="${orderId}"]`);
+    if (!row) return;
+    
+    // Update status badge
+    const statusCell = row.querySelector('.order-status-cell');
+    if (statusCell) {
+        statusCell.innerHTML = getStatusBadge(status);
+    }
+    
+    // Update delivery confirmation if provided
+    if (deliveryConfirmed !== null) {
+        const deliveryCell = row.querySelector('.delivery-confirmed-cell');
+        if (deliveryCell) {
+            if (deliveryConfirmed) {
+                deliveryCell.innerHTML = `
+                    <span class="badge bg-success">
+                        <i class="fas fa-check-circle"></i> Yes
+                    </span>
+                `;
+            } else {
+                deliveryCell.innerHTML = `
+                    <span class="badge bg-warning">
+                        <i class="fas fa-clock"></i> Awaiting Confirmation
+                        ${status === 'delivered' ? '<br><small>Customer will confirm</small>' : ''}
+                    </span>
+                `;
+            }
+        }
+    }
+}
+
+function getStatusBadge(status) {
+    const badges = {
+        'pending': '<span class="badge bg-secondary">Pending</span>',
+        'processing': '<span class="badge bg-info">Processing</span>',
+        'shipped': '<span class="badge bg-primary">Shipped</span>',
+        'delivered': '<span class="badge bg-success">Delivered</span>',
+        'cancelled': '<span class="badge bg-danger">Cancelled</span>'
+    };
+    return badges[status] || `<span class="badge bg-secondary">${status}</span>`;
+}
+
+// Auto-refresh delivery confirmation status for delivered orders
+function autoRefreshDeliveryStatus() {
+    document.querySelectorAll('tr[data-order-id]').forEach(row => {
+        const orderId = row.getAttribute('data-order-id');
+        const statusElement = row.querySelector('.order-status-cell');
+        if (statusElement && statusElement.textContent.trim().toLowerCase() === 'delivered') {
+            // Check every 30 seconds
+            setTimeout(() => checkDeliveryConfirmation(orderId), Math.random() * 10000);
+        }
+    });
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-refresh every 30 seconds
+    setInterval(autoRefreshDeliveryStatus, 30000);
+    
+    // Initial refresh after 2 seconds
+    setTimeout(autoRefreshDeliveryStatus, 2000);
+});
+</script>
+{% endblock %}

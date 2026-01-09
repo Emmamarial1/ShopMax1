@@ -1,0 +1,653 @@
+{% extends "base.html" %}
+
+{% block title %}Reports - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Reports & Analytics</h1>
+        <div class="d-none d-sm-inline-block">
+            <button class="btn btn-success" onclick="downloadReport()">
+                <i class="fas fa-download me-2"></i>Export Report
+            </button>
+        </div>
+    </div>
+
+    <!-- Report Filters -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Report Filters</h6>
+                </div>
+                <div class="card-body">
+                    <form id="reportFiltersForm">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="reportType" class="form-label">Report Type</label>
+                                    <select class="form-control" id="reportType">
+                                        <option value="sales">Sales Report</option>
+                                        <option value="users">User Analytics</option>
+                                        <option value="products">Product Performance</option>
+                                        <option value="orders">Order Summary</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label for="dateRange" class="form-label">Date Range</label>
+                                    <select class="form-control" id="dateRange">
+                                        <option value="7">Last 7 Days</option>
+                                        <option value="30">Last 30 Days</option>
+                                        <option value="90">Last 90 Days</option>
+                                        <option value="365">Last Year</option>
+                                        <option value="custom">Custom Range</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="mb-3">
+                                    <label for="startDate" class="form-label">Start Date</label>
+                                    <input type="date" class="form-control" id="startDate">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="mb-3">
+                                    <label for="endDate" class="form-label">End Date</label>
+                                    <input type="date" class="form-control" id="endDate">
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="mb-3">
+                                    <label class="form-label">&nbsp;</label>
+                                    <button type="submit" class="btn btn-primary btn-block">
+                                        <i class="fas fa-chart-bar me-2"></i>Generate
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="row" id="quickStats">
+        <!-- Stats will be loaded dynamically -->
+    </div>
+
+    <!-- Charts and Detailed Reports -->
+    <div class="row">
+        <!-- Sales Chart -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Sales Overview</h6>
+                    <select class="form-control form-control-sm w-auto" id="chartPeriod" onchange="loadSalesData()">
+                        <option value="7">7 Days</option>
+                        <option value="30">30 Days</option>
+                        <option value="90">90 Days</option>
+                    </select>
+                </div>
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="salesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Products -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Top Products</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0" id="topProductsTable">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Sales</th>
+                                    <th>Revenue</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Top products will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Reports -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Detailed Sales Report</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="salesReportTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Payment Method</th>
+                                    <th>Items</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Sales data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Report Sections -->
+    <div class="row">
+        <!-- User Analytics -->
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">User Analytics</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-pie pt-4 pb-2">
+                        <canvas id="userPieChart"></canvas>
+                    </div>
+                    <div class="mt-4 text-center small">
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-primary"></i> Buyers
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-success"></i> Sellers
+                        </span>
+                        <span class="mr-2">
+                            <i class="fas fa-circle text-info"></i> Admins
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Status Distribution -->
+        <div class="col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Order Status Distribution</h6>
+                </div>
+                <div class="card-body">
+                    <div class="chart-pie pt-4 pb-2">
+                        <canvas id="orderStatusChart"></canvas>
+                    </div>
+                    <div class="mt-4 text-center small" id="orderStatusLegend">
+                        <!-- Legend will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Platform Activity</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0" id="recentActivityTable">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                    <th>User</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Recent activity will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Global variables
+let salesChartInstance = null;
+let userChartInstance = null;
+let orderStatusChartInstance = null;
+
+$(document).ready(function() {
+    // Set default dates
+    const today = new Date().toISOString().split('T')[0];
+    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+    $('#startDate').val(weekAgo);
+    $('#endDate').val(today);
+    
+    // Load all data
+    loadQuickStats();
+    loadSalesData();
+    loadTopProducts();
+    loadSalesDetails();
+    loadUserAnalytics();
+    loadOrderStatusDistribution();
+    loadRecentActivity();
+    
+    // Handle report filters form
+    $('#reportFiltersForm').on('submit', function(e) {
+        e.preventDefault();
+        refreshAllData();
+    });
+});
+
+async function loadQuickStats() {
+    try {
+        const response = await fetch('/api/reports/quick-stats');
+        const data = await response.json();
+        
+        if (data.error) {
+            throw new Error(data.error);
+        }
+        
+        $('#quickStats').html(`
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                    Total Revenue</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">UGX ${data.total_revenue.toLocaleString()}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-money-bill-wave fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Recent Orders</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">${data.recent_orders}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-info shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                    New Customers</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">${data.new_customers}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-user-plus fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-warning shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                    Active Sellers</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">${data.active_sellers || 'N/A'}</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-store fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `);
+    } catch (error) {
+        console.error('Error loading quick stats:', error);
+        showAlert('Failed to load statistics', 'error');
+    }
+}
+
+async function loadSalesData() {
+    try {
+        const days = $('#chartPeriod').val();
+        const response = await fetch(`/api/reports/sales-data?days=${days}`);
+        const data = await response.json();
+        
+        if (data.error) {
+            throw new Error(data.error);
+        }
+        
+        updateSalesChart(data);
+    } catch (error) {
+        console.error('Error loading sales data:', error);
+        showAlert('Failed to load sales data', 'error');
+    }
+}
+
+function updateSalesChart(data) {
+    const ctx = document.getElementById('salesChart').getContext('2d');
+    
+    // Destroy existing chart if it exists
+    if (salesChartInstance) {
+        salesChartInstance.destroy();
+    }
+    
+    salesChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: data.labels,
+            datasets: [{
+                label: 'Sales (UGX)',
+                data: data.sales,
+                borderColor: '#4e73df',
+                backgroundColor: 'rgba(78, 115, 223, 0.1)',
+                borderWidth: 2,
+                fill: true
+            }]
+        },
+        options: {
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return 'UGX ' + value.toLocaleString();
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+async function loadTopProducts() {
+    try {
+        const response = await fetch('/api/reports/top-products');
+        const data = await response.json();
+        
+        if (data.error) {
+            throw new Error(data.error);
+        }
+        
+        const tbody = $('#topProductsTable tbody');
+        tbody.empty();
+        
+        data.forEach(product => {
+            tbody.append(`
+                <tr>
+                    <td>${product.name}</td>
+                    <td>${product.sales}</td>
+                    <td>UGX ${product.revenue.toLocaleString()}</td>
+                </tr>
+            `);
+        });
+    } catch (error) {
+        console.error('Error loading top products:', error);
+        showAlert('Failed to load top products', 'error');
+    }
+}
+
+async function loadSalesDetails() {
+    try {
+        const response = await fetch('/api/reports/sales-details');
+        const data = await response.json();
+        
+        if (data.error) {
+            throw new Error(data.error);
+        }
+        
+        const tbody = $('#salesReportTable tbody');
+        tbody.empty();
+        
+        data.orders.forEach(order => {
+            const statusBadge = getStatusBadge(order.status);
+            tbody.append(`
+                <tr>
+                    <td>#${order.id}</td>
+                    <td>${order.customer_name}</td>
+                    <td>${order.date}</td>
+                    <td>UGX ${order.amount.toLocaleString()}</td>
+                    <td>${statusBadge}</td>
+                    <td>${order.payment_method}</td>
+                    <td>${order.items_count || 1}</td>
+                </tr>
+            `);
+        });
+        
+        // Initialize DataTable
+        if (!$.fn.DataTable.isDataTable('#salesReportTable')) {
+            $('#salesReportTable').DataTable({
+                "pageLength": 10,
+                "order": [[2, 'desc']]
+            });
+        }
+    } catch (error) {
+        console.error('Error loading sales details:', error);
+        showAlert('Failed to load sales details', 'error');
+    }
+}
+
+async function loadUserAnalytics() {
+    try {
+        const response = await fetch('/api/reports/user-analytics');
+        const data = await response.json();
+        
+        if (data.error) {
+            throw new Error(data.error);
+        }
+        
+        updateUserChart(data);
+    } catch (error) {
+        console.error('Error loading user analytics:', error);
+        showAlert('Failed to load user analytics', 'error');
+    }
+}
+
+function updateUserChart(data) {
+    const ctx = document.getElementById('userPieChart').getContext('2d');
+    
+    // Destroy existing chart if it exists
+    if (userChartInstance) {
+        userChartInstance.destroy();
+    }
+    
+    userChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Buyers', 'Sellers', 'Admins'],
+            datasets: [{
+                data: [data.buyers, data.sellers, data.admins],
+                backgroundColor: ['#4e73df', '#1cc88a', '#36b9cc'],
+                hoverBackgroundColor: ['#2e59d9', '#17a673', '#2c9faf'],
+                hoverBorderColor: "rgba(234, 236, 244, 1)",
+            }],
+        },
+        options: {
+            maintainAspectRatio: false,
+            cutout: '70%',
+        },
+    });
+}
+
+async function loadOrderStatusDistribution() {
+    try {
+        const response = await fetch('/api/reports/order-status');
+        const data = await response.json();
+        
+        if (data.error) {
+            throw new Error(data.error);
+        }
+        
+        updateOrderStatusChart(data);
+    } catch (error) {
+        console.error('Error loading order status distribution:', error);
+        // This is optional, so don't show error alert
+    }
+}
+
+function updateOrderStatusChart(data) {
+    const ctx = document.getElementById('orderStatusChart').getContext('2d');
+    
+    // Destroy existing chart if it exists
+    if (orderStatusChartInstance) {
+        orderStatusChartInstance.destroy();
+    }
+    
+    orderStatusChartInstance = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: data.labels,
+            datasets: [{
+                data: data.counts,
+                backgroundColor: ['#1cc88a', '#4e73df', '#f6c23e', '#e74a3b', '#858796'],
+                hoverBackgroundColor: ['#17a673', '#2e59d9', '#dda20a', '#be2617', '#656775'],
+            }],
+        },
+        options: {
+            maintainAspectRatio: false,
+        },
+    });
+    
+    // Update legend
+    let legendHtml = '';
+    data.labels.forEach((label, index) => {
+        const colors = ['text-success', 'text-primary', 'text-warning', 'text-danger', 'text-secondary'];
+        legendHtml += `<span class="mr-2"><i class="fas fa-circle ${colors[index]}"></i> ${label}</span>`;
+    });
+    $('#orderStatusLegend').html(legendHtml);
+}
+
+async function loadRecentActivity() {
+    try {
+        const response = await fetch('/api/reports/recent-activity');
+        const data = await response.json();
+        
+        if (data.error) {
+            throw new Error(data.error);
+        }
+        
+        const tbody = $('#recentActivityTable tbody');
+        tbody.empty();
+        
+        data.activities.forEach(activity => {
+            tbody.append(`
+                <tr>
+                    <td><span class="badge ${getActivityBadgeClass(activity.type)}">${activity.type}</span></td>
+                    <td>${activity.description}</td>
+                    <td>${activity.user_name}</td>
+                    <td>${activity.time}</td>
+                </tr>
+            `);
+        });
+    } catch (error) {
+        console.error('Error loading recent activity:', error);
+        // This is optional, so don't show error alert
+    }
+}
+
+function getStatusBadge(status) {
+    const statusClasses = {
+        'completed': 'badge badge-success',
+        'pending': 'badge badge-warning',
+        'confirmed': 'badge badge-info',
+        'cancelled': 'badge badge-danger',
+        'shipped': 'badge badge-primary',
+        'delivered': 'badge badge-success'
+    };
+    
+    const className = statusClasses[status] || 'badge badge-secondary';
+    return `<span class="${className}">${status}</span>`;
+}
+
+function getActivityBadgeClass(type) {
+    const classMap = {
+        'order': 'bg-primary',
+        'user': 'bg-success',
+        'product': 'bg-info',
+        'payment': 'bg-warning',
+        'system': 'bg-secondary'
+    };
+    return classMap[type] || 'bg-secondary';
+}
+
+async function downloadReport() {
+    try {
+        const reportType = $('#reportType').val();
+        const startDate = $('#startDate').val();
+        const endDate = $('#endDate').val();
+        
+        const url = `/api/reports/generate-report?type=${reportType}&format=csv&start_date=${startDate}&end_date=${endDate}`;
+        
+        // Trigger download
+        window.location.href = url;
+        
+        showAlert('Report download started', 'success');
+    } catch (error) {
+        console.error('Error downloading report:', error);
+        showAlert('Failed to download report', 'error');
+    }
+}
+
+function refreshAllData() {
+    loadQuickStats();
+    loadSalesData();
+    loadTopProducts();
+    loadSalesDetails();
+    loadUserAnalytics();
+    loadOrderStatusDistribution();
+    loadRecentActivity();
+}
+
+function showAlert(message, type) {
+    const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+    const alert = $(`<div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>`);
+    
+    $('.container-fluid').prepend(alert);
+    
+    setTimeout(() => {
+        alert.alert('close');
+    }, 5000);
+}
+</script>
+{% endblock %}

@@ -1,0 +1,843 @@
+{% extends "base.html" %}
+
+{% block title %}Safety Tips - ShopMax{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto text-center">
+            <h1 class="display-4 fw-bold text-primary mb-4">Safety Tips</h1>
+            <p class="lead text-muted">Your safety is our priority. Follow these guidelines for a secure shopping experience.</p>
+            <div class="alert alert-success">
+                <i class="fas fa-shield-alt me-2"></i>
+                ShopMax is committed to creating a safe marketplace for the UCU community.
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <!-- Quick Navigation -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body text-center">
+                    <h5 class="card-title mb-3">Quick Safety Navigation</h5>
+                    <div class="d-flex flex-wrap gap-2 justify-content-center">
+                        <a href="#buying-safety" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-shopping-cart me-1"></i>Buying Safety
+                        </a>
+                        <a href="#selling-safety" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-store me-1"></i>Selling Safety
+                        </a>
+                        <a href="#meeting-safety" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-handshake me-1"></i>Meeting Safety
+                        </a>
+                        <a href="#online-safety" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-laptop me-1"></i>Online Safety
+                        </a>
+                        <a href="#payment-safety" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-credit-card me-1"></i>Payment Safety
+                        </a>
+                        <a href="#emergency" class="btn btn-outline-danger btn-sm">
+                            <i class="fas fa-phone-alt me-1"></i>Emergency Contacts
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Safety Statistics -->
+            <div class="row mb-5">
+                <div class="col-md-3 text-center">
+                    <div class="card border-0 bg-light">
+                        <div class="card-body">
+                            <i class="fas fa-user-shield fa-2x text-primary mb-2"></i>
+                            <h3>100%</h3>
+                            <p class="small mb-0">Verified Users</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="card border-0 bg-light">
+                        <div class="card-body">
+                            <i class="fas fa-lock fa-2x text-primary mb-2"></i>
+                            <h3>24/7</h3>
+                            <p class="small mb-0">Secure Platform</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="card border-0 bg-light">
+                        <div class="card-body">
+                            <i class="fas fa-headset fa-2x text-primary mb-2"></i>
+                            <h3>30min</h3>
+                            <p class="small mb-0">Support Response</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 text-center">
+                    <div class="card border-0 bg-light">
+                        <div class="card-body">
+                            <i class="fas fa-check-circle fa-2x text-primary mb-2"></i>
+                            <h3>99.8%</h3>
+                            <p class="small mb-0">Safe Transactions</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buying Safety -->
+            <section id="buying-safety" class="mb-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-primary text-white rounded-circle p-3 me-3">
+                        <i class="fas fa-shopping-cart fa-2x"></i>
+                    </div>
+                    <div>
+                        <h2 class="h3 text-primary mb-1">Buying Safety Guide</h2>
+                        <p class="text-muted">Protect yourself when purchasing on ShopMax</p>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card h-100 border-start border-primary border-4">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start">
+                                    <i class="fas fa-search text-primary me-3 mt-1"></i>
+                                    <div>
+                                        <h5 class="card-title">Research Sellers</h5>
+                                        <p class="card-text">Check seller ratings, reviews, and verification status before purchasing. Look for sellers with established history.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-start border-primary border-4">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start">
+                                    <i class="fas fa-images text-primary me-3 mt-1"></i>
+                                    <div>
+                                        <h5 class="card-title">Examine Product Photos</h5>
+                                        <p class="card-text">Look for clear, multiple photos from different angles. Be cautious of stock images or blurry photos.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-start border-primary border-4">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start">
+                                    <i class="fas fa-comments text-primary me-3 mt-1"></i>
+                                    <div>
+                                        <h5 class="card-title">Ask Questions</h5>
+                                        <p class="card-text">Communicate with sellers through our secure messaging system. Ask about product condition, authenticity, and details.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-start border-primary border-4">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start">
+                                    <i class="fas fa-receipt text-primary me-3 mt-1"></i>
+                                    <div>
+                                        <h5 class="card-title">Get Documentation</h5>
+                                        <p class="card-text">Request receipts, warranty information, or proof of purchase for high-value items.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buying Do's and Don'ts -->
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card border-success">
+                            <div class="card-header bg-success text-white">
+                                <i class="fas fa-check-circle me-2"></i>DO'S FOR BUYERS
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Verify seller ratings and reviews</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Use secure payment methods</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Meet in safe, public locations</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Inspect items before payment</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Keep communication on platform</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card border-danger">
+                            <div class="card-header bg-danger text-white">
+                                <i class="fas fa-times-circle me-2"></i>DON'TS FOR BUYERS
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="fas fa-times text-danger me-2"></i>Don't pay outside the platform</li>
+                                    <li class="mb-2"><i class="fas fa-times text-danger me-2"></i>Don't share personal information</li>
+                                    <li class="mb-2"><i class="fas fa-times text-danger me-2"></i>Don't meet in private locations</li>
+                                    <li class="mb-2"><i class="fas fa-times text-danger me-2"></i>Don't rush the transaction</li>
+                                    <li class="mb-2"><i class="fas fa-times text-danger me-2"></i>Don't ignore red flags</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Selling Safety -->
+            <section id="selling-safety" class="mb-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-warning text-white rounded-circle p-3 me-3">
+                        <i class="fas fa-store fa-2x"></i>
+                    </div>
+                    <div>
+                        <h2 class="h3 text-primary mb-1">Selling Safety Guide</h2>
+                        <p class="text-muted">Protect your business and yourself when selling</p>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card h-100 border-start border-warning border-4">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start">
+                                    <i class="fas fa-user-check text-warning me-3 mt-1"></i>
+                                    <div>
+                                        <h5 class="card-title">Verify Buyers</h5>
+                                        <p class="card-text">Check buyer profiles and ratings. Be cautious of new accounts with no history.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-start border-warning border-4">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start">
+                                    <i class="fas fa-cash-register text-warning me-3 mt-1"></i>
+                                    <div>
+                                        <h5 class="card-title">Secure Payments</h5>
+                                        <p class="card-text">Only accept payments through ShopMax. Avoid cash transactions for high-value items.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-start border-warning border-4">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start">
+                                    <i class="fas fa-box-open text-warning me-3 mt-1"></i>
+                                    <div>
+                                        <h5 class="card-title">Document Everything</h5>
+                                        <p class="card-text">Take photos/videos of items before handing over. Keep records of all transactions.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100 border-start border-warning border-4">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start">
+                                    <i class="fas fa-shipping-fast text-warning me-3 mt-1"></i>
+                                    <div>
+                                        <h5 class="card-title">Safe Delivery</h5>
+                                        <p class="card-text">Use our verified delivery partners. Get delivery confirmation for all shipments.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selling Do's and Don'ts -->
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card border-success">
+                            <div class="card-header bg-success text-white">
+                                <i class="fas fa-check-circle me-2"></i>DO'S FOR SELLERS
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Verify buyer profiles</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Use secure payment methods</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Meet in safe locations</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Keep transaction records</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Report suspicious activity</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card border-danger">
+                            <div class="card-header bg-danger text-white">
+                                <i class="fas fa-times-circle me-2"></i>DON'TS FOR SELLERS
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="fas fa-times text-danger me-2"></i>Don't share bank details</li>
+                                    <li class="mb-2"><i class="fas fa-times text-danger me-2"></i>Don't meet buyers alone</li>
+                                    <li class="mb-2"><i class="fas fa-times text-danger me-2"></i>Don't accept offline payments</li>
+                                    <li class="mb-2"><i class="fas fa-times text-danger me-2"></i>Don't ship before payment</li>
+                                    <li class="mb-2"><i class="fas fa-times text-danger me-2"></i>Don't ignore buyer reviews</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Meeting Safety -->
+            <section id="meeting-safety" class="mb-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-info text-white rounded-circle p-3 me-3">
+                        <i class="fas fa-handshake fa-2x"></i>
+                    </div>
+                    <div>
+                        <h2 class="h3 text-primary mb-1">Safe Meeting Guidelines</h2>
+                        <p class="text-muted">How to conduct safe in-person transactions</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8 mx-auto">
+                        <div class="card border-0 bg-light">
+                            <div class="card-body p-4">
+                                <h4 class="text-center mb-4">🏢 UCU Safe Meeting Locations</h4>
+                                <div class="row text-center">
+                                    <div class="col-md-4 mb-3">
+                                        <i class="fas fa-university fa-2x text-primary mb-2"></i>
+                                        <h6>University Main Gate</h6>
+                                        <p class="small text-muted">Security presence, public area</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <i class="fas fa-coffee fa-2x text-primary mb-2"></i>
+                                        <h6>Campus Cafeteria</h6>
+                                        <p class="small text-muted">Crowded, monitored area</p>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <i class="fas fa-book-reader fa-2x text-primary mb-2"></i>
+                                        <h6>Library Entrance</h6>
+                                        <p class="small text-muted">Well-lit, security cameras</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4 g-4">
+                    <div class="col-md-4">
+                        <div class="card text-center h-100">
+                            <div class="card-body">
+                                <i class="fas fa-sun fa-2x text-warning mb-3"></i>
+                                <h5>Daylight Meetings</h5>
+                                <p class="small">Schedule meetings during daylight hours (8AM-6PM) for better safety.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center h-100">
+                            <div class="card-body">
+                                <i class="fas fa-users fa-2x text-info mb-3"></i>
+                                <h5>Bring a Friend</h5>
+                                <p class="small">Never meet alone. Bring a friend or family member with you.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center h-100">
+                            <div class="card-body">
+                                <i class="fas fa-mobile-alt fa-2x text-success mb-3"></i>
+                                <h5>Phone Prepared</h5>
+                                <p class="small">Keep your phone charged and have emergency numbers ready.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Meeting Safety Checklist -->
+                <div class="card mt-4 border-primary">
+                    <div class="card-header bg-primary text-white">
+                        <i class="fas fa-clipboard-list me-2"></i>Meeting Safety Checklist
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="check1">
+                                    <label class="form-check-label" for="check1">
+                                        Inform someone about meeting details
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="check2">
+                                    <label class="form-check-label" for="check2">
+                                        Choose public, well-lit location
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="check3">
+                                    <label class="form-check-label" for="check3">
+                                        Verify person's identity
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="check4">
+                                    <label class="form-check-label" for="check4">
+                                        Bring phone with emergency contacts
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="check5">
+                                    <label class="form-check-label" for="check5">
+                                        Inspect item before payment
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="check6">
+                                    <label class="form-check-label" for="check6">
+                                        Trust your instincts
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Online Safety -->
+            <section id="online-safety" class="mb-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-danger text-white rounded-circle p-3 me-3">
+                        <i class="fas fa-laptop fa-2x"></i>
+                    </div>
+                    <div>
+                        <h2 class="h3 text-primary mb-1">Online Safety & Security</h2>
+                        <p class="text-muted">Protect your digital presence and personal information</p>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-danger text-white">
+                                <i class="fas fa-exclamation-triangle me-2"></i>Red Flags to Watch For
+                            </div>
+                            <div class="card-body">
+                                <ul>
+                                    <li class="mb-2">Prices that seem too good to be true</li>
+                                    <li class="mb-2">Sellers requesting payment outside ShopMax</li>
+                                    <li class="mb-2">Pressure to complete transaction quickly</li>
+                                    <li class="mb-2">Vague or incomplete product descriptions</li>
+                                    <li class="mb-2">Requests for personal information</li>
+                                    <li class="mb-2">New accounts with no verification</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-success text-white">
+                                <i class="fas fa-shield-alt me-2"></i>Account Security Tips
+                            </div>
+                            <div class="card-body">
+                                <ul>
+                                    <li class="mb-2">Use strong, unique passwords</li>
+                                    <li class="mb-2">Enable two-factor authentication</li>
+                                    <li class="mb-2">Never share login credentials</li>
+                                    <li class="mb-2">Log out from shared devices</li>
+                                    <li class="mb-2">Monitor account activity regularly</li>
+                                    <li class="mb-2">Update contact information</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Phishing Awareness -->
+                <div class="card mt-4 border-warning">
+                    <div class="card-header bg-warning text-dark">
+                        <i class="fas fa-fish me-2"></i>Beware of Phishing Attempts
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h6>How to Spot Fake ShopMax Communications:</h6>
+                                <ul>
+                                    <li>Check sender's email address carefully</li>
+                                    <li>Look for poor grammar and spelling</li>
+                                    <li>Hover over links before clicking</li>
+                                    <li>Never enter password from email links</li>
+                                    <li>Official emails will address you by name</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="bg-light p-3 rounded">
+                                    <i class="fas fa-envelope fa-3x text-primary mb-2"></i>
+                                    <p class="small mb-0">Official emails from:<br><strong>@shopmax.com</strong></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Payment Safety -->
+            <section id="payment-safety" class="mb-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-success text-white rounded-circle p-3 me-3">
+                        <i class="fas fa-credit-card fa-2x"></i>
+                    </div>
+                    <div>
+                        <h2 class="h3 text-primary mb-1">Payment Safety</h2>
+                        <p class="text-muted">Secure transaction practices for buyers and sellers</p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card border-success h-100">
+                            <div class="card-header bg-success text-white">
+                                <i class="fas fa-check-circle me-2"></i>Safe Payment Methods
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-mobile-alt fa-2x text-success me-3"></i>
+                                    <div>
+                                        <h6 class="mb-1">Mobile Money</h6>
+                                        <p class="small mb-0">Secure, traceable transactions</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-university fa-2x text-success me-3"></i>
+                                    <div>
+                                        <h6 class="mb-1">Bank Transfer</h6>
+                                        <p class="small mb-0">Through verified bank accounts</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-credit-card fa-2x text-success me-3"></i>
+                                    <div>
+                                        <h6 class="mb-1">Card Payments</h6>
+                                        <p class="small mb-0">PCI-DSS compliant processing</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card border-danger h-100">
+                            <div class="card-header bg-danger text-white">
+                                <i class="fas fa-times-circle me-2"></i>Unsafe Payment Methods
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-money-bill-wave fa-2x text-danger me-3"></i>
+                                    <div>
+                                        <h6 class="mb-1">Large Cash Payments</h6>
+                                        <p class="small mb-0">No protection or records</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="fas fa-exchange-alt fa-2x text-danger me-3"></i>
+                                    <div>
+                                        <h6 class="mb-1">Direct Person-to-Person</h6>
+                                        <p class="small mb-0">Bypasses platform security</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-gift fa-2x text-danger me-3"></i>
+                                    <div>
+                                        <h6 class="mb-1">Gift Cards/Cryptocurrency</h6>
+                                        <p class="small mb-0">Untraceable and irreversible</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Safety Tips -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <div class="card border-primary">
+                            <div class="card-header bg-primary text-white">
+                                <i class="fas fa-lightbulb me-2"></i>Payment Safety Tips
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 text-center mb-3">
+                                        <i class="fas fa-receipt fa-2x text-primary mb-2"></i>
+                                        <h6>Get Receipts</h6>
+                                        <p class="small">Always request and keep transaction receipts</p>
+                                    </div>
+                                    <div class="col-md-4 text-center mb-3">
+                                        <i class="fas fa-history fa-2x text-primary mb-2"></i>
+                                        <h6>Check History</h6>
+                                        <p class="small">Verify transaction in your account history</p>
+                                    </div>
+                                    <div class="col-md-4 text-center mb-3">
+                                        <i class="fas fa-bell fa-2x text-primary mb-2"></i>
+                                        <h6>Enable Notifications</h6>
+                                        <p class="small">Get alerts for all payment activities</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Emergency Contacts -->
+            <section id="emergency" class="mb-5">
+                <div class="card border-danger">
+                    <div class="card-header bg-danger text-white">
+                        <i class="fas fa-phone-alt me-2"></i>Emergency Contacts & Support
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center">
+                            <div class="col-md-4 mb-4">
+                                <div class="border rounded p-3 h-100">
+                                    <i class="fas fa-headset fa-2x text-primary mb-2"></i>
+                                    <h5>ShopMax Support</h5>
+                                    <p class="small text-muted">Platform Issues & Disputes</p>
+                                    <p class="mb-1"><strong>Phone:</strong> +256 700 123 456</p>
+                                    <p class="mb-1"><strong>Email:</strong> support@shopmax.com</p>
+                                    <p class="mb-0"><strong>Hours:</strong> 24/7</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-4">
+                                <div class="border rounded p-3 h-100">
+                                    <i class="fas fa-university fa-2x text-warning mb-2"></i>
+                                    <h5>UCU Security</h5>
+                                    <p class="small text-muted">Campus Safety & Emergencies</p>
+                                    <p class="mb-1"><strong>Emergency:</strong> 0772 123 456</p>
+                                    <p class="mb-1"><strong>Campus Line:</strong> 0414 123 456</p>
+                                    <p class="mb-0"><strong>Location:</strong> Main Gate</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-4">
+                                <div class="border rounded p-3 h-100">
+                                    <i class="fas fa-shield-alt fa-2x text-success mb-2"></i>
+                                    <h5>Local Authorities</h5>
+                                    <p class="small text-muted">Police & Emergency Services</p>
+                                    <p class="mb-1"><strong>Police Emergency:</strong> 999/112</p>
+                                    <p class="mb-1"><strong>Ambulance:</strong> 911</p>
+                                    <p class="mb-0"><strong>Fire Department:</strong> 999</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Emergency Action Plan -->
+                        <div class="alert alert-warning mt-3">
+                            <h6><i class="fas fa-exclamation-triangle me-2"></i>Emergency Action Plan</h6>
+                            <p class="mb-2">If you feel unsafe during a transaction:</p>
+                            <ol class="mb-0">
+                                <li>Leave the location immediately</li>
+                                <li>Contact UCU Security or local police</li>
+                                <li>Report the incident to ShopMax Support</li>
+                                <li>Preserve any evidence or documentation</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Safety Pledge -->
+            <section class="text-center p-5 bg-primary text-white rounded">
+                <h3 class="mb-3">ShopMax Safety Pledge</h3>
+                <p class="lead mb-4">We are committed to maintaining a safe, trusted marketplace for the UCU community. Our team works 24/7 to monitor activity, verify users, and respond to safety concerns.</p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <div class="bg-white text-primary rounded p-3">
+                        <i class="fas fa-user-check fa-2x mb-2"></i>
+                        <h6 class="mb-0">Verified Users</h6>
+                    </div>
+                    <div class="bg-white text-primary rounded p-3">
+                        <i class="fas fa-lock fa-2x mb-2"></i>
+                        <h6 class="mb-0">Secure Payments</h6>
+                    </div>
+                    <div class="bg-white text-primary rounded p-3">
+                        <i class="fas fa-shield-alt fa-2x mb-2"></i>
+                        <h6 class="mb-0">24/7 Monitoring</h6>
+                    </div>
+                    <div class="bg-white text-primary rounded p-3">
+                        <i class="fas fa-headset fa-2x mb-2"></i>
+                        <h6 class="mb-0">Quick Support</h6>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Report Issues -->
+            <div class="text-center mt-4">
+                <a href="{{ url_for('report_issue') }}" class="btn btn-danger btn-lg me-3">
+                    <i class="fas fa-flag me-2"></i>Report Safety Issue
+                </a>
+                <a href="{{ url_for('contact_us') }}" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-envelope me-2"></i>Contact Safety Team
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+section {
+    scroll-margin-top: 100px;
+}
+
+.card {
+    border-radius: 12px;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.border-4 {
+    border-width: 4px !important;
+}
+
+.form-check-input:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+}
+
+.btn-outline-primary.active {
+    background-color: var(--primary);
+    color: white;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Add active class to navigation buttons when section is in view
+    const sections = document.querySelectorAll('section');
+    const navButtons = document.querySelectorAll('.btn-outline-primary');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                navButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.getAttribute('href') === `#${id}`) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, {
+        threshold: 0.5,
+        rootMargin: '-100px 0px -100px 0px'
+    });
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+
+    // Emergency contact copy functionality
+    const contactElements = document.querySelectorAll('.border.rounded p strong');
+    contactElements.forEach(element => {
+        if (element.textContent.includes('Phone:') || element.textContent.includes('Email:')) {
+            const parent = element.parentElement;
+            parent.style.cursor = 'pointer';
+            parent.title = 'Click to copy contact information';
+            
+            parent.addEventListener('click', function() {
+                const textToCopy = this.textContent.replace(/Phone:|Email:|Hours:|Location:/g, '').trim();
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    const originalHTML = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-check text-success me-1"></i> Copied!';
+                    setTimeout(() => {
+                        this.innerHTML = originalHTML;
+                    }, 2000);
+                });
+            });
+        }
+    });
+
+    // Checklist functionality
+    const checkboxes = document.querySelectorAll('.form-check-input');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (this.checked) {
+                this.parentElement.classList.add('text-success');
+            } else {
+                this.parentElement.classList.remove('text-success');
+            }
+        });
+    });
+
+    // Print safety tips
+    const printButton = document.createElement('button');
+    printButton.innerHTML = '<i class="fas fa-print me-2"></i>Print Safety Guide';
+    printButton.className = 'btn btn-outline-secondary position-fixed';
+    printButton.style.bottom = '20px';
+    printButton.style.right = '20px';
+    printButton.style.zIndex = '1000';
+    
+    printButton.addEventListener('click', function() {
+        window.print();
+    });
+    
+    document.body.appendChild(printButton);
+
+    // Emergency quick dial
+    const emergencyNumbers = document.querySelectorAll('.border.rounded p strong');
+    emergencyNumbers.forEach(element => {
+        if (element.textContent.match(/\d{3}[\s-]?\d{3}[\s-]?\d{3}/)) {
+            const phoneNumber = element.textContent.replace(/\D/g, '');
+            element.parentElement.innerHTML = element.parentElement.innerHTML.replace(
+                element.outerHTML,
+                `<strong>${element.textContent}</strong> <a href="tel:${phoneNumber}" class="btn btn-sm btn-success ms-2"><i class="fas fa-phone"></i></a>`
+            );
+        }
+    });
+});
+
+// Print styles
+</script>
+
+<style media="print">
+.btn, .position-fixed, .alert {
+    display: none !important;
+}
+
+.card {
+    break-inside: avoid;
+    border: 1px solid #ddd !important;
+}
+
+section {
+    break-after: page;
+}
+
+h1, h2, h3, h4, h5 {
+    color: #000 !important;
+}
+</style>
+{% endblock %}

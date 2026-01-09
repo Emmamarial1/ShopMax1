@@ -1,0 +1,1193 @@
+{% extends "base.html" %}
+
+{% block title %}Shopping Cart - ShopMax{% endblock %}
+
+{% block content %}
+<div class="cart-page">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="{{ url_for('home') }}">Home</a> &gt;
+        <a href="{{ url_for('products') }}">Products</a> &gt;
+        <span>Shopping Cart</span>
+    </nav>
+
+    <div class="cart-container">
+        <!-- Left Column - Cart Items -->
+        <div class="cart-items-section">
+            <div class="section-header">
+                <h1>🛒 Your Shopping Cart</h1>
+                {% if cart_items %}
+                    <button class="clear-cart-btn" onclick="clearCart()">Clear Cart</button>
+                {% endif %}
+            </div>
+
+            {% if cart_items %}
+                <div class="cart-items">
+                    {% for cart_item, product in cart_items %}
+                    <div class="cart-item" 
+                         data-cart-item-id="{{ cart_item.id if cart_item.id is defined else cart_item['id'] }}" 
+                         data-product-id="{{ product.id }}"
+                         data-max-stock="{{ product.stock }}">
+                        
+                        <!-- Product Image -->
+                        <div class="item-image">
+                            {% if product.image %}
+                                <img src="{{ url_for('static', filename='uploads/' + product.image) }}" 
+                                     alt="{{ product.name }}">
+                            {% else %}
+                                <div class="image-placeholder">📦</div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Product Details -->
+                        <div class="item-details">
+                            <h3 class="product-name">
+                                <a href="{{ url_for('product_detail', product_id=product.id) }}">
+                                    {{ product.name }}
+                                </a>
+                            </h3>
+                            <p class="product-category">{{ product.category|title }}</p>
+                            <p class="product-brand">
+                                {% if product.brand %}{{ product.brand }} • {% endif %}
+                                {{ product.condition|title if product.condition else 'Not specified' }}
+                            </p>
+                            
+                            <!-- Seller Info -->
+                            <div class="seller-info">
+                                <span class="seller-name">
+                                    Sold by: 
+                                    {% if product.seller and product.seller.business_name %}
+                                        {{ product.seller.business_name }}
+                                    {% elif product.seller and product.seller.fullname %}
+                                        {{ product.seller.fullname }}
+                                    {% else %}
+                                        ShopMax Seller
+                                    {% endif %}
+                                </span>
+                            </div>
+
+                            <!-- Stock Status -->
+                            <div class="stock-status">
+                                {% if product.stock > 5 %}
+                                    <span class="in-stock">✅ In Stock</span>
+                                {% elif product.stock > 0 %}
+                                    <span class="low-stock">⚠️ Only {{ product.stock }} left</span>
+                                {% else %}
+                                    <span class="out-of-stock">❌ Out of Stock</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Price and Quantity -->
+                        <div class="item-controls">
+                            <!-- Price -->
+                            <div class="item-price" data-unit-price="{{ product.price }}">
+                                UGX{{ "{:,.0f}".format(product.price) }}
+                            </div>
+
+                            <!-- Quantity Controls -->
+                            <div class="quantity-controls">
+                                <button class="quantity-btn minus" type="button">
+                                    −
+                                </button>
+                                <span class="quantity-display">
+                                    {{ cart_item.quantity if cart_item.quantity is defined else cart_item['quantity'] }}
+                                </span>
+                                <button class="quantity-btn plus" type="button">
+                                    +
+                                </button>
+                            </div>
+
+                            <!-- Item Total -->
+                            <div class="item-total" id="item-total-{{ cart_item.id if cart_item.id is defined else cart_item['id'] }}">
+                                UGX{{ "{:,.0f}".format(product.price * (cart_item.quantity if cart_item.quantity is defined else cart_item['quantity'])) }}
+                            </div>
+
+                            <!-- Remove Button -->
+                            <button class="remove-btn" type="button">
+                                🗑️ Remove
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <!-- Empty Cart State -->
+                <div class="empty-cart">
+                    <div class="empty-cart-icon">🛒</div>
+                    <h2>Your cart is empty</h2>
+                    <p>Looks like you haven't added any items to your cart yet.</p>
+                    <div class="empty-cart-actions">
+                        <a href="{{ url_for('products') }}" class="browse-btn">
+                            🛍️ Continue Shopping
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Right Column - Order Summary -->
+        {% if cart_items %}
+        <div class="order-summary">
+            <div class="summary-card">
+                <h3>Order Summary</h3>
+                
+                <div class="summary-row">
+                    <span>Subtotal (<span id="cart-item-count">{{ cart_items|length }}</span> item{% if cart_items|length != 1 %}s{% endif %}):</span>
+                    <span id="subtotal">UGX{{ "{:,.0f}".format(subtotal) }}</span>
+                </div>
+                
+             
+                
+                <div class="summary-divider"></div>
+                
+                <div class="summary-row total">
+                    <span>Total:</span>
+                    <span class="total-price" id="total">UGX{{ "{:,.0f}".format(total) }}</span>
+                </div>
+
+                <!-- Delivery Information -->
+                <div class="delivery-info">
+                    <h4>🚚 Delivery Information</h4>
+                    <ul>
+                        <li>📍 <strong>UCU Campus:</strong> Free same-day delivery</li>
+                        <li>🏘️ <strong>Mukono Area:</strong> Free next-day delivery</li>
+                        <li>💰 <strong>Cash on Delivery</strong> available</li>
+                        <li>📦 <strong>Secure Packaging</strong> for all items</li>
+                    </ul>
+                </div>
+
+                <!-- Checkout Button -->
+                {% if current_user and current_user.user_type == 'buyer' %}
+                    <!-- User is logged in as buyer -->
+                    <a href="{{ url_for('checkout') }}" class="checkout-btn">
+                        🛍️ Proceed to Checkout
+                    </a>
+                {% elif current_user %}
+                    <!-- User is logged in but not as buyer -->
+                    <div class="checkout-warning">
+                        <p>⚠️ Only buyer accounts can checkout. Please switch to a buyer account.</p>
+                        <a href="{{ url_for('logout') }}" class="logout-btn">
+                            Logout
+                        </a>
+                    </div>
+                {% else %}
+                    <!-- User is not logged in -->
+                    <div class="checkout-warning">
+                        <p>🛒 You need to login or create an account to checkout</p>
+                        <div class="auth-buttons">
+                            <a href="{{ url_for('login') }}?next={{ url_for('checkout') }}" class="login-btn">
+                                Login
+                            </a>
+                            <a href="{{ url_for('register_buyer') }}" class="register-btn">
+                                Create Account
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Continue Shopping -->
+                <a href="{{ url_for('products') }}" class="continue-shopping">
+                    ← Continue Shopping
+                </a>
+            </div>
+
+            <!-- Security Badges -->
+            <div class="security-badges">
+                <div class="security-item">
+                    <span class="badge-icon">🔒</span>
+                    <span>Secure Checkout</span>
+                </div>
+                <div class="security-item">
+                    <span class="badge-icon">🛡️</span>
+                    <span>Buyer Protection</span>
+                </div>
+                <div class="security-item">
+                    <span class="badge-icon">💳</span>
+                    <span>Cash on Delivery</span>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Recently Viewed / Recommended Products -->
+    {% if cart_items %}
+    <div class="recommended-section">
+        <h2>You Might Also Like</h2>
+        <div class="recommended-products">
+            <!-- This would be populated with recommended products -->
+            <div class="recommended-placeholder">
+                <p>More products coming soon!</p>
+                <a href="{{ url_for('products') }}" class="browse-more-btn">
+                    Browse All Products
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+/* Your existing CSS styles here - make sure they are included */
+.cart-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.breadcrumb {
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+}
+
+.breadcrumb a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.cart-container {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.section-header h1 {
+    color: #2c3e50;
+    margin: 0;
+}
+
+.clear-cart-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.clear-cart-btn:hover {
+    background: #c0392b;
+}
+
+/* Cart Items */
+.cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.cart-item {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    gap: 1.5rem;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.cart-item:hover {
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+}
+
+.item-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #f8f9fa;
+}
+
+.item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: #6c757d;
+}
+
+.item-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.product-name {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.product-name a {
+    color: #2c3e50;
+    text-decoration: none;
+}
+
+.product-name a:hover {
+    color: #3498db;
+}
+
+.product-category {
+    color: #3498db;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.product-brand {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.seller-info {
+    margin-top: 0.5rem;
+}
+
+.seller-name {
+    color: #7f8c8d;
+    font-size: 0.85rem;
+}
+
+.stock-status {
+    margin-top: 0.5rem;
+}
+
+.in-stock {
+    color: #27ae60;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.low-stock {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.out-of-stock {
+    color: #95a5a6;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.item-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1rem;
+}
+
+.item-price {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #27ae60;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 0.5rem;
+}
+
+.quantity-btn {
+    width: 35px;
+    height: 35px;
+    border: 1px solid #e9ecef;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.quantity-btn:hover:not(:disabled) {
+    background: #3498db;
+    color: white;
+    border-color: #3498db;
+}
+
+.quantity-btn:disabled {
+    background: #f8f9fa;
+    color: #bdc3c7;
+    cursor: not-allowed;
+}
+
+.quantity-display {
+    width: 40px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.item-total {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.remove-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.remove-btn:hover {
+    background: #c0392b;
+    transform: translateY(-2px);
+}
+
+/* Empty Cart */
+.empty-cart {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.empty-cart-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.empty-cart h2 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.empty-cart p {
+    color: #7f8c8d;
+    margin-bottom: 2rem;
+}
+
+.browse-btn {
+    background: #3498db;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.browse-btn:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+/* Order Summary */
+.order-summary {
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+}
+
+.summary-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    margin-bottom: 1.5rem;
+}
+
+.summary-card h3 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    color: #555;
+}
+
+.summary-row.total {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.total-price {
+    color: #27ae60;
+}
+
+.free-delivery {
+    color: #27ae60;
+    font-weight: 600;
+}
+
+.summary-divider {
+    height: 1px;
+    background: #e9ecef;
+    margin: 1rem 0;
+}
+
+.delivery-info {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e9ecef;
+}
+
+.delivery-info h4 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.delivery-info ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.delivery-info li {
+    padding: 0.3rem 0;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.checkout-btn {
+    width: 100%;
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1.5rem;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+}
+
+.checkout-btn:hover {
+    background: #219a52;
+    transform: translateY(-2px);
+}
+
+.checkout-warning {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.checkout-warning p {
+    margin: 0 0 1rem 0;
+    color: #856404;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.login-btn, .register-btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.login-btn {
+    background: #3498db;
+    color: white;
+}
+
+.login-btn:hover {
+    background: #2980b9;
+}
+
+.register-btn {
+    background: #27ae60;
+    color: white;
+}
+
+.register-btn:hover {
+    background: #219a52;
+}
+
+.logout-btn {
+    background: #e74c3c;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 1rem;
+}
+
+.logout-btn:hover {
+    background: #c0392b;
+}
+
+.continue-shopping {
+    display: block;
+    text-align: center;
+    margin-top: 1rem;
+    color: #3498db;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.continue-shopping:hover {
+    text-decoration: underline;
+}
+
+/* Security Badges */
+.security-badges {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.security-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.security-item:last-child {
+    margin-bottom: 0;
+}
+
+.badge-icon {
+    font-size: 1.2rem;
+}
+
+/* Recommended Section */
+.recommended-section {
+    margin-top: 3rem;
+}
+
+.recommended-section h2 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+}
+
+.recommended-placeholder {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    color: #7f8c8d;
+}
+
+.browse-more-btn {
+    background: #3498db;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 6px;
+    text-decoration: none;
+    margin-top: 1rem;
+    display: inline-block;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .cart-page {
+        padding: 1rem;
+    }
+    
+    .cart-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .cart-item {
+        grid-template-columns: 80px 1fr;
+        gap: 1rem;
+    }
+    
+    .item-controls {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .item-image {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    .cart-item {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .item-controls {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .section-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .auth-buttons {
+        flex-direction: column;
+    }
+}
+</style>
+
+<script>
+// Global variables
+let isUserLoggedIn = {{ ('true' if current_user and current_user.user_type == 'buyer' else 'false') | lower }};
+
+// Update quantity function
+async function updateQuantity(cartItemId, newQuantity, maxStock) {
+    if (newQuantity < 1) return;
+    
+    try {
+        const response = await fetch('/api/cart/update', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                cart_item_id: cartItemId,
+                quantity: parseInt(newQuantity)
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showNotification('✅ Cart updated successfully');
+            
+            // Update the display
+            updateItemDisplay(cartItemId, newQuantity, data.subtotal);
+            
+            // Update cart summary if data exists
+            if (data.subtotal !== undefined || data.cart_count !== undefined) {
+                updateCartSummary(data);
+            }
+            
+            // Update guest cart in session storage
+            if (cartItemId.startsWith('session_')) {
+                updateGuestCartStorage();
+            }
+        } else {
+            showNotification('❌ ' + (data.message || 'Failed to update cart'));
+        }
+    } catch (error) {
+        console.error('Error updating cart:', error);
+        showNotification('❌ Error updating cart');
+    }
+}
+
+// Adjust quantity by +1 or -1
+function adjustQuantity(cartItemId, change, maxStock) {
+    const cartItem = document.querySelector(`[data-cart-item-id="${cartItemId}"]`);
+    if (!cartItem) return;
+    
+    const quantityDisplay = cartItem.querySelector('.quantity-display');
+    let newQuantity = parseInt(quantityDisplay.textContent) + change;
+    
+    // Ensure quantity stays within bounds
+    if (newQuantity < 1) newQuantity = 1;
+    if (newQuantity > maxStock) {
+        showNotification(`❌ Maximum available stock is ${maxStock}`);
+        newQuantity = maxStock;
+    }
+    
+    // Update the display immediately for better UX
+    quantityDisplay.textContent = newQuantity;
+    
+    // Update button states
+    const minusBtn = cartItem.querySelector('.quantity-btn.minus');
+    const plusBtn = cartItem.querySelector('.quantity-btn.plus');
+    if (minusBtn) minusBtn.disabled = newQuantity <= 1;
+    if (plusBtn) plusBtn.disabled = newQuantity >= maxStock;
+    
+    // Update item total immediately
+    const unitPriceElement = cartItem.querySelector('.item-price');
+    let unitPrice = 0;
+    
+    if (unitPriceElement && unitPriceElement.dataset.unitPrice) {
+        unitPrice = parseFloat(unitPriceElement.dataset.unitPrice);
+    } else {
+        // Extract price from text
+        const priceText = unitPriceElement ? unitPriceElement.textContent.replace('UGX', '').replace(/,/g, '').trim() : '0';
+        unitPrice = parseFloat(priceText) || 0;
+    }
+    
+    const itemTotal = cartItem.querySelector('.item-total');
+    if (itemTotal) {
+        itemTotal.textContent = 'UGX ' + (unitPrice * newQuantity).toLocaleString();
+    }
+    
+    // Call updateQuantity with the new value
+    updateQuantity(cartItemId, newQuantity, maxStock);
+}
+
+// Remove item from cart
+async function removeFromCart(cartItemId) {
+    if (!confirm('Are you sure you want to remove this item from your cart?')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/cart/remove', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                cart_item_id: cartItemId
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showNotification('✅ Item removed from cart');
+            
+            // Remove the item from DOM with animation
+            const cartItem = document.querySelector(`[data-cart-item-id="${cartItemId}"]`);
+            if (cartItem) {
+                cartItem.style.opacity = '0.5';
+                cartItem.style.transform = 'translateX(-100px)';
+                setTimeout(() => {
+                    cartItem.remove();
+                    
+                    // Update cart summary if data exists
+                    if (data.subtotal !== undefined) {
+                        updateCartSummary(data);
+                    }
+                    
+                    // Update guest cart storage
+                    if (cartItemId.startsWith('session_')) {
+                        updateGuestCartStorage();
+                    }
+                    
+                    // If cart is empty, reload to show empty state
+                    if (document.querySelectorAll('.cart-item').length === 0) {
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 500);
+                    }
+                }, 300);
+            }
+        } else {
+            showNotification('❌ ' + (data.message || 'Failed to remove item'));
+        }
+    } catch (error) {
+        console.error('Error removing item:', error);
+        showNotification('❌ Error removing item from cart');
+    }
+}
+
+// Clear entire cart
+async function clearCart() {
+    if (!confirm('Are you sure you want to clear your entire cart?')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/cart/clear', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showNotification('✅ Cart cleared successfully');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        } else {
+            showNotification('❌ ' + (data.message || 'Failed to clear cart'));
+        }
+    } catch (error) {
+        console.error('Error clearing cart:', error);
+        showNotification('❌ Error clearing cart');
+    }
+}
+
+// Helper function to update guest cart storage
+function updateGuestCartStorage() {
+    if (!isUserLoggedIn) {
+        const cartItems = document.querySelectorAll('.cart-item[data-cart-item-id^="session_"]');
+        const cartData = {};
+        
+        cartItems.forEach(item => {
+            const productId = item.getAttribute('data-product-id');
+            const quantityElement = item.querySelector('.quantity-display');
+            if (quantityElement && productId) {
+                const quantity = parseInt(quantityElement.textContent) || 0;
+                if (quantity > 0) {
+                    cartData[productId] = quantity;
+                }
+            }
+        });
+        
+        // Store in sessionStorage
+        sessionStorage.setItem('guest_cart', JSON.stringify(cartData));
+        
+        // Update cart count in session storage
+        const cartCount = Object.values(cartData).reduce((sum, qty) => sum + qty, 0);
+        sessionStorage.setItem('cart_count', cartCount);
+        
+        // Update navbar count
+        const cartCountElements = document.querySelectorAll('.cart-count, #cartCount');
+        cartCountElements.forEach(el => {
+            el.textContent = cartCount;
+        });
+    }
+}
+
+// Update individual item display
+function updateItemDisplay(cartItemId, quantity, subtotal) {
+    const cartItem = document.querySelector(`[data-cart-item-id="${cartItemId}"]`);
+    if (!cartItem) return;
+    
+    // Update quantity display
+    const quantityDisplay = cartItem.querySelector('.quantity-display');
+    if (quantityDisplay) {
+        quantityDisplay.textContent = quantity;
+    }
+    
+    // Update button states
+    const minusBtn = cartItem.querySelector('.quantity-btn.minus');
+    const plusBtn = cartItem.querySelector('.quantity-btn.plus');
+    if (minusBtn) minusBtn.disabled = quantity <= 1;
+    
+    // For plus button, we need to check stock
+    if (plusBtn) {
+        const maxStock = parseInt(cartItem.getAttribute('data-max-stock') || 999);
+        plusBtn.disabled = quantity >= maxStock;
+    }
+    
+    // Update item total
+    const unitPriceElement = cartItem.querySelector('.item-price');
+    if (unitPriceElement) {
+        const unitPrice = parseFloat(unitPriceElement.dataset.unitPrice) || 
+                         parseFloat(unitPriceElement.textContent.replace('UGX', '').replace(/,/g, '').trim()) || 0;
+        const itemTotal = cartItem.querySelector('.item-total');
+        if (itemTotal) {
+            itemTotal.textContent = 'UGX ' + (unitPrice * quantity).toLocaleString();
+        }
+    }
+}
+
+// Update cart summary (subtotal, total, item count)
+function updateCartSummary(data) {
+    // Update cart count in navbar
+    if (data.cart_count !== undefined) {
+        const cartCountElements = document.querySelectorAll('#cartCount, .cart-count');
+        cartCountElements.forEach(element => {
+            element.textContent = data.cart_count;
+        });
+        
+        // Also update in session storage for guest users
+        if (!isUserLoggedIn) {
+            sessionStorage.setItem('cart_count', data.cart_count);
+        }
+    }
+    
+    // Update cart item count in the page
+    if (data.cart_item_count !== undefined) {
+        const cartItemCountElement = document.getElementById('cart-item-count');
+        if (cartItemCountElement) {
+            cartItemCountElement.textContent = data.cart_item_count;
+            // Update the text (item/items)
+            const itemText = data.cart_item_count === 1 ? 'item' : 'items';
+            const parent = cartItemCountElement.parentElement;
+            if (parent) {
+                parent.innerHTML = `Subtotal (<span id="cart-item-count">${data.cart_item_count}</span> ${itemText}):`;
+            }
+        }
+    }
+    
+    // Update subtotal
+    if (data.subtotal !== undefined) {
+        const subtotalElement = document.getElementById('subtotal');
+        if (subtotalElement) {
+            subtotalElement.textContent = 'UGX ' + parseFloat(data.subtotal).toLocaleString();
+        }
+        
+        // Update total
+        const totalElement = document.getElementById('total');
+        if (totalElement) {
+            totalElement.textContent = 'UGX ' + parseFloat(data.subtotal).toLocaleString();
+        }
+    }
+}
+
+// Notification function
+function showNotification(message) {
+    // Remove existing notifications
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(n => n.remove());
+    
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #27ae60;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+        font-weight: 600;
+    `;
+    
+    document.body.appendChild(notification);
+    
+    // Remove notification after 3 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+            if (document.body.contains(notification)) {
+                document.body.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// Add CSS for animations
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+    .cart-item {
+        transition: all 0.3s ease;
+    }
+`;
+document.head.appendChild(style);
+
+// Initialize cart page with event delegation
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Cart page loaded - User logged in:', isUserLoggedIn);
+    
+    // Use event delegation for all cart buttons
+    document.addEventListener('click', function(event) {
+        // Handle minus button clicks
+        if (event.target.classList.contains('quantity-btn') && event.target.classList.contains('minus')) {
+            event.preventDefault();
+            const cartItem = event.target.closest('.cart-item');
+            if (cartItem) {
+                const cartItemId = cartItem.getAttribute('data-cart-item-id');
+                const maxStock = parseInt(cartItem.getAttribute('data-max-stock') || 999);
+                adjustQuantity(cartItemId, -1, maxStock);
+            }
+        }
+        
+        // Handle plus button clicks
+        if (event.target.classList.contains('quantity-btn') && event.target.classList.contains('plus')) {
+            event.preventDefault();
+            const cartItem = event.target.closest('.cart-item');
+            if (cartItem) {
+                const cartItemId = cartItem.getAttribute('data-cart-item-id');
+                const maxStock = parseInt(cartItem.getAttribute('data-max-stock') || 999);
+                adjustQuantity(cartItemId, 1, maxStock);
+            }
+        }
+        
+        // Handle remove button clicks
+        if (event.target.classList.contains('remove-btn')) {
+            event.preventDefault();
+            const cartItem = event.target.closest('.cart-item');
+            if (cartItem) {
+                const cartItemId = cartItem.getAttribute('data-cart-item-id');
+                removeFromCart(cartItemId);
+            }
+        }
+    });
+    
+    // Clear cart button
+    const clearCartBtn = document.querySelector('.clear-cart-btn');
+    if (clearCartBtn) {
+        clearCartBtn.addEventListener('click', clearCart);
+    }
+    
+    // Update cart count from session storage for guest users
+    if (!isUserLoggedIn) {
+        const cartCount = sessionStorage.getItem('cart_count') || 0;
+        const cartCountElements = document.querySelectorAll('#cartCount, .cart-count');
+        cartCountElements.forEach(element => {
+            element.textContent = cartCount;
+        });
+    }
+});
+
+// Make functions available globally
+window.showNotification = showNotification;
+window.updateCartSummary = updateCartSummary;
+window.updateItemDisplay = updateItemDisplay;
+window.adjustQuantity = adjustQuantity;
+window.updateQuantity = updateQuantity;
+window.removeFromCart = removeFromCart;
+window.clearCart = clearCart;
+window.updateGuestCartStorage = updateGuestCartStorage;
+</script>
+{% endblock %}

@@ -1,0 +1,307 @@
+{% extends "base.html" %}
+
+{% block title %}Delivery Management - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Delivery Management</h1>
+        <div class="d-none d-sm-inline-block">
+            <span class="text-muted">Total Delivery Persons: {{ delivery_persons|length }}</span>
+        </div>
+    </div>
+
+    <!-- Delivery Persons Management -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Delivery Team</h6>
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addDeliveryPersonModal">
+                        <i class="fas fa-plus"></i> Add Delivery Person
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="deliveryPersonsTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Vehicle</th>
+                                    <th>Active Assignments</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for person in delivery_persons %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ person.name }}</strong>
+                                        {% if person.current_location %}
+                                        <br><small class="text-muted">Location: {{ person.current_location }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ person.phone }}</td>
+                                    <td>
+                                        <span class="badge badge-info">{{ person.vehicle_type|title }}</span>
+                                        {% if person.vehicle_number %}
+                                        <br><small>{{ person.vehicle_number }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% set active_assignments = person.assignments|selectattr("status", "in", ["assigned", "picked_up", "in_transit"])|list %}
+                                        <span class="badge badge-primary">{{ active_assignments|length }}</span>
+                                    </td>
+                                    <td>
+                                        {% if person.is_active %}
+                                        <span class="badge badge-success">Active</span>
+                                        {% else %}
+                                        <span class="badge badge-secondary">Inactive</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-info btn-sm" 
+                                                    onclick="viewDeliveryPerson({{ person.id }})">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-warning btn-sm" 
+                                                    onclick="editDeliveryPerson({{ person.id }})">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <form method="POST" action="{{ url_for('toggle_delivery_person_status', person_id=person.id) }}" 
+                                                  class="d-inline">
+                                                <button type="submit" class="btn btn-{{ 'secondary' if person.is_active else 'success' }} btn-sm">
+                                                    <i class="fas fa-{{ 'pause' if person.is_active else 'play' }}"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Deliveries -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Active Deliveries</h6>
+                </div>
+                <div class="card-body">
+                    {% if active_deliveries %}
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="activeDeliveriesTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Delivery Person</th>
+                                    <th>Status</th>
+                                    <th>Assigned At</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for delivery in active_deliveries %}
+                                <tr>
+                                    <td>
+                                        <strong>#{{ delivery.order.id }}</strong>
+                                        <br><small>{{ delivery.order.created_at.strftime('%Y-%m-%d') }}</small>
+                                    </td>
+                                    <td>
+                                        {{ delivery.order.user.fullname }}
+                                        <br><small>{{ delivery.order.user.phone }}</small>
+                                    </td>
+                                    <td>
+                                        {% if delivery.delivery_person %}
+                                        {{ delivery.delivery_person.name }}
+                                        <br><small>{{ delivery.delivery_person.phone }}</small>
+                                        {% else %}
+                                        <span class="text-muted">Not assigned</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-{{ 
+                                            'primary' if delivery.status == 'assigned' 
+                                            else 'warning' if delivery.status == 'picked_up' 
+                                            else 'info' if delivery.status == 'in_transit'
+                                            else 'success' if delivery.status == 'delivered'
+                                            else 'secondary' 
+                                        }}">
+                                            {{ delivery.status|title }}
+                                        </span>
+                                    </td>
+                                    <td>{{ delivery.assigned_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a href="{{ url_for('track_delivery', delivery_id=delivery.id) }}" 
+                                               class="btn btn-info btn-sm">
+                                                <i class="fas fa-eye"></i> Track
+                                            </a>
+                                            <button type="button" class="btn btn-warning btn-sm" 
+                                                    onclick="updateDeliveryStatus({{ delivery.id }})">
+                                                <i class="fas fa-edit"></i> Status
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-shipping-fast fa-3x text-gray-300 mb-3"></i>
+                        <h5 class="text-gray-500">No Active Deliveries</h5>
+                        <p class="text-gray-400">There are currently no active deliveries.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Delivery Person Modal -->
+<div class="modal fade" id="addDeliveryPersonModal" tabindex="-1" aria-labelledby="addDeliveryPersonModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addDeliveryPersonModalLabel">Add Delivery Person</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{{ url_for('add_delivery_person') }}">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="vehicle_type" class="form-label">Vehicle Type</label>
+                        <select class="form-control" id="vehicle_type" name="vehicle_type" required>
+                            <option value="motorcycle">Motorcycle</option>
+                            <option value="bicycle">Bicycle</option>
+                            <option value="car">Car</option>
+                            <option value="van">Van</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="vehicle_number" class="form-label">Vehicle Number (Plate)</label>
+                        <input type="text" class="form-control" id="vehicle_number" name="vehicle_number">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Delivery Person</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Update Delivery Status Modal -->
+<div class="modal fade" id="updateDeliveryStatusModal" tabindex="-1" aria-labelledby="updateDeliveryStatusModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateDeliveryStatusModalLabel">Update Delivery Status</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="updateDeliveryStatusForm">
+                <div class="modal-body">
+                    <input type="hidden" id="delivery_id" name="delivery_id">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-control" id="status" name="status" required>
+                            <option value="assigned">Assigned</option>
+                            <option value="picked_up">Picked Up</option>
+                            <option value="in_transit">In Transit</option>
+                            <option value="delivered">Delivered</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Status</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize DataTables
+    $(document).ready(function() {
+        $('#deliveryPersonsTable').DataTable({
+            "pageLength": 10,
+            "order": [[0, 'asc']]
+        });
+        
+        $('#activeDeliveriesTable').DataTable({
+            "pageLength": 10,
+            "order": [[0, 'desc']]
+        });
+    });
+
+    function updateDeliveryStatus(deliveryId) {
+        $('#delivery_id').val(deliveryId);
+        $('#updateDeliveryStatusModal').modal('show');
+    }
+
+    // Handle update delivery status form submission
+    $('#updateDeliveryStatusForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            delivery_id: $('#delivery_id').val(),
+            status: $('#status').val()
+        };
+
+        fetch('/admin/delivery/' + formData.delivery_id + '/update-status', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'status=' + formData.status
+        })
+        .then(response => {
+            if (response.ok) {
+                $('#updateDeliveryStatusModal').modal('hide');
+                location.reload();
+            } else {
+                alert('Error updating delivery status');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error updating delivery status');
+        });
+    });
+
+    function viewDeliveryPerson(personId) {
+        // Implement view delivery person details
+        alert('View delivery person: ' + personId);
+    }
+
+    function editDeliveryPerson(personId) {
+        // Implement edit delivery person
+        alert('Edit delivery person: ' + personId);
+    }
+</script>
+{% endblock %}

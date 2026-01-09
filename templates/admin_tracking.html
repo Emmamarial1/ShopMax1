@@ -1,0 +1,563 @@
+{% extends "base.html" %}
+
+{% block title %}Order Tracking - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Order Tracking & Delivery Management</h1>
+        <div class="d-none d-sm-inline-block">
+            <span class="text-muted" id="lastUpdated">Last updated: {{ now().strftime('%H:%M:%S') }}</span>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row">
+        <!-- Pending Deliveries -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Pending Deliveries</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ pending_deliveries_count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clock fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- In Transit -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                In Transit</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ in_transit_count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-shipping-fast fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completed Today -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Completed Today</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ completed_today_count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Delivery Persons -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Active Delivery Persons</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ active_delivery_persons_count }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-motorcycle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delivery Persons Management -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Delivery Team</h6>
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#addDeliveryPersonModal">
+                        <i class="fas fa-plus"></i> Add Delivery Person
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="deliveryPersonsTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Phone</th>
+                                    <th>Vehicle</th>
+                                    <th>Active Assignments</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for person in delivery_persons %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ person.name }}</strong>
+                                        {% if person.current_location %}
+                                        <br><small class="text-muted">Location: {{ person.current_location }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ person.phone }}</td>
+                                    <td>
+                                        <span class="badge badge-info">{{ person.vehicle_type|title }}</span>
+                                        {% if person.vehicle_number %}
+                                        <br><small>{{ person.vehicle_number }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% set active_assignments = person.assignments|selectattr("status", "in", ["assigned", "picked_up", "in_transit"])|list %}
+                                        <span class="badge badge-primary">{{ active_assignments|length }}</span>
+                                    </td>
+                                    <td>
+                                        {% if person.is_active %}
+                                        <span class="badge badge-success">Active</span>
+                                        {% else %}
+                                        <span class="badge badge-secondary">Inactive</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-info btn-sm" 
+                                                    onclick="viewDeliveryPerson({{ person.id }})">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-warning btn-sm" 
+                                                    onclick="editDeliveryPerson({{ person.id }})">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <form method="POST" action="{{ url_for('toggle_delivery_person_status', person_id=person.id) }}" 
+                                                  class="d-inline">
+                                                <button type="submit" class="btn btn-{{ 'secondary' if person.is_active else 'success' }} btn-sm">
+                                                    <i class="fas fa-{{ 'pause' if person.is_active else 'play' }}"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Deliveries -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Active Deliveries</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="activeDeliveriesTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Delivery Person</th>
+                                    <th>Current Status</th>
+                                    <th>Location</th>
+                                    <th>Estimated Delivery</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for assignment in active_assignments %}
+                                <tr>
+                                    <td>
+                                        <strong>#{{ assignment.order.id }}</strong>
+                                        <br><small>{{ assignment.order.created_at.strftime('%Y-%m-%d') }}</small>
+                                    </td>
+                                    <td>
+                                        {{ assignment.order.user.fullname }}
+                                        <br><small>{{ assignment.order.user.phone }}</small>
+                                    </td>
+                                    <td>
+                                        {% if assignment.delivery_person %}
+                                        {{ assignment.delivery_person.name }}
+                                        <br><small>{{ assignment.delivery_person.phone }}</small>
+                                        {% else %}
+                                        <span class="text-muted">Not assigned</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% set latest_tracking = assignment.order.tracking_updates|sort(attribute='created_at')|last if assignment.order.tracking_updates %}
+                                        {% if latest_tracking %}
+                                        <span class="badge badge-{{ 
+                                            'primary' if latest_tracking.status == 'confirmed' 
+                                            else 'warning' if latest_tracking.status == 'shipped' 
+                                            else 'info' if latest_tracking.status == 'in_transit'
+                                            else 'success' if latest_tracking.status == 'delivered'
+                                            else 'secondary' 
+                                        }}">
+                                            {{ latest_tracking.status|title }}
+                                        </span>
+                                        <br><small>{{ latest_tracking.created_at.strftime('%H:%M') }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if assignment.delivery_person and assignment.delivery_person.current_location %}
+                                        {{ assignment.delivery_person.current_location }}
+                                        {% else %}
+                                        <span class="text-muted">Unknown</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if assignment.order.estimated_delivery %}
+                                        {{ assignment.order.estimated_delivery.strftime('%Y-%m-%d %H:%M') }}
+                                        {% if assignment.order.estimated_delivery < now() %}
+                                        <br><small class="text-danger">Overdue</small>
+                                        {% endif %}
+                                        {% else %}
+                                        <span class="text-muted">Not set</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-info btn-sm" 
+                                                    onclick="viewOrderDetails({{ assignment.order.id }})">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-warning btn-sm" 
+                                                    onclick="updateTracking({{ assignment.order.id }})">
+                                                <i class="fas fa-shipping-fast"></i>
+                                            </button>
+                                            {% if not assignment.delivery_person %}
+                                            <button type="button" class="btn btn-primary btn-sm" 
+                                                    onclick="assignDeliveryPerson({{ assignment.order.id }})">
+                                                <i class="fas fa-user-plus"></i>
+                                            </button>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Tracking Updates -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Tracking Updates</h6>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        {% for update in recent_tracking_updates %}
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h6 class="mb-1">
+                                    Order #{{ update.order.id }} - {{ update.status|title }}
+                                    <small class="text-muted float-end">{{ update.created_at.strftime('%Y-%m-%d %H:%M') }}</small>
+                                </h6>
+                                <p class="mb-1">
+                                    <strong>Customer:</strong> {{ update.order.user.fullname }}
+                                    {% if update.location %}
+                                    | <strong>Location:</strong> {{ update.location }}
+                                    {% endif %}
+                                </p>
+                                {% if update.notes %}
+                                <p class="text-muted mb-0"><small>{{ update.notes }}</small></p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Delivery Person Modal -->
+<div class="modal fade" id="addDeliveryPersonModal" tabindex="-1" aria-labelledby="addDeliveryPersonModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addDeliveryPersonModalLabel">Add Delivery Person</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{{ url_for('add_delivery_person') }}">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="phone" name="phone" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="vehicle_type" class="form-label">Vehicle Type</label>
+                        <select class="form-control" id="vehicle_type" name="vehicle_type" required>
+                            <option value="motorcycle">Motorcycle</option>
+                            <option value="bicycle">Bicycle</option>
+                            <option value="car">Car</option>
+                            <option value="van">Van</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="vehicle_number" class="form-label">Vehicle Number (Plate)</label>
+                        <input type="text" class="form-control" id="vehicle_number" name="vehicle_number">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Delivery Person</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Update Tracking Modal -->
+<div class="modal fade" id="updateTrackingModal" tabindex="-1" aria-labelledby="updateTrackingModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateTrackingModalLabel">Update Order Tracking</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="updateTrackingForm">
+                <div class="modal-body">
+                    <input type="hidden" id="tracking_order_id" name="order_id">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-control" id="status" name="status" required>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="processing">Processing</option>
+                            <option value="shipped">Shipped</option>
+                            <option value="in_transit">In Transit</option>
+                            <option value="out_for_delivery">Out for Delivery</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="location" class="form-label">Location</label>
+                        <input type="text" class="form-control" id="location" name="location" placeholder="Current location...">
+                    </div>
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Additional notes..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update Tracking</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Assign Delivery Person Modal -->
+<div class="modal fade" id="assignDeliveryPersonModal" tabindex="-1" aria-labelledby="assignDeliveryPersonModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="assignDeliveryPersonModalLabel">Assign Delivery Person</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="assignDeliveryPersonForm">
+                <div class="modal-body">
+                    <input type="hidden" id="assign_order_id" name="order_id">
+                    <div class="mb-3">
+                        <label for="delivery_person_id" class="form-label">Select Delivery Person</label>
+                        <select class="form-control" id="delivery_person_id" name="delivery_person_id" required>
+                            <option value="">Choose a delivery person...</option>
+                            {% for person in delivery_persons %}
+                            {% if person.is_active %}
+                            <option value="{{ person.id }}">{{ person.name }} ({{ person.vehicle_type|title }}) - {{ person.phone }}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Assign</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize DataTables
+    $(document).ready(function() {
+        $('#deliveryPersonsTable').DataTable({
+            "pageLength": 10,
+            "order": [[0, 'asc']]
+        });
+        
+        $('#activeDeliveriesTable').DataTable({
+            "pageLength": 10,
+            "order": [[0, 'desc']]
+        });
+    });
+
+    // Update tracking function
+    function updateTracking(orderId) {
+        $('#tracking_order_id').val(orderId);
+        $('#updateTrackingModal').modal('show');
+    }
+
+    // Assign delivery person function
+    function assignDeliveryPerson(orderId) {
+        $('#assign_order_id').val(orderId);
+        $('#assignDeliveryPersonModal').modal('show');
+    }
+
+    // View order details
+    function viewOrderDetails(orderId) {
+        window.location.href = `/admin/orders?highlight=${orderId}`;
+    }
+
+    // View delivery person details
+    function viewDeliveryPerson(personId) {
+        // Implement view delivery person details
+        alert('View delivery person: ' + personId);
+    }
+
+    // Edit delivery person
+    function editDeliveryPerson(personId) {
+        // Implement edit delivery person
+        alert('Edit delivery person: ' + personId);
+    }
+
+    // Handle update tracking form submission
+    $('#updateTrackingForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            order_id: $('#tracking_order_id').val(),
+            status: $('#status').val(),
+            location: $('#location').val(),
+            notes: $('#notes').val()
+        };
+
+        fetch('/api/order/tracking/update', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                $('#updateTrackingModal').modal('hide');
+                location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error updating tracking');
+        });
+    });
+
+    // Handle assign delivery person form submission
+    $('#assignDeliveryPersonForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            order_id: $('#assign_order_id').val(),
+            delivery_person_id: $('#delivery_person_id').val()
+        };
+
+        fetch('/api/delivery/assign', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                $('#assignDeliveryPersonModal').modal('hide');
+                location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error assigning delivery person');
+        });
+    });
+
+    // Auto-refresh every 30 seconds
+    setInterval(function() {
+        $('#lastUpdated').text('Last updated: ' + new Date().toLocaleTimeString());
+    }, 30000);
+</script>
+
+<style>
+.timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -30px;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #4e73df;
+    border: 2px solid white;
+    box-shadow: 0 0 0 3px #4e73df;
+}
+
+.timeline-content {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    border-left: 3px solid #4e73df;
+}
+</style>
+{% endblock %}

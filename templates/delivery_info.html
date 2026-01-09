@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Information | QuickShip Delivery</title>
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            line-height: 1.6;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        
+        .logo span {
+            color: #3498db;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: #3498db;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="400" viewBox="0 0 1200 400"><rect width="1200" height="400" fill="%23343a40"/></svg>');
+            color: white;
+            text-align: center;
+            padding: 4rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Main Content */
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .main-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .sidebar {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            align-self: start;
+        }
+        
+        h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        h3 {
+            color: #2c3e50;
+            margin: 1.5rem 0 1rem;
+        }
+        
+        p {
+            margin-bottom: 1rem;
+        }
+        
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        
+        /* FAQ Styles */
+        .faq-item {
+            margin-bottom: 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-answer {
+            padding: 1rem;
+            display: none;
+        }
+        
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+        
+        /* Sidebar Styles */
+        .contact-box {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 5px;
+            margin-top: 1.5rem;
+        }
+        
+        .contact-box h3 {
+            margin-top: 0;
+        }
+        
+        .tracking-box {
+            background-color: #e8f4fd;
+            padding: 1.5rem;
+            border-radius: 5px;
+            margin-top: 1.5rem;
+        }
+        
+        .tracking-box h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-section h3 {
+            color: #3498db;
+            margin-bottom: 1rem;
+            border-bottom: none;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+            margin-left: 0;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer-section a {
+            color: #ddd;
+            text-decoration: none;
+        }
+        
+        .footer-section a:hover {
+            color: #3498db;
+        }
+        
+        .copyright {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #444;
+            font-size: 0.9rem;
+            color: #bbb;
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">Quick<span>Ship</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#" class="active">Delivery Info</a></li>
+                    <li><a href="#">Tracking</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Delivery Information</h1>
+            <p>Everything you need to know about our delivery services, shipping options, and delivery times</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container content">
+        <div class="main-content">
+            <!-- Delivery Options Section -->
+            <section>
+                <h2>Delivery Options & Times</h2>
+                <p>We offer a range of delivery options to suit your needs. All orders are processed within 24 hours of placement.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Delivery Time</th>
+                            <th>Cost</th>
+                            <th>Features</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Standard Delivery</td>
+                            <td>3-5 business days</td>
+                            <td>$4.99</td>
+                            <td>Tracked, weekday delivery</td>
+                        </tr>
+                        <tr>
+                            <td>Express Delivery</td>
+                            <td>1-2 business days</td>
+                            <td>$9.99</td>
+                            <td>Priority, tracked, weekday delivery</td>
+                        </tr>
+                        <tr>
+                            <td>Next Day Delivery</td>
+                            <td>Next business day</td>
+                            <td>$14.99</td>
+                            <td>Guanteed next day, tracked</td>
+                        </tr>
+                        <tr>
+                            <td>Saturday Delivery</td>
+                            <td>Saturday</td>
+                            <td>$19.99</td>
+                            <td>Weekend delivery option</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p><strong>Note:</strong> Delivery times are estimates and may vary during peak seasons or due to unforeseen circumstances.</p>
+            </section>
+
+            <!-- Delivery Areas Section -->
+            <section>
+                <h2>Delivery Areas</h2>
+                <p>We currently deliver to all addresses within the United States, including:</p>
+                <ul>
+                    <li>All 50 states</li>
+                    <li>Puerto Rico</li>
+                    <li>U.S. Virgin Islands</li>
+                    <li>Guam</li>
+                </ul>
+                <p>International shipping is available to select countries. Please contact our customer service team for international delivery options and pricing.</p>
+            </section>
+
+            <!-- Free Delivery Section -->
+            <section>
+                <h2>Free Delivery</h2>
+                <p>Enjoy free standard delivery on all orders over $50. This offer applies to:</p>
+                <ul>
+                    <li>All products in our catalog</li>
+                    <li>Standard delivery service only</li>
+                    <li>Domestic addresses only</li>
+                </ul>
+                <p>Free delivery orders are processed in the same timeframe as paid standard delivery orders.</p>
+            </section>
+
+            <!-- Order Tracking Section -->
+            <section>
+                <h2>Track Your Order</h2>
+                <p>Once your order has been shipped, you will receive a confirmation email with your tracking number. You can use this number to:</p>
+                <ol>
+                    <li>Visit our <a href="#">Tracking Page</a></li>
+                    <li>Enter your tracking number</li>
+                    <li>View real-time updates on your delivery status</li>
+                </ol>
+                <p>Our tracking system provides detailed information including:</p>
+                <ul>
+                    <li>Order processing status</li>
+                    <li>Shipment location</li>
+                    <li>Estimated delivery date</li>
+                    <li>Delivery confirmation</li>
+                </ul>
+            </section>
+
+            <!-- Delivery FAQ Section -->
+            <section>
+                <h2>Frequently Asked Questions</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What happens if I'm not home when my delivery arrives?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>If you're not home, our delivery partner will attempt to leave your package in a safe place. If this isn't possible, they will leave a note with instructions on how to reschedule delivery or pick up your package from a local facility.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Can I change my delivery address after placing an order?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, you can change your delivery address if your order hasn't been shipped yet. Please contact our customer service team as soon as possible with your order number and the updated address.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Do you deliver on weekends and holidays?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We offer Saturday delivery as an additional service for an extra fee. We do not deliver on Sundays or major holidays. Delivery times may be extended during holiday periods.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>What should I do if my package is damaged?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>If your package arrives damaged, please contact our customer service team within 48 hours of delivery. We will arrange for a replacement or refund as appropriate.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="contact-box">
+                <h3>Need Help?</h3>
+                <p>Our customer service team is here to assist you with any delivery questions or concerns.</p>
+                <p><strong>Phone:</strong> 1-800-QUICKSHIP</p>
+                <p><strong>Email:</strong> support@quickship.com</p>
+                <p><strong>Hours:</strong> Mon-Fri, 8am-8pm EST</p>
+                <a href="#" class="btn">Contact Us</a>
+            </div>
+            
+            <div class="tracking-box">
+                <h3>Track Your Package</h3>
+                <p>Enter your tracking number to check the status of your delivery.</p>
+                <form>
+                    <input type="text" placeholder="Tracking Number" style="width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                    <button type="submit" class="btn" style="width: 100%;">Track Package</button>
+                </form>
+            </div>
+            
+            <div style="margin-top: 1.5rem;">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="#">Shipping Policy</a></li>
+                    <li><a href="#">Returns & Refunds</a></li>
+                    <li><a href="#">International Shipping</a></li>
+                    <li><a href="#">Size Guide</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>QuickShip</h3>
+                    <p>Reliable delivery services you can count on. Fast, secure, and convenient shipping solutions for all your needs.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <ul>
+                        <li><a href="#">Standard Delivery</a></li>
+                        <li><a href="#">Express Delivery</a></li>
+                        <li><a href="#">Next Day Delivery</a></li>
+                        <li><a href="#">International Shipping</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Customer Care</h3>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Track Your Order</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Shipping Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 QuickShip Delivery. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // FAQ toggle functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                faqItem.classList.toggle('active');
+                
+                // Toggle plus/minus icon
+                const icon = question.querySelector('span:last-child');
+                icon.textContent = faqItem.classList.contains('active') ? '−' : '+';
+            });
+        });
+        
+        // Simple form submission handler for tracking
+        document.querySelector('.tracking-box form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const trackingNumber = this.querySelector('input').value;
+            if(trackingNumber.trim() !== '') {
+                alert(`Tracking package: ${trackingNumber}\n\nIn a real implementation, this would redirect to a tracking results page.`);
+            } else {
+                alert('Please enter a tracking number');
+            }
+        });
+    </script>
+</body>
+</html>

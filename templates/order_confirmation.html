@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+
+{% block title %}Order Confirmed - ShopMax{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <!-- Success Header -->
+            <div class="text-center mb-5">
+                <div class="success-icon mb-3">
+                    <i class="fas fa-check-circle text-success fa-4x"></i>
+                </div>
+                <h1 class="h2 mb-2">Order Confirmed</h1>
+                <p class="text-muted mb-0">Thank you for your purchase. Your order is being processed.</p>
+                <div class="badge bg-success mt-2 p-2">
+                    <i class="fas fa-receipt me-1"></i>Order #{{ order.id }}
+                </div>
+            </div>
+
+            <!-- Order Summary Card -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-light py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="fas fa-file-invoice me-2"></i>Order Summary
+                        </h5>
+                        <small class="text-muted">{{ order.created_at.strftime('%b %d, %Y %I:%M %p') }}</small>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <!-- Order Details -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <small class="text-muted d-block">Payment Method</small>
+                            <strong>{{ order.payment_method|replace('_', ' ')|title }}</strong>
+                        </div>
+                        <div class="col-md-6">
+                            <small class="text-muted d-block">Status</small>
+                            <span class="badge bg-success">Confirmed</span>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Address -->
+                    <div class="mb-3">
+                        <small class="text-muted d-block">Delivery Address</small>
+                        <p class="mb-0">{{ order.delivery_address }}</p>
+                    </div>
+
+                    <!-- Order Items -->
+                    <div class="border-top pt-3">
+                        <h6 class="mb-3">Items Ordered</h6>
+                        {% for item in order_items %}
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                            <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                    <i class="fas fa-box text-muted"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-medium">{{ item.product.name }}</div>
+                                    <small class="text-muted">Qty: {{ item.quantity }} × UGX {{ "{:,.0f}".format(item.price) }}</small>
+                                </div>
+                            </div>
+                            <div class="fw-bold text-success">
+                                UGX {{ "{:,.0f}".format(item.price * item.quantity) }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <!-- Order Total -->
+                    <div class="border-top pt-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span>UGX {{ "{:,.0f}".format(order.total_amount) }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Delivery Fee:</span>
+                            <span class="text-success">Free</span>
+                        </div>
+                        <div class="d-flex justify-content-between fw-bold fs-5 border-top pt-2">
+                            <span>Total Amount:</span>
+                            <span class="text-success">UGX {{ "{:,.0f}".format(order.total_amount) }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-light py-3">
+                    <h5 class="mb-0">
+                        <i class="fas fa-list-check me-2"></i>What's Next?
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-4 mb-3">
+                            <div class="p-3">
+                                <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                                     style="width: 60px; height: 60px;">
+                                    <i class="fas fa-box-open text-primary fa-lg"></i>
+                                </div>
+                                <h6 class="fw-bold">Order Processing</h6>
+                                <small class="text-muted">Sellers are preparing your items</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="p-3">
+                                <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                                     style="width: 60px; height: 60px;">
+                                    <i class="fas fa-shipping-fast text-warning fa-lg"></i>
+                                </div>
+                                <h6 class="fw-bold">Delivery Assignment</h6>
+                                <small class="text-muted">Your order will be assigned for delivery</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="p-3">
+                                <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                                     style="width: 60px; height: 60px;">
+                                    <i class="fas fa-map-marker-alt text-success fa-lg"></i>
+                                </div>
+                                <h6 class="fw-bold">Track Order</h6>
+                                <small class="text-muted">Monitor your delivery progress</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body text-center">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <a href="{{ url_for('user_orders') }}" class="btn btn-primary w-100">
+                                <i class="fas fa-list me-2"></i>View Orders
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{{ url_for('order_details', order_id=order.id) }}" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-eye me-2"></i>Order Details
+                            </a>
+                        </div>
+                        <div class="col-md-4">
+                            <a href="{{ url_for('products') }}" class="btn btn-outline-secondary w-100">
+                                <i class="fas fa-shopping-bag me-2"></i>Continue Shopping
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Support Information -->
+            <div class="card border-0 bg-light">
+                <div class="card-body text-center py-4">
+                    <h6 class="mb-3">
+                        <i class="fas fa-headset me-2 text-primary"></i>Need Help with Your Order?
+                    </h6>
+                    <p class="text-muted mb-3 small">Our support team is here to assist you</p>
+                    <div class="row g-3 justify-content-center">
+                        <div class="col-auto">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-phone text-primary me-2"></i>
+                                <small>+256 700 123 456</small>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-envelope text-primary me-2"></i>
+                                <small>support@shopmax.com</small>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-comment text-primary me-2"></i>
+                                <small>Live Chat</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Timeline (Optional) -->
+            <div class="text-center mt-4">
+                <small class="text-muted">
+                    <i class="fas fa-info-circle me-1"></i>
+                    You will receive order updates via email and SMS
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border-radius: 12px;
+}
+
+.success-icon {
+    animation: bounceIn 0.6s ease;
+}
+
+@keyframes bounceIn {
+    0% { transform: scale(0.3); opacity: 0; }
+    50% { transform: scale(1.05); opacity: 1; }
+    100% { transform: scale(1); }
+}
+
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.badge {
+    font-weight: 500;
+}
+
+.bg-opacity-10 {
+    background-color: rgba(var(--bs-primary-rgb), 0.1) !important;
+}
+
+/* Smooth transitions */
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .row.text-center .col-md-4 {
+        margin-bottom: 1rem;
+    }
+    
+    .btn {
+        margin-bottom: 0.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+    
+    .text-center h1 {
+        font-size: 1.5rem;
+    }
+    
+    .card-header h5 {
+        font-size: 1rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Order confirmation page loaded');
+    
+    // Add smooth animations
+    const cards = document.querySelectorAll('.card');
+    cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            card.style.transition = 'all 0.5s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 200);
+    });
+    
+    // Auto-redirect to orders page after 15 seconds (optional)
+    setTimeout(() => {
+        // Uncomment the line below to enable auto-redirect
+        // window.location.href = "{{ url_for('user_orders') }}";
+    }, 15000);
+});
+</script>
+{% endblock %}

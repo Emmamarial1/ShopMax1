@@ -1,0 +1,562 @@
+{% extends "base.html" %}
+
+{% block title %}Careers - ShopMax{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Hero Section -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto text-center">
+            <h1 class="display-4 fw-bold text-primary mb-4">Join the ShopMax Team</h1>
+            <p class="lead text-muted mb-4">Help us revolutionize campus commerce and build the future of student marketplaces</p>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <span class="badge bg-primary fs-6 p-3">🚀 Fast-Growing Startup</span>
+                <span class="badge bg-success fs-6 p-3">💼 Flexible Work</span>
+                <span class="badge bg-info fs-6 p-3">🎓 Student-Friendly</span>
+                <span class="badge bg-warning fs-6 p-3">📈 Career Growth</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Why Work With Us -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-5">
+                    <h2 class="text-center mb-5">Why Work at ShopMax?</h2>
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <div class="text-primary me-3">
+                                    <i class="fas fa-rocket fa-2x"></i>
+                                </div>
+                                <div>
+                                    <h4>Impactful Work</h4>
+                                    <p class="text-muted mb-0">Your work directly impacts thousands of students and staff at UCU. See your code, designs, or ideas come to life and make a real difference.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <div class="text-primary me-3">
+                                    <i class="fas fa-users fa-2x"></i>
+                                </div>
+                                <div>
+                                    <h4>Great Team Culture</h4>
+                                    <p class="text-muted mb-0">Join a passionate team of students and professionals who support each other and celebrate wins together.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <div class="text-primary me-3">
+                                    <i class="fas fa-graduation-cap fa-2x"></i>
+                                </div>
+                                <div>
+                                    <h4>Learn & Grow</h4>
+                                    <p class="text-muted mb-0">Perfect for students looking to gain real-world experience. We provide mentorship and opportunities to develop new skills.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <div class="text-primary me-3">
+                                    <i class="fas fa-clock fa-2x"></i>
+                                </div>
+                                <div>
+                                    <h4>Flexible Hours</h4>
+                                    <p class="text-muted mb-0">We understand you're a student first. Work around your class schedule with flexible hours and remote options.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Current Openings -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h2 class="text-center mb-5">Current Open Positions</h2>
+            
+            <!-- Job 1 -->
+            <div class="card job-card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h4 class="text-primary">Frontend Developer (Student Intern)</h4>
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <span class="badge bg-light text-dark">🌐 Remote/Flexible</span>
+                                <span class="badge bg-light text-dark">⏱ Part-time</span>
+                                <span class="badge bg-light text-dark">💻 Tech</span>
+                                <span class="badge bg-light text-dark">🎓 Student Position</span>
+                            </div>
+                            <p class="text-muted">Help us build beautiful, responsive user interfaces for the ShopMax platform using modern web technologies.</p>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#jobModal1">
+                                View Details & Apply
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Job 2 -->
+            <div class="card job-card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h4 class="text-primary">Campus Ambassador</h4>
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <span class="badge bg-light text-dark">🏫 On-campus</span>
+                                <span class="badge bg-light text-dark">⏱ Part-time</span>
+                                <span class="badge bg-light text-dark">📢 Marketing</span>
+                                <span class="badge bg-light text-dark">🎓 Student Position</span>
+                            </div>
+                            <p class="text-muted">Represent ShopMax on campus, organize events, and help grow our community of users and sellers.</p>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#jobModal2">
+                                View Details & Apply
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Job 3 -->
+            <div class="card job-card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h4 class="text-primary">Customer Support Specialist</h4>
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <span class="badge bg-light text-dark">🌐 Remote/Flexible</span>
+                                <span class="badge bg-light text-dark">⏱ Part-time</span>
+                                <span class="badge bg-light text-dark">💬 Support</span>
+                                <span class="badge bg-light text-dark">🎓 Student Position</span>
+                            </div>
+                            <p class="text-muted">Help our users with questions, troubleshoot issues, and ensure everyone has a great experience on ShopMax.</p>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#jobModal3">
+                                View Details & Apply
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Job 4 -->
+            <div class="card job-card shadow-sm border-0 mb-4">
+                <div class="card-body p-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h4 class="text-primary">Backend Developer</h4>
+                            <div class="d-flex flex-wrap gap-2 mb-3">
+                                <span class="badge bg-light text-dark">🌐 Remote/Flexible</span>
+                                <span class="badge bg-light text-dark">⏱ Full-time/Part-time</span>
+                                <span class="badge bg-light text-dark">💻 Tech</span>
+                                <span class="badge bg-light text-dark">🚀 Experienced</span>
+                            </div>
+                            <p class="text-muted">Build and maintain our server infrastructure, APIs, and database systems to ensure ShopMax runs smoothly.</p>
+                        </div>
+                        <div class="col-md-4 text-md-end">
+                            <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#jobModal4">
+                                View Details & Apply
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How We Hire -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card border-0 bg-light">
+                <div class="card-body p-5 text-center">
+                    <h2 class="mb-4">Our Hiring Process</h2>
+                    <div class="row g-4">
+                        <div class="col-md-4">
+                            <div class="bg-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                <i class="fas fa-file-alt fa-2x text-primary"></i>
+                            </div>
+                            <h5>1. Application</h5>
+                            <p class="text-muted small">Submit your application and resume</p>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="bg-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                <i class="fas fa-video fa-2x text-primary"></i>
+                            </div>
+                            <h5>2. Interview</h5>
+                            <p class="text-muted small">Virtual or in-person meeting with our team</p>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="bg-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                                <i class="fas fa-handshake fa-2x text-primary"></i>
+                            </div>
+                            <h5>3. Offer</h5>
+                            <p class="text-muted small">Receive your offer and welcome to the team!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Job Detail Modals -->
+<!-- Modal 1: Frontend Developer -->
+<div class="modal fade" id="jobModal1" tabindex="-1" aria-labelledby="jobModal1Label" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="jobModal1Label">Frontend Developer (Student Intern)</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <strong>📍 Location:</strong> Remote/Flexible<br>
+                        <strong>⏱ Type:</strong> Part-time (15-20 hrs/week)<br>
+                        <strong>💰 Stipend:</strong> UGX 300,000 - 500,000/month
+                    </div>
+                    <div class="col-md-6">
+                        <strong>🎓 Level:</strong> Student Intern<br>
+                        <strong>🚀 Department:</strong> Technology<br>
+                        <strong>📅 Apply By:</strong> December 15, 2024
+                    </div>
+                </div>
+
+                <h6>About the Role</h6>
+                <p>As a Frontend Developer Intern, you'll work with our engineering team to build and improve the ShopMax user interface. You'll help create responsive, accessible, and beautiful web experiences for our growing community.</p>
+
+                <h6>What You'll Do</h6>
+                <ul>
+                    <li>Develop responsive web interfaces using HTML, CSS, and JavaScript</li>
+                    <li>Implement user interface components with modern frameworks</li>
+                    <li>Collaborate with designers to translate mockups into functional code</li>
+                    <li>Optimize applications for maximum speed and scalability</li>
+                    <li>Participate in code reviews and team meetings</li>
+                </ul>
+
+                <h6>What We're Looking For</h6>
+                <ul>
+                    <li>Currently enrolled at UCU in Computer Science or related field</li>
+                    <li>Basic knowledge of HTML, CSS, and JavaScript</li>
+                    <li>Familiarity with version control (Git)</li>
+                    <li>Strong problem-solving skills and attention to detail</li>
+                    <li>Ability to work independently and meet deadlines</li>
+                </ul>
+
+                <h6>Nice to Have</h6>
+                <ul>
+                    <li>Experience with React, Vue.js, or similar frameworks</li>
+                    <li>Knowledge of responsive design principles</li>
+                    <li>Previous project or internship experience</li>
+                    <li>Understanding of UI/UX design principles</li>
+                </ul>
+
+                <h6>What We Offer</h6>
+                <ul>
+                    <li>Mentorship from experienced developers</li>
+                    <li>Flexible work hours around your class schedule</li>
+                    <li>Real-world experience for your portfolio</li>
+                    <li>Potential for full-time employment after graduation</li>
+                    <li>Letter of recommendation and certification</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="mailto:careers@shopmax.com?subject=Application: Frontend Developer Intern" class="btn btn-primary">Apply Now</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 2: Campus Ambassador -->
+<div class="modal fade" id="jobModal2" tabindex="-1" aria-labelledby="jobModal2Label" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="jobModal2Label">Campus Ambassador</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <strong>📍 Location:</strong> UCU Campus<br>
+                        <strong>⏱ Type:</strong> Part-time (10-15 hrs/week)<br>
+                        <strong>💰 Stipend:</strong> UGX 200,000/month + Bonuses
+                    </div>
+                    <div class="col-md-6">
+                        <strong>🎓 Level:</strong> Student Position<br>
+                        <strong>🚀 Department:</strong> Marketing<br>
+                        <strong>📅 Apply By:</strong> Rolling Applications
+                    </div>
+                </div>
+
+                <h6>About the Role</h6>
+                <p>As a Campus Ambassador, you'll be the face of ShopMax at UCU. You'll help spread awareness, organize campus events, and build our community of users and sellers.</p>
+
+                <h6>What You'll Do</h6>
+                <ul>
+                    <li>Promote ShopMax across campus through various channels</li>
+                    <li>Organize and host campus events and information sessions</li>
+                    <li>Recruit new users and sellers to the platform</li>
+                    <li>Gather feedback from the student community</li>
+                    <li>Create social media content about ShopMax</li>
+                    <li>Distribute marketing materials around campus</li>
+                </ul>
+
+                <h6>What We're Looking For</h6>
+                <ul>
+                    <li>Currently enrolled UCU student</li>
+                    <li>Active on campus and involved in student life</li>
+                    <li>Excellent communication and interpersonal skills</li>
+                    <li>Active on social media platforms</li>
+                    <li>Self-motivated and results-oriented</li>
+                    <li>Familiar with the UCU campus and student culture</li>
+                </ul>
+
+                <h6>Nice to Have</h6>
+                <ul>
+                    <li>Previous ambassador or leadership experience</li>
+                    <li>Social media marketing experience</li>
+                    <li>Event planning or organization experience</li>
+                    <li>Large network of UCU student contacts</li>
+                </ul>
+
+                <h6>What We Offer</h6>
+                <ul>
+                    <li>Performance-based bonuses and incentives</li>
+                    <li>Marketing and leadership experience</li>
+                    <li>Networking opportunities</li>
+                    <li>Flexible hours that work with your schedule</li>
+                    <li>Certificate of completion and reference letter</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="mailto:careers@shopmax.com?subject=Application: Campus Ambassador" class="btn btn-primary">Apply Now</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 3: Customer Support Specialist -->
+<div class="modal fade" id="jobModal3" tabindex="-1" aria-labelledby="jobModal3Label" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="jobModal3Label">Customer Support Specialist</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <strong>📍 Location:</strong> Remote/Flexible<br>
+                        <strong>⏱ Type:</strong> Part-time (15-20 hrs/week)<br>
+                        <strong>💰 Stipend:</strong> UGX 250,000 - 400,000/month
+                    </div>
+                    <div class="col-md-6">
+                        <strong>🎓 Level:</strong> Student Position<br>
+                        <strong>🚀 Department:</strong> Customer Success<br>
+                        <strong>📅 Apply By:</strong> December 20, 2024
+                    </div>
+                </div>
+
+                <h6>About the Role</h6>
+                <p>As a Customer Support Specialist, you'll be the first point of contact for our users. You'll help resolve issues, answer questions, and ensure everyone has a positive experience with ShopMax.</p>
+
+                <h6>What You'll Do</h6>
+                <ul>
+                    <li>Respond to customer inquiries via email, chat, and phone</li>
+                    <li>Troubleshoot and resolve user issues</li>
+                    <li>Guide users through platform features and functionality</li>
+                    <li>Escalate complex issues to appropriate teams</li>
+                    <li>Document common issues and solutions</li>
+                    <li>Collect user feedback for product improvements</li>
+                </ul>
+
+                <h6>What We're Looking For</h6>
+                <ul>
+                    <li>Currently enrolled UCU student</li>
+                    <li>Excellent written and verbal communication skills</li>
+                    <li>Patience and empathy when dealing with users</li>
+                    <li>Basic technical aptitude and problem-solving skills</li>
+                    <li>Ability to explain complex concepts simply</li>
+                    <li>Reliable internet connection for remote work</li>
+                </ul>
+
+                <h6>Nice to Have</h6>
+                <ul>
+                    <li>Previous customer service experience</li>
+                    <li>Familiarity with help desk software</li>
+                    <li>Multilingual abilities (English + local languages)</li>
+                    <li>Technical background or interest</li>
+                </ul>
+
+                <h6>What We Offer</h6>
+                <ul>
+                    <li>Comprehensive training on our platform</li>
+                    <li>Flexible scheduling around classes</li>
+                    <li>Development of customer service skills</li>
+                    <li>Opportunity to understand user needs firsthand</li>
+                    <li>Potential growth into team lead roles</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="mailto:careers@shopmax.com?subject=Application: Customer Support Specialist" class="btn btn-primary">Apply Now</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 4: Backend Developer -->
+<div class="modal fade" id="jobModal4" tabindex="-1" aria-labelledby="jobModal4Label" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="jobModal4Label">Backend Developer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <strong>📍 Location:</strong> Remote/Flexible<br>
+                        <strong>⏱ Type:</strong> Full-time or Part-time<br>
+                        <strong>💰 Salary:</strong> Competitive, based on experience
+                    </div>
+                    <div class="col-md-6">
+                        <strong>🎓 Level:</strong> Experienced<br>
+                        <strong>🚀 Department:</strong> Technology<br>
+                        <strong>📅 Apply By:</strong> December 10, 2024
+                    </div>
+                </div>
+
+                <h6>About the Role</h6>
+                <p>As a Backend Developer, you'll be responsible for building and maintaining the server-side logic, databases, and APIs that power ShopMax. You'll ensure our platform is scalable, secure, and performant.</p>
+
+                <h6>What You'll Do</h6>
+                <ul>
+                    <li>Design, build, and maintain efficient, reusable, and reliable code</li>
+                    <li>Ensure the best possible performance, quality, and responsiveness of applications</li>
+                    <li>Identify bottlenecks and bugs, and devise solutions to these problems</li>
+                    <li>Help maintain code quality, organization, and automation</li>
+                    <li>Collaborate with frontend developers to integrate user-facing elements</li>
+                    <li>Implement security and data protection measures</li>
+                </ul>
+
+                <h6>What We're Looking For</h6>
+                <ul>
+                    <li>2+ years of backend development experience</li>
+                    <li>Proficiency in Python (Flask/Django) or similar backend languages</li>
+                    <li>Experience with relational databases (PostgreSQL, MySQL)</li>
+                    <li>Understanding of RESTful API design principles</li>
+                    <li>Knowledge of version control systems (Git)</li>
+                    <li>Experience with cloud platforms (AWS, Google Cloud, or Azure)</li>
+                </ul>
+
+                <h6>Nice to Have</h6>
+                <ul>
+                    <li>Experience with e-commerce platforms</li>
+                    <li>Knowledge of containerization (Docker)</li>
+                    <li>Understanding of microservices architecture</li>
+                    <li>Experience with payment gateway integration</li>
+                    <li>Background in computer science or related field</li>
+                </ul>
+
+                <h6>What We Offer</h6>
+                <ul>
+                    <li>Competitive salary and equity package</li>
+                    <li>Flexible work arrangements</li>
+                    <li>Opportunity to work on impactful technology</li>
+                    <li>Professional development budget</li>
+                    <li>Health insurance and other benefits</li>
+                    <li>Dynamic startup environment with growth potential</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="mailto:careers@shopmax.com?subject=Application: Backend Developer" class="btn btn-primary">Apply Now</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.job-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-left: 4px solid var(--primary);
+}
+
+.job-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+
+.badge {
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.modal-content {
+    border-radius: 12px;
+    border: none;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-header .btn-close {
+    filter: invert(1);
+}
+</style>
+
+<script>
+// Add some interactive features
+document.addEventListener('DOMContentLoaded', function() {
+    // Add smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // Add animation to job cards when they come into view
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Observe job cards
+    document.querySelectorAll('.job-card').forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(card);
+    });
+});
+</script>
+{% endblock %}

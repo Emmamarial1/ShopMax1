@@ -1,0 +1,586 @@
+{% extends "base.html" %}
+
+{% block title %}My Products - ShopMax{% endblock %}
+
+{% block content %}
+<div class="products-management-container">
+    <div class="management-header">
+        <h1>📦 My Products</h1>
+        <p>Manage your product listings and track performance</p>
+        
+        <div class="header-actions">
+            <a href="{{ url_for('add_product') }}" class="add-product-btn">
+                ➕ Add New Product
+            </a>
+            <div class="stats-overview">
+                <div class="stat-item">
+                    <span class="stat-number">{{ products|length }}</span>
+                    <span class="stat-label">Total</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">{{ active_products }}</span>
+                    <span class="stat-label">Active</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">{{ low_stock_count }}</span>
+                    <span class="stat-label">Low Stock</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Quick Stats -->
+    <div class="quick-stats">
+        <div class="stat-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-info">
+                <h3>UGX {{ total_value }}</h3>
+                <p>Total Inventory Value</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">👁️</div>
+            <div class="stat-info">
+                <h3>{{ total_views }}</h3>
+                <p>Total Views</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-info">
+                <h3>{{ average_rating }}/5</h3>
+                <p>Average Rating</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="products-grid">
+        {% if products %}
+            {% for product in products %}
+            <div class="product-card">
+                <div class="product-image">
+                    {% if product.image %}
+                        <img src="{{ url_for('static', filename='uploads/' + product.image) }}" 
+                             alt="{{ product.name }}"
+                             onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmOWZhIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxOCIgZmlsbD0iIzZjNzU3ZCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPuKGkue+veeUqOaItzwvdGV4dD48L3N2Zz4='">
+                    {% else %}
+                        <div class="no-image">
+                            <span>📦</span>
+                            <p>No Image</p>
+                        </div>
+                    {% endif %}
+                    <div class="product-status {{ 'active' if product.is_active else 'inactive' }}">
+                        {{ 'Active' if product.is_active else 'Inactive' }}
+                    </div>
+                    {% if product.stock <= 5 and product.stock > 0 %}
+                    <div class="stock-warning">Low Stock: {{ product.stock }}</div>
+                    {% elif product.stock == 0 %}
+                    <div class="stock-out">Out of Stock</div>
+                    {% endif %}
+                </div>
+                
+                <div class="product-info">
+                    <h3 class="product-name">{{ product.name }}</h3>
+                    <p class="product-category">{{ product.category|title }}</p>
+                    <p class="product-description">{{ product.description[:80] }}{% if product.description|length > 80 %}...{% endif %}</p>
+                    
+                    <div class="product-meta">
+                        <div class="price">UGX {{ "{:,.0f}".format(product.price) }}</div>
+                        <div class="stock {{ 'low' if product.stock <= 5 else 'out' if product.stock == 0 else '' }}">
+                            Stock: {{ product.stock }}
+                        </div>
+                    </div>
+
+                    <div class="product-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Added:</span>
+                            <span class="detail-value">{{ product.created_at.strftime('%b %d, %Y') }}</span>
+                        </div>
+                        {% if product.brand %}
+                        <div class="detail-item">
+                            <span class="detail-label">Brand:</span>
+                            <span class="detail-value">{{ product.brand }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="product-actions">
+                        <a href="{{ url_for('edit_product', product_id=product.id) }}" class="action-btn edit-btn">
+                            ✏️ Edit
+                        </a>
+                        <a href="{{ url_for('toggle_product', product_id=product.id) }}" 
+                           class="action-btn {{ 'deactivate-btn' if product.is_active else 'activate-btn' }}">
+                            {{ '⏸️ Pause' if product.is_active else '▶️ Activate' }}
+                        </a>
+                        <form method="POST" action="{{ url_for('delete_product', product_id=product.id) }}" 
+                              onsubmit="return confirm('Are you sure you want to delete {{ product.name }}?')">
+                            <button type="submit" class="action-btn delete-btn">
+                                🗑️ Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-products">
+                <div class="no-products-icon">📦</div>
+                <h3>No Products Yet</h3>
+                <p>Start your selling journey by adding your first product!</p>
+                <a href="{{ url_for('add_product') }}" class="add-first-product-btn">
+                    🚀 Add Your First Product
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+.products-management-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.management-header {
+    margin-bottom: 2rem;
+}
+
+.management-header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.management-header p {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.header-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.add-product-btn {
+    background: #27ae60;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.add-product-btn:hover {
+    background: #219a52;
+    transform: translateY(-2px);
+    color: white;
+}
+
+.stats-overview {
+    display: flex;
+    gap: 2rem;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+}
+
+.quick-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.stat-card .stat-icon {
+    font-size: 2rem;
+}
+
+.stat-card .stat-info h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.5rem;
+}
+
+.stat-card .stat-info p {
+    margin: 0.3rem 0 0;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.product-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: 1px solid #e9ecef;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.product-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    background: #f8f9fa;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image img {
+    transform: scale(1.05);
+}
+
+.no-image {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #6c757d;
+    background: #e9ecef;
+}
+
+.no-image span {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.no-image p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.product-status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.product-status.active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.product-status.inactive {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.stock-warning {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #fff3cd;
+    color: #856404;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.stock-out {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #f8d7da;
+    color: #721c24;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.product-info {
+    padding: 1.5rem;
+}
+
+.product-name {
+    color: #2c3e50;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+    line-height: 1.3;
+}
+
+.product-category {
+    color: #3498db;
+    margin: 0 0 1rem 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.product-description {
+    color: #7f8c8d;
+    margin: 0 0 1rem 0;
+    line-height: 1.5;
+    font-size: 0.9rem;
+}
+
+.product-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.price {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #27ae60;
+}
+
+.stock {
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: #e9ecef;
+}
+
+.stock.low {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.stock.out {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.product-details {
+    margin-bottom: 1rem;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.3rem;
+    font-size: 0.8rem;
+}
+
+.detail-label {
+    color: #6c757d;
+    font-weight: 600;
+}
+
+.detail-value {
+    color: #495057;
+}
+
+.product-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    padding: 8px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    flex: 1;
+    text-align: center;
+    min-width: 80px;
+}
+
+.edit-btn {
+    background: #3498db;
+    color: white;
+}
+
+.edit-btn:hover {
+    background: #2980b9;
+}
+
+.deactivate-btn {
+    background: #f39c12;
+    color: white;
+}
+
+.deactivate-btn:hover {
+    background: #e67e22;
+}
+
+.activate-btn {
+    background: #27ae60;
+    color: white;
+}
+
+.activate-btn:hover {
+    background: #219a52;
+}
+
+.delete-btn {
+    background: #e74c3c;
+    color: white;
+}
+
+.delete-btn:hover {
+    background: #c0392b;
+}
+
+.no-products {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.no-products-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.no-products h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.no-products p {
+    color: #7f8c8d;
+    margin-bottom: 2rem;
+}
+
+.add-first-product-btn {
+    background: #3498db;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.add-first-product-btn:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+    color: white;
+}
+
+.flash-messages {
+    margin-bottom: 2rem;
+}
+
+.flash-message {
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.flash-message.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.flash-message.danger {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+@media (max-width: 768px) {
+    .products-management-container {
+        padding: 1rem;
+    }
+    
+    .header-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .stats-overview {
+        justify-content: space-around;
+    }
+    
+    .quick-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .products-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .product-actions {
+        flex-direction: column;
+    }
+    
+    .action-btn {
+        min-width: auto;
+    }
+}
+</style>
+{% endblock %}

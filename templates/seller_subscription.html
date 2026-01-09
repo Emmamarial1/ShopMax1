@@ -1,0 +1,393 @@
+{% extends "base.html" %}
+
+{% block title %}Seller Subscription - ShopMax{% endblock %}
+
+{% block content %}
+<div class="subscription-container">
+    <div class="subscription-background"></div>
+    <div class="subscription-content">
+        <div class="subscription-header">
+            <div class="header-icon">🚀</div>
+            <h1>Start Selling on ShopMax</h1>
+            <p>Choose your subscription plan to unlock your seller dashboard and start growing your business</p>
+            
+            {% if not has_subscription %}
+            <div class="welcome-message">
+                <p>🎉 Welcome to ShopMax Seller Program! To access your seller dashboard and start selling, please choose a subscription plan below.</p>
+            </div>
+            {% else %}
+            <div class="upgrade-message">
+                <p>📈 You're currently on the <strong>{{ user.subscription_tier|title }}</strong> plan. Upgrade to get more features!</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="plans-container">
+            {% for plan in plans %}
+            <div class="plan-card {{ plan.tier }}-plan">
+                <div class="plan-header">
+                    <h3>{{ plan.name }}</h3>
+                    <div class="plan-price">
+                        <span class="currency">UGX</span>
+                        <span class="amount">{{ "{:,.0f}".format(plan.price) }}</span>
+                        <span class="duration">/{{ plan.duration }}</span>
+                    </div>
+                </div>
+                
+                <div class="plan-features">
+                    {% for feature in plan.features.split('\n') %}
+                    <div class="feature">
+                        <span class="feature-icon">✓</span>
+                        <span>{{ feature }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <div class="plan-action">
+                    {% if not has_subscription or (has_subscription and user.subscription_tier != plan.tier) %}
+                    <a href="{{ url_for('seller_payment', plan_id=plan.id) }}" class="plan-btn {{ plan.tier }}-btn">
+                        {% if not has_subscription %}Get Started{% else %}Upgrade{% endif %}
+                    </a>
+                    {% else %}
+                    <button class="plan-btn current-plan" disabled>
+                        Current Plan
+                    </button>
+                    {% endif %}
+                </div>
+                
+                {% if plan.duration == 'quarterly' %}
+                <div class="plan-badge">Save 20%</div>
+                {% elif plan.duration == 'yearly' %}
+                <div class="plan-badge">Save 33%</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="subscription-benefits">
+            <h3>Why Subscribe as a Seller?</h3>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">🛍️</div>
+                    <h4>Reach More Customers</h4>
+                    <p>Access thousands of UCU students and Mukono residents</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">💰</div>
+                    <h4>Increase Sales</h4>
+                    <p>Tap into the growing UCU market with cash on delivery</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">📊</div>
+                    <h4>Business Insights</h4>
+                    <p>Track your sales and customer behavior with analytics</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🛡️</div>
+                    <h4>Secure Payments</h4>
+                    <p>Multiple payment options including mobile money and bank transfer</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="subscription-footer">
+            <p>Need help choosing? <a href="#">Contact our sales team</a> or call us at +256 700 123 456</p>
+            {% if not has_subscription %}
+            <p class="urgent-note">⚠️ You must subscribe to access the seller dashboard and start selling</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.subscription-container {
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    position: relative;
+}
+
+.subscription-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        linear-gradient(135deg, rgba(52, 73, 94, 0.9) 0%, rgba(44, 62, 80, 0.9) 100%),
+        url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+.subscription-content {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.subscription-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: white;
+}
+
+.header-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.subscription-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.subscription-header p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.welcome-message, .upgrade-message {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    border-radius: 10px;
+    margin: 1.5rem auto;
+    max-width: 500px;
+    backdrop-filter: blur(10px);
+}
+
+.welcome-message {
+    border-left: 4px solid #27ae60;
+}
+
+.upgrade-message {
+    border-left: 4px solid #f39c12;
+}
+
+.plans-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.plan-card {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.plan-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.starter-plan {
+    border: 2px solid #3498db;
+}
+
+.business-plan {
+    border: 2px solid #e74c3c;
+    transform: scale(1.05);
+}
+
+.enterprise-plan {
+    border: 2px solid #f39c12;
+}
+
+.plan-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.plan-header h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.plan-price {
+    color: #2c3e50;
+}
+
+.currency {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #7f8c8d;
+}
+
+.amount {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.duration {
+    color: #7f8c8d;
+    font-size: 1rem;
+}
+
+.plan-features {
+    margin-bottom: 2rem;
+}
+
+.feature {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+    color: #555;
+}
+
+.feature-icon {
+    color: #27ae60;
+    margin-right: 0.5rem;
+    font-weight: bold;
+}
+
+.plan-action {
+    text-align: center;
+}
+
+.plan-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+}
+
+.starter-btn {
+    background: #3498db;
+    color: white;
+}
+
+.starter-btn:hover {
+    background: #2980b9;
+    color: white;
+}
+
+.business-btn {
+    background: #e74c3c;
+    color: white;
+}
+
+.business-btn:hover {
+    background: #c0392b;
+    color: white;
+}
+
+.enterprise-btn {
+    background: #f39c12;
+    color: white;
+}
+
+.enterprise-btn:hover {
+    background: #d35400;
+    color: white;
+}
+
+.current-plan {
+    background: #95a5a6 !important;
+    color: white;
+    cursor: not-allowed;
+}
+
+.plan-badge {
+    position: absolute;
+    top: -10px;
+    right: 20px;
+    background: #e74c3c;
+    color: white;
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.subscription-benefits {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+}
+
+.subscription-benefits h3 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+}
+
+.benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.benefit-item {
+    text-align: center;
+    padding: 1.5rem;
+}
+
+.benefit-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.benefit-item h4 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.benefit-item p {
+    color: #7f8c8d;
+    line-height: 1.5;
+}
+
+.subscription-footer {
+    text-align: center;
+    color: white;
+}
+
+.subscription-footer a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.subscription-footer a:hover {
+    text-decoration: underline;
+}
+
+.urgent-note {
+    background: rgba(231, 76, 60, 0.2);
+    padding: 0.8rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    border-left: 4px solid #e74c3c;
+}
+
+@media (max-width: 768px) {
+    .business-plan {
+        transform: scale(1);
+    }
+    
+    .plans-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .subscription-header h1 {
+        font-size: 2rem;
+    }
+}
+</style>
+{% endblock %}

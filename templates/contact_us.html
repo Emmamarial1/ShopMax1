@@ -1,0 +1,667 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Us - ShopMax UCU{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header Section -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto text-center">
+            <div class="ucu-badge mb-4">
+                <span class="badge bg-primary">UCU Community Support</span>
+            </div>
+            <h1 class="display-4 fw-bold text-primary mb-4">Contact ShopMax UCU</h1>
+            <p class="lead text-muted">Get in touch with our student support team. We're here to help you!</p>
+            <div class="alert alert-info">
+                <i class="fas fa-university me-2"></i>
+                <strong>UCU Priority Support:</strong> Students and staff with verified UCU emails receive faster response times.
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <!-- Emergency Contact Banner -->
+            <div class="card border-danger mb-5">
+                <div class="card-header bg-danger text-white">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Emergency / Urgent Support</strong>
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <p class="mb-3">For immediate assistance with active orders, safety concerns, or urgent issues:</p>
+                            <div class="d-flex flex-wrap gap-2">
+                                <a href="tel:+256700123456" class="btn btn-danger btn-lg">
+                                    <i class="fas fa-phone me-2"></i>Emergency Call: +256 700 123 456
+                                </a>
+                                <a href="tel:+256414123456" class="btn btn-outline-danger btn-lg">
+                                    <i class="fas fa-phone me-2"></i>UCU Security: +256 782 713 764
+                                </a>
+                            </div>
+                            <p class="mt-3 mb-0 small text-muted">
+                                <i class="fas fa-clock me-1"></i>24/7 emergency support for verified UCU community members
+                            </p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <i class="fas fa-headset fa-3x text-danger"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Methods Grid -->
+            <div class="row mb-5">
+                <div class="col-md-4 mb-4">
+                    <div class="card text-center h-100 contact-method">
+                        <div class="card-body">
+                            <div class="contact-icon bg-primary">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <h5>Email Support</h5>
+                            <p class="text-muted">Send us detailed questions and get comprehensive responses</p>
+                            <div class="contact-details">
+                                <strong>support@shopmaxucu.com</strong>
+                                <p class="small mt-2">
+                                    <i class="fas fa-envelope-open me-1"></i>UCU emails prioritized<br>
+                                    <i class="fas fa-check me-1"></i>UCU priority support
+                                </p>
+                            </div>
+                            <a href="mailto:support@shopmaxucu.com" class="btn btn-outline-primary mt-3">
+                                <i class="fas fa-paper-plane me-2"></i>Send Email
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <div class="card text-center h-100 contact-method">
+                        <div class="card-body">
+                            <div class="contact-icon bg-success">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <h5>Phone Support</h5>
+                            <p class="text-muted">Speak directly with our UCU student support team</p>
+                            <div class="contact-details">
+                                <strong>+256 782 713 764</strong>
+                                <p class="small mt-2">
+                                    <i class="fas fa-clock me-1"></i>Mon-Fri: 8AM-8PM<br>
+                                    <i class="fas fa-clock me-1"></i>Sat-Sun: 9AM-5PM
+                                </p>
+                            </div>
+                            <a href="tel:+256700123456" class="btn btn-outline-success mt-3">
+                                <i class="fas fa-phone me-2"></i>Call Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mb-4">
+                    <div class="card text-center h-100 contact-method">
+                        <div class="card-body">
+                            <div class="contact-icon bg-warning">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <h5>Live Chat</h5>
+                            <p class="text-muted">Instant messaging with our support team</p>
+                            <div class="contact-details">
+                                <strong>Available 24/7</strong>
+                                <p class="small mt-2">
+                                    <i class="fas fa-bolt me-1"></i>Instant connection<br>
+                                    <i class="fas fa-robot me-1"></i>AI + Human support
+                                </p>
+                            </div>
+                            <button class="btn btn-outline-warning mt-3" onclick="openChat()">
+                                <i class="fas fa-comment me-2"></i>Start Chat
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form and Information -->
+            <div class="row">
+                <!-- Contact Form -->
+                <div class="col-lg-8 mb-5">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <i class="fas fa-paper-plane me-2"></i>Send Us a Message
+                        </div>
+                        <div class="card-body p-4">
+                            <form id="contactForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="firstName" class="form-label">First Name *</label>
+                                        <input type="text" class="form-control" id="firstName" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="lastName" class="form-label">Last Name *</label>
+                                        <input type="text" class="form-control" id="lastName" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email Address *</label>
+                                    <input type="email" class="form-control" id="email" required placeholder="your.email@ucu.ac.ug">
+                                    <div class="form-text">UCU email addresses receive priority support</div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="userType" class="form-label">I am a *</label>
+                                    <select class="form-select" id="userType" required>
+                                        <option value="">Select your role</option>
+                                        <option value="student">UCU Student</option>
+                                        <option value="staff">UCU Staff</option>
+                                        <option value="faculty">UCU Faculty</option>
+                                        <option value="alumni">UCU Alumni</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="department" class="form-label">Department/Faculty (Optional)</label>
+                                    <input type="text" class="form-control" id="department" placeholder="e.g., Computer Science, Business">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="subject" class="form-label">Subject *</label>
+                                    <select class="form-select" id="subject" required>
+                                        <option value="">Select a topic</option>
+                                        <option value="account">Account Issues</option>
+                                        <option value="buying">Buying Help</option>
+                                        <option value="selling">Selling Help</option>
+                                        <option value="payment">Payment Issues</option>
+                                        <option value="delivery">Delivery Problems</option>
+                                        <option value="safety">Safety Concerns</option>
+                                        <option value="technical">Technical Support</option>
+                                        <option value="feedback">Feedback & Suggestions</option>
+                                        <option value="partnership">Partnership Inquiry</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="orderNumber" class="form-label">Order Number (If applicable)</label>
+                                    <input type="text" class="form-control" id="orderNumber" placeholder="e.g., ORD-12345">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="message" class="form-label">Message *</label>
+                                    <textarea class="form-control" id="message" rows="6" required placeholder="Please describe your issue or question in detail..."></textarea>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="attachment" class="form-label">Attachments (Optional)</label>
+                                    <input type="file" class="form-control" id="attachment" multiple>
+                                    <div class="form-text">You can attach screenshots, documents, or photos (max 3 files, 5MB each)</div>
+                                </div>
+                                
+                                <div class="form-check mb-4">
+                                    <input class="form-check-input" type="checkbox" id="urgent" value="urgent">
+                                    <label class="form-check-label" for="urgent">
+                                        <strong>This is an urgent matter requiring immediate attention</strong>
+                                    </label>
+                                </div>
+                                
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="fas fa-paper-plane me-2"></i>Send Message
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="col-lg-4 mb-5">
+                    <!-- Campus Visit Card -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-success text-white">
+                            <i class="fas fa-map-marker-alt me-2"></i>Visit Our Campus Office
+                        </div>
+                        <div class="card-body">
+                            <h6>📍 UCU Main Library</h6>
+                            <p class="mb-2">Ground Floor, Next to Computer Lab<br>Uganda Christian University<br>Mukono, Uganda</p>
+                            
+                            <h6 class="mt-3">🕒 Office Hours</h6>
+                            <ul class="list-unstyled">
+                                <li>Mon - Fri: 9:00 AM - 5:00 PM</li>
+                                <li>Saturday: 10:00 AM - 2:00 PM</li>
+                                <li>Sunday: Closed</li>
+                            </ul>
+                            
+                            <div class="d-grid gap-2 mt-3">
+                                <a href="#" class="btn btn-outline-success btn-sm">
+                                    <i class="fas fa-directions me-2"></i>Get Directions
+                                </a>
+                                <a href="#" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-calendar me-2"></i>Book Appointment
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Support Card -->
+                    <div class="card mb-4">
+                        <div class="card-header bg-info text-white">
+                            <i class="fas fa-clock me-2"></i>Expected Response Times
+                        </div>
+                        <div class="card-body">
+                            <div class="response-time">
+                                <div class="time-item">
+                                    <span class="badge bg-danger">Urgent</span>
+                                    <span>Within 1 hour</span>
+                                </div>
+                                <div class="time-item">
+                                    <span class="badge bg-warning">UCU Email</span>
+                                    <span>Within 4 hours</span>
+                                </div>
+                                <div class="time-item">
+                                    <span class="badge bg-primary">General</span>
+                                    <span>Within 24 hours</span>
+                                </div>
+                                <div class="time-item">
+                                    <span class="badge bg-secondary">Feedback</span>
+                                    <span>Within 3 days</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Department Contacts -->
+                    <div class="card">
+                        <div class="card-header bg-warning text-dark">
+                            <i class="fas fa-users me-2"></i>Specific Departments
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled department-contacts">
+                                <li class="mb-3">
+                                    <strong>Technical Support</strong><br>
+                                    <small>tech@shopmaxucu.com</small><br>
+                                    <span class="badge bg-info">App & Website Issues</span>
+                                </li>
+                                <li class="mb-3">
+                                    <strong>Seller Support</strong><br>
+                                    <small>sellers@shopmaxucu.com</small><br>
+                                    <span class="badge bg-success">Seller Accounts</span>
+                                </li>
+                                <li class="mb-3">
+                                    <strong>Safety Team</strong><br>
+                                    <small>safety@shopmaxucu.com</small><br>
+                                    <span class="badge bg-danger">Safety Concerns</span>
+                                </li>
+                                <li>
+                                    <strong>Partnerships</strong><br>
+                                    <small>partners@shopmaxucu.com</small><br>
+                                    <span class="badge bg-primary">Business Inquiries</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Campus Map Section -->
+            <div class="card mb-5">
+                <div class="card-header bg-primary text-white">
+                    <i class="fas fa-map me-2"></i>Find Us on Campus
+                </div>
+                <div class="card-body p-0">
+                    <div class="campus-map">
+                        <div class="map-placeholder">
+                            <div class="map-content text-center py-5">
+                                <i class="fas fa-map-marked-alt fa-3x text-primary mb-3"></i>
+                                <h4>UCU Campus Map</h4>
+                                <p class="text-muted">Our office is located in the Main Library, Ground Floor</p>
+                                <div class="map-key mt-4">
+                                    <div class="row justify-content-center">
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="col-6 text-center">
+                                                    <i class="fas fa-book text-primary fa-2x mb-2"></i>
+                                                    <p class="small mb-0">Main Library</p>
+                                                </div>
+                                                <div class="col-6 text-center">
+                                                    <i class="fas fa-laptop text-success fa-2x mb-2"></i>
+                                                    <p class="small mb-0">Computer Lab</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <a href="#" class="btn btn-primary mt-3">
+                                    <i class="fas fa-download me-2"></i>Download Campus Map
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Quick Links -->
+            <div class="card mb-5">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Quick Answers to Common Questions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <a href="{{ url_for('how_to_buy') }}" class="text-decoration-none">
+                                        <i class="fas fa-shopping-cart text-primary me-2"></i>
+                                        How to buy products on ShopMax?
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="{{ url_for('seller_guidelines') }}" class="text-decoration-none">
+                                        <i class="fas fa-store text-success me-2"></i>
+                                        How to become a seller?
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="{{ url_for('delivery_info') }}" class="text-decoration-none">
+                                        <i class="fas fa-truck text-info me-2"></i>
+                                        Delivery times and areas
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <a href="{{ url_for('payment_methods') }}" class="text-decoration-none">
+                                        <i class="fas fa-credit-card text-warning me-2"></i>
+                                        Payment methods accepted
+                                    </a>
+                                </li>
+                                <li class="mb-2">
+                                    <a href="{{ url_for('safety_tips') }}" class="text-decoration-none">
+                                        <i class="fas fa-shield-alt text-danger me-2"></i>
+                                        Safety guidelines
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ url_for('faqs') }}" class="text-decoration-none">
+                                        <i class="fas fa-question-circle text-secondary me-2"></i>
+                                        View all FAQs
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Project Information -->
+            <div class="card border-info">
+                <div class="card-header bg-info text-white">
+                    <i class="fas fa-graduation-cap me-2"></i>About This Student Project
+                </div>
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h5>ShopMax UCU - Final Year Project</h5>
+                            <p>This platform was developed by final year Computer Science students at Uganda Christian University as part of our capstone project.</p>
+                            <p><strong>Project Goal:</strong> To create a safe, efficient marketplace exclusively for the UCU community where students and staff can buy, sell, and trade items within our campus ecosystem.</p>
+                            <p><strong>Supervised by:</strong> Department of Computing & Technology, UCU</p>
+                            <div class="mt-3">
+                                <a href="#" class="btn btn-outline-info btn-sm me-2">
+                                    <i class="fas fa-file-alt me-2"></i>Project Documentation
+                                </a>
+                                <a href="#" class="btn btn-outline-info btn-sm">
+                                    <i class="fas fa-code me-2"></i>View Source Code
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="ucu-logo p-3">
+                                <img src="https://via.placeholder.com/150x150/003366/ffffff?text=UCU" alt="UCU Logo" class="img-fluid mb-2">
+                                <p class="small mb-0">Uganda Christian University<br>Department of Computing & Technology</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Media & Community -->
+            <div class="text-center mt-5 p-4 bg-light rounded">
+                <h4 class="mb-3">Join Our UCU Community</h4>
+                <p class="mb-4">Connect with other UCU students and stay updated on campus events and exclusive deals.</p>
+                <div class="d-flex justify-content-center gap-3 mb-4">
+                    <a href="#" class="social-link">
+                        <i class="fab fa-whatsapp fa-2x text-success"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-telegram fa-2x text-primary"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-facebook fa-2x text-primary"></i>
+                    </a>
+                    <a href="#" class="social-link">
+                        <i class="fab fa-instagram fa-2x text-danger"></i>
+                    </a>
+                </div>
+                <p class="text-muted small">UCU Students & Staff Only</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.ucu-badge {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.contact-method {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.contact-method:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+}
+
+.contact-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.contact-details {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.response-time .time-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.response-time .time-item:last-child {
+    border-bottom: none;
+}
+
+.department-contacts li {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.department-contacts li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.campus-map {
+    background: #f8f9fa;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.map-placeholder {
+    width: 100%;
+}
+
+.social-link {
+    transition: transform 0.3s ease;
+}
+
+.social-link:hover {
+    transform: scale(1.2);
+}
+
+.ucu-logo {
+    background: white;
+    border-radius: 8px;
+    border: 2px solid #003366;
+}
+
+/* Form styling */
+.form-label {
+    font-weight: 600;
+    color: #495057;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .contact-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.25rem;
+    }
+    
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Contact form handling
+    const contactForm = document.getElementById('contactForm');
+    
+    contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Simple validation
+        const email = document.getElementById('email').value;
+        const isUcuEmail = email.includes('@ucu.ac.ug');
+        
+        // Show success message
+        const alertType = isUcuEmail ? 'success' : 'info';
+        const message = isUcuEmail 
+            ? 'Thank you for your message! As a UCU community member, you will receive priority support. We will respond within 4 hours.'
+            : 'Thank you for your message! We will respond within 24 hours.';
+            
+        showAlert(message, alertType);
+        
+        // In a real application, you would submit the form data to your backend here
+        console.log('Form submitted with UCU email:', isUcuEmail);
+        
+        // Reset form
+        contactForm.reset();
+    });
+
+    // UCU email detection
+    const emailInput = document.getElementById('email');
+    emailInput.addEventListener('blur', function() {
+        const email = this.value;
+        if (email.includes('@ucu.ac.ug')) {
+            this.classList.add('is-valid');
+            this.classList.remove('is-invalid');
+            
+            // Show UCU benefits message
+            const benefitsMessage = document.createElement('div');
+            benefitsMessage.className = 'valid-feedback d-block';
+            benefitsMessage.innerHTML = '<i class="fas fa-star me-1"></i> UCU email detected! You will receive priority support.';
+            
+            // Remove existing message if any
+            const existingMessage = this.parentNode.querySelector('.valid-feedback');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            this.parentNode.appendChild(benefitsMessage);
+        } else if (email) {
+            this.classList.add('is-invalid');
+            this.classList.remove('is-valid');
+        } else {
+            this.classList.remove('is-valid', 'is-invalid');
+        }
+    });
+
+    // Emergency phone call tracking
+    const emergencyPhones = document.querySelectorAll('a[href^="tel:"]');
+    emergencyPhones.forEach(phone => {
+        phone.addEventListener('click', function() {
+            // In a real implementation, this would track emergency calls
+            console.log('Emergency support call initiated to:', this.textContent);
+        });
+    });
+
+    // Live chat simulation
+    window.openChat = function() {
+        alert('Live chat would open in a real implementation. This feature connects you directly with our UCU student support team.');
+    };
+
+    // Helper function to show alerts
+    function showAlert(message, type = 'info') {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+        alertDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        
+        contactForm.parentNode.insertBefore(alertDiv, contactForm);
+        
+        // Auto-remove after 5 seconds
+        setTimeout(() => {
+            if (alertDiv.parentNode) {
+                alertDiv.remove();
+            }
+        }, 5000);
+    }
+
+    // Add interactive effects to contact methods
+    const contactMethods = document.querySelectorAll('.contact-method');
+    contactMethods.forEach(method => {
+        method.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-5px)';
+        });
+        
+        method.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+});
+</script>
+{% endblock %}

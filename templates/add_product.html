@@ -1,0 +1,534 @@
+{% extends "base.html" %}
+
+{% block title %}Add Product - ShopMax{% endblock %}
+
+{% block content %}
+<div class="product-management-container">
+    <div class="management-header">
+        <h1>🚀 Quick Add Product</h1>
+        <p>Just fill the basics to get started - you can add more details later</p>
+    </div>
+
+    <div class="management-content">
+        <div class="product-form-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-messages">
+                        {% for category, message in messages %}
+                            <div class="flash-message {{ category }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('add_product') }}" enctype="multipart/form-data" class="product-form">
+                
+                <!-- Essential Fields Only -->
+                <div class="form-section">
+                    <h3>📝 Basic Info (Required)</h3>
+                    
+                    <div class="form-group">
+                        <label>Product Name *</label>
+                        <input type="text" name="name" required 
+                               placeholder="e.g., iPhone 13 Pro Max" 
+                               value="{{ request.form.name }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description *</label>
+                        <textarea name="description" required rows="3" 
+                                  placeholder="Brief description of your product...">{{ request.form.description }}</textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Price (UGX) *</label>
+                            <input type="number" name="price" required 
+                                   placeholder="e.g., 150000" min="0"
+                                   value="{{ request.form.price }}">
+                        </div>
+                        <div class="form-group">
+                            <label>Category *</label>
+                            <select name="category" required>
+                                <option value="">Select Category</option>
+                                <option value="electronics">Electronics</option>
+                                <option value="clothing">Clothing</option>
+                                <option value="books">Books</option>
+                                <option value="home">Home</option>
+                                <option value="sports">Sports</option>
+                                <option value="beauty">Beauty</option>
+                                <option value="phones">Phones</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Stock Quantity</label>
+                        <input type="number" name="stock" 
+                               placeholder="e.g., 10" min="1" value="1">
+                        <small>Leave as 1 if you're not sure</small>
+                    </div>
+                </div>
+
+                <!-- Optional Fields - Collapsible -->
+                <div class="form-section">
+                    <details class="optional-section">
+                        <summary class="optional-summary">
+                            <h3 style="display: inline;">🎁 Additional Details (Optional)</h3>
+                            <span class="toggle-icon">▶</span>
+                        </summary>
+                        
+                        <div class="optional-content">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Brand</label>
+                                    <input type="text" name="brand" 
+                                           placeholder="e.g., Apple, Nike"
+                                           value="{{ request.form.brand }}">
+                                </div>
+                                <div class="form-group">
+                                    <label>Condition</label>
+                                    <select name="condition">
+                                        <option value="new">New</option>
+                                        <option value="used">Used</option>
+                                        <option value="refurbished">Refurbished</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Product Image (Optional)</label>
+                                <div class="file-upload-container">
+                                    <input type="file" name="image" accept="image/*" 
+                                           class="file-upload" id="imageUpload">
+                                    <label for="imageUpload" class="file-upload-label">
+                                        <span class="upload-icon">📁</span>
+                                        <span class="upload-text">Choose product image (optional)</span>
+                                    </label>
+                                    <div class="image-preview" id="imagePreview">
+                                        <span>No image selected</span>
+                                    </div>
+                                </div>
+                                <small>Supported: JPG, PNG, GIF. Max: 5MB</small>
+                            </div>
+                        </div>
+                    </details>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="submit-btn">
+                        🚀 Add Product Now
+                    </button>
+                    <a href="{{ url_for('manage_products') }}" class="cancel-btn">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <div class="form-guidelines">
+            <h3>🎯 Quick Tips</h3>
+            <div class="guideline-list">
+                <div class="guideline-item">
+                    <span class="guideline-icon">✅</span>
+                    <div>
+                        <strong>Just the Basics</strong>
+                        <p>Only 4 fields are required to get started</p>
+                    </div>
+                </div>
+                <div class="guideline-item">
+                    <span class="guideline-icon">✅</span>
+                    <div>
+                        <strong>Add Details Later</strong>
+                        <p>You can edit and add images anytime</p>
+                    </div>
+                </div>
+                <div class="guideline-item">
+                    <span class="guideline-icon">✅</span>
+                    <div>
+                        <strong>Quick Listing</strong>
+                        <p>Get your products online in under 60 seconds</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-example" style="margin-top: 2rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                <h4>💡 Example Product:</h4>
+                <p><strong>Name:</strong> iPhone 13 Pro Max</p>
+                <p><strong>Description:</strong> Latest iPhone with great camera</p>
+                <p><strong>Price:</strong> 1500000</p>
+                <p><strong>Category:</strong> Electronics</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.product-management-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.management-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.management-header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.management-header p {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+}
+
+.management-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.product-form-container {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.form-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.form-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.form-section h3 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.form-group small {
+    color: #7f8c8d;
+    font-size: 0.8rem;
+    margin-top: 0.3rem;
+    display: block;
+}
+
+/* Optional Section Styles */
+.optional-section {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.optional-summary {
+    padding: 1rem 1.5rem;
+    background: #f8f9fa;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.optional-summary::-webkit-details-marker {
+    display: none;
+}
+
+.optional-summary h3 {
+    margin: 0 !important;
+    color: #6c757d !important;
+}
+
+.toggle-icon {
+    transition: transform 0.3s ease;
+}
+
+.optional-section[open] .toggle-icon {
+    transform: rotate(90deg);
+}
+
+.optional-content {
+    padding: 1.5rem;
+    background: white;
+}
+
+.file-upload-container {
+    margin-top: 0.5rem;
+}
+
+.file-upload {
+    display: none;
+}
+
+.file-upload-label {
+    display: inline-block;
+    padding: 12px 20px;
+    background: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    width: 100%;
+}
+
+.file-upload-label:hover {
+    border-color: #3498db;
+    background: #ebf5fb;
+}
+
+.upload-icon {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+}
+
+.image-preview {
+    margin-top: 1rem;
+    text-align: center;
+    padding: 1rem;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #7f8c8d;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 2rem;
+}
+
+.submit-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 14px 30px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    background: #219a52;
+    transform: translateY(-2px);
+}
+
+.cancel-btn {
+    background: #6c757d;
+    color: white;
+    padding: 14px 30px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.cancel-btn:hover {
+    background: #545b62;
+    transform: translateY(-2px);
+    color: white;
+}
+
+.form-guidelines {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    height: fit-content;
+    position: sticky;
+    top: 2rem;
+}
+
+.form-guidelines h3 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    font-size: 1.3rem;
+}
+
+.guideline-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.guideline-item {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.guideline-icon {
+    font-size: 1.2rem;
+    margin-top: 0.2rem;
+}
+
+.guideline-item div {
+    flex: 1;
+}
+
+.guideline-item strong {
+    color: #2c3e50;
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
+.guideline-item p {
+    color: #7f8c8d;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.quick-example h4 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.quick-example p {
+    margin: 0.3rem 0;
+    color: #555;
+    font-size: 0.9rem;
+}
+
+.flash-messages {
+    margin-bottom: 1.5rem;
+}
+
+.flash-message {
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.flash-message.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.flash-message.danger {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+@media (max-width: 768px) {
+    .product-management-container {
+        padding: 1rem;
+    }
+    
+    .management-content {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .submit-btn,
+    .cancel-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const imageUpload = document.getElementById('imageUpload');
+    const imagePreview = document.getElementById('imagePreview');
+    
+    imageUpload.addEventListener('change', function() {
+        const file = this.files[0];
+        
+        if (file) {
+            const reader = new FileReader();
+            
+            reader.addEventListener('load', function() {
+                imagePreview.innerHTML = `<img src="${this.result}" alt="Preview">`;
+            });
+            
+            reader.readAsDataURL(file);
+        } else {
+            imagePreview.innerHTML = '<span>No image selected</span>';
+        }
+    });
+
+    // Auto-open optional section if there are errors
+    const flashMessages = document.querySelectorAll('.flash-message.danger');
+    if (flashMessages.length > 0) {
+        const optionalSection = document.querySelector('.optional-section');
+        if (optionalSection) {
+            optionalSection.open = true;
+        }
+    }
+});
+</script>
+{% endblock %}

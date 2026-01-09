@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}Confirm Delivery - Order #{{ order.id }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Order Summary -->
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-truck me-2"></i>
+                        Confirm Delivery - Order #{{ order.id }}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Order Details</h6>
+                            <p class="mb-1"><strong>Order Date:</strong> {{ order.created_at.strftime('%B %d, %Y') }}</p>
+                            <p class="mb-1"><strong>Total Amount:</strong> ₦{{ "{:,.2f}".format(order.total_amount) }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Current Status</h6>
+                            <p class="mb-1"><strong>Status:</strong> 
+                                <span class="badge bg-warning">{{ order.status|title }}</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Confirmation Forms -->
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-check-circle me-2"></i>
+                        Confirm Delivery Status
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Please confirm that you have received your order and everything is correct.
+                    </div>
+
+                    <!-- Successful Delivery Form -->
+                    <div class="mb-5">
+                        <h5 class="text-success mb-3">✅ Successful Delivery</h5>
+                        <form method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="confirmation_type" value="success">
+                            
+                            <!-- Rating -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">How would you rate this delivery?</label>
+                                <div class="rating-stars mb-2">
+                                    {% for i in range(1, 6) %}
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="rating" id="rating{{ i }}" value="{{ i }}" required>
+                                        <label class="form-check-label" for="rating{{ i }}">
+                                            {{ "⭐" * i }} ({{ i }})
+                                        </label>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+
+                            <!-- Delivery Proof -->
+                            <div class="mb-3">
+                                <label for="delivery_proof" class="form-label">
+                                    <i class="fas fa-camera me-1"></i>
+                                    Upload Delivery Proof (Optional)
+                                </label>
+                                <input type="file" class="form-control" id="delivery_proof" name="delivery_proof" accept="image/*,.pdf">
+                                <div class="form-text">You can upload a photo of the delivered items or any proof of delivery.</div>
+                            </div>
+
+                            <!-- Feedback -->
+                            <div class="mb-3">
+                                <label for="feedback" class="form-label">
+                                    <i class="fas fa-comment me-1"></i>
+                                    Your Feedback
+                                </label>
+                                <textarea class="form-control" id="feedback" name="feedback" rows="3" 
+                                          placeholder="How was your delivery experience? Any comments about the items or service?"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-success btn-lg w-100">
+                                <i class="fas fa-check-circle me-2"></i>
+                                Confirm Successful Delivery
+                            </button>
+                        </form>
+                    </div>
+
+                    <hr>
+
+                    <!-- Issue Reporting -->
+                    <div>
+                        <h5 class="text-danger mb-3">⚠️ Report Delivery Issue</h5>
+                        <form method="POST">
+                            <input type="hidden" name="confirmation_type" value="issue">
+                            
+                            <div class="mb-3">
+                                <label for="issue_description" class="form-label">
+                                    <i class="fas fa-exclamation-triangle me-1"></i>
+                                    Describe the Issue
+                                </label>
+                                <textarea class="form-control" id="issue_description" name="issue_description" 
+                                          rows="4" required placeholder="Please describe any issues with your delivery..."></textarea>
+                                <div class="form-text">
+                                    Examples: Missing items, damaged products, wrong items received, etc.
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-warning btn-lg w-100">
+                                <i class="fas fa-exclamation-circle me-2"></i>
+                                Report Delivery Issue
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

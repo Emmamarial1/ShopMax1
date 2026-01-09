@@ -1,0 +1,513 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">System Settings</h1>
+        <div class="d-none d-sm-inline-block">
+            <span class="text-muted">System Configuration</span>
+        </div>
+    </div>
+
+    <!-- Settings Navigation -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <ul class="nav nav-pills mb-3" id="settingsTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="general-tab" data-bs-toggle="pill" data-bs-target="#general" type="button" role="tab">
+                                <i class="fas fa-cog me-2"></i>General
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="payment-tab" data-bs-toggle="pill" data-bs-target="#payment" type="button" role="tab">
+                                <i class="fas fa-credit-card me-2"></i>Payment
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="delivery-tab" data-bs-toggle="pill" data-bs-target="#delivery" type="button" role="tab">
+                                <i class="fas fa-shipping-fast me-2"></i>Delivery
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="notifications-tab" data-bs-toggle="pill" data-bs-target="#notifications" type="button" role="tab">
+                                <i class="fas fa-bell me-2"></i>Notifications
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="security-tab" data-bs-toggle="pill" data-bs-target="#security" type="button" role="tab">
+                                <i class="fas fa-shield-alt me-2"></i>Security
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Content -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-body">
+                    <div class="tab-content" id="settingsTabsContent">
+                        
+                        <!-- General Settings -->
+                        <div class="tab-pane fade show active" id="general" role="tabpanel">
+                            <h5 class="card-title mb-4">General Settings</h5>
+                            <form id="generalSettingsForm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="siteName" class="form-label">Site Name</label>
+                                            <input type="text" class="form-control" id="siteName" value="ShopMax" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="siteEmail" class="form-label">Admin Email</label>
+                                            <input type="email" class="form-control" id="siteEmail" value="admin@shopmax.com" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="sitePhone" class="form-label">Contact Phone</label>
+                                            <input type="text" class="form-control" id="sitePhone" value="+256 700 123 456" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label for="currency" class="form-label">Currency</label>
+                                            <select class="form-control" id="currency">
+                                                <option value="UGX" selected>Ugandan Shilling (UGX)</option>
+                                                <option value="USD">US Dollar (USD)</option>
+                                                <option value="KES">Kenyan Shilling (KES)</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="timezone" class="form-label">Timezone</label>
+                                            <select class="form-control" id="timezone">
+                                                <option value="Africa/Kampala" selected>East Africa Time (EAT)</option>
+                                                <option value="UTC">UTC</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="maintenance" class="form-label">Maintenance Mode</label>
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="maintenance">
+                                                <label class="form-check-label" for="maintenance">Enable Maintenance Mode</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label for="siteDescription" class="form-label">Site Description</label>
+                                            <textarea class="form-control" id="siteDescription" rows="3">Your trusted online marketplace in Uganda</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save General Settings</button>
+                            </form>
+                        </div>
+
+                        <!-- Payment Settings -->
+                        <div class="tab-pane fade" id="payment" role="tabpanel">
+                            <h5 class="card-title mb-4">Payment Settings</h5>
+                            <form id="paymentSettingsForm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>Payment Methods</h6>
+                                        <div class="mb-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="cashOnDelivery" checked>
+                                                <label class="form-check-label" for="cashOnDelivery">Cash on Delivery</label>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="mobileMoney">
+                                                <label class="form-check-label" for="mobileMoney">Mobile Money</label>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="bankTransfer">
+                                                <label class="form-check-label" for="bankTransfer">Bank Transfer</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Mobile Money Configuration</h6>
+                                        <div class="mb-3">
+                                            <label for="mtnNumber" class="form-label">MTN Mobile Money Number</label>
+                                            <input type="text" class="form-control" id="mtnNumber" placeholder="+256 XXX XXX XXX">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="airtelNumber" class="form-label">Airtel Money Number</label>
+                                            <input type="text" class="form-control" id="airtelNumber" placeholder="+256 XXX XXX XXX">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <h6>Commission Rates</h6>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label for="sellerCommission" class="form-label">Seller Commission (%)</label>
+                                                    <input type="number" class="form-control" id="sellerCommission" value="5" min="0" max="50">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <label for="deliveryFee" class="form-label">Default Delivery Fee (UGX)</label>
+                                                    <input type="number" class="form-control" id="deliveryFee" value="5000" min="0">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save Payment Settings</button>
+                            </form>
+                        </div>
+
+                        <!-- Delivery Settings -->
+                        <div class="tab-pane fade" id="delivery" role="tabpanel">
+                            <h5 class="card-title mb-4">Delivery Settings</h5>
+                            <form id="deliverySettingsForm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>Delivery Zones</h6>
+                                        <div class="mb-3">
+                                            <label for="deliveryAreas" class="form-label">Service Areas</label>
+                                            <textarea class="form-control" id="deliveryAreas" rows="4" placeholder="Enter areas separated by commas">Kampala, Mukono, Entebbe, Wakiso, Jinja</textarea>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="deliveryTime" class="form-label">Estimated Delivery Time (Days)</label>
+                                            <input type="number" class="form-control" id="deliveryTime" value="2" min="1" max="7">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Boda Boda Settings</h6>
+                                        <div class="mb-3">
+                                            <label for="bodaBaseFee" class="form-label">Boda Base Fee (UGX)</label>
+                                            <input type="number" class="form-control" id="bodaBaseFee" value="3000" min="0">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="bodaPerKm" class="form-label">Boda Fee per KM (UGX)</label>
+                                            <input type="number" class="form-control" id="bodaPerKm" value="500" min="0">
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="autoAssignBoda" checked>
+                                                <label class="form-check-label" for="autoAssignBoda">Auto-assign Boda Riders</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <h6>Working Hours</h6>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="mb-3">
+                                                    <label for="deliveryStart" class="form-label">Start Time</label>
+                                                    <input type="time" class="form-control" id="deliveryStart" value="08:00">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="mb-3">
+                                                    <label for="deliveryEnd" class="form-label">End Time</label>
+                                                    <input type="time" class="form-control" id="deliveryEnd" value="18:00">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Delivery Days</label>
+                                                    <div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="checkbox" id="mon" checked>
+                                                            <label class="form-check-label" for="mon">Mon</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="checkbox" id="tue" checked>
+                                                            <label class="form-check-label" for="tue">Tue</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="checkbox" id="wed" checked>
+                                                            <label class="form-check-label" for="wed">Wed</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="checkbox" id="thu" checked>
+                                                            <label class="form-check-label" for="thu">Thu</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="checkbox" id="fri" checked>
+                                                            <label class="form-check-label" for="fri">Fri</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="checkbox" id="sat" checked>
+                                                            <label class="form-check-label" for="sat">Sat</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="checkbox" id="sun">
+                                                            <label class="form-check-label" for="sun">Sun</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save Delivery Settings</button>
+                            </form>
+                        </div>
+
+                        <!-- Notification Settings -->
+                        <div class="tab-pane fade" id="notifications" role="tabpanel">
+                            <h5 class="card-title mb-4">Notification Settings</h5>
+                            <form id="notificationSettingsForm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>Email Notifications</h6>
+                                        <div class="mb-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="emailOrders" checked>
+                                                <label class="form-check-label" for="emailOrders">New Order Notifications</label>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="emailUsers" checked>
+                                                <label class="form-check-label" for="emailUsers">New User Registrations</label>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="emailIssues" checked>
+                                                <label class="form-check-label" for="emailIssues">Order Issues</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>SMS Notifications</h6>
+                                        <div class="mb-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="smsOrders">
+                                                <label class="form-check-label" for="smsOrders">Order Updates</label>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="smsDelivery">
+                                                <label class="form-check-label" for="smsDelivery">Delivery Status</label>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="smsPromotions">
+                                                <label class="form-check-label" for="smsPromotions">Promotional Messages</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <h6>Admin Alerts</h6>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" id="alertLowStock" checked>
+                                                        <label class="form-check-label" for="alertLowStock">Low Stock Alerts</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" id="alertHighOrders" checked>
+                                                        <label class="form-check-label" for="alertHighOrders">High Order Volume</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="mb-3">
+                                                    <div class="form-check form-switch">
+                                                        <input class="form-check-input" type="checkbox" id="alertSystem" checked>
+                                                        <label class="form-check-label" for="alertSystem">System Issues</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save Notification Settings</button>
+                            </form>
+                        </div>
+
+                        <!-- Security Settings -->
+                        <div class="tab-pane fade" id="security" role="tabpanel">
+                            <h5 class="card-title mb-4">Security Settings</h5>
+                            <form id="securitySettingsForm">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h6>Authentication</h6>
+                                        <div class="mb-3">
+                                            <label for="sessionTimeout" class="form-label">Session Timeout (minutes)</label>
+                                            <input type="number" class="form-control" id="sessionTimeout" value="30" min="5" max="240">
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="requireStrongPassword" checked>
+                                                <label class="form-check-label" for="requireStrongPassword">Require Strong Passwords</label>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="twoFactorAuth">
+                                                <label class="form-check-label" for="twoFactorAuth">Two-Factor Authentication</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h6>Data Protection</h6>
+                                        <div class="mb-3">
+                                            <label for="dataRetention" class="form-label">Data Retention (months)</label>
+                                            <input type="number" class="form-control" id="dataRetention" value="24" min="1" max="60">
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="autoBackup" checked>
+                                                <label class="form-check-label" for="autoBackup">Automatic Backups</label>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="backupFrequency" class="form-label">Backup Frequency</label>
+                                            <select class="form-control" id="backupFrequency">
+                                                <option value="daily">Daily</option>
+                                                <option value="weekly" selected>Weekly</option>
+                                                <option value="monthly">Monthly</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-12">
+                                        <h6>API Security</h6>
+                                        <div class="mb-3">
+                                            <label for="apiKey" class="form-label">API Key</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="apiKey" value="sk_live_xxxxxxxxxxxxxxxx" readonly>
+                                                <button class="btn btn-outline-secondary" type="button" id="generateApiKey">Generate New</button>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" id="rateLimiting" checked>
+                                                <label class="form-check-label" for="rateLimiting">Enable Rate Limiting</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Save Security Settings</button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Information -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">System Information</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <strong>Platform Version:</strong> ShopMax v1.0.0
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Database:</strong> SQLite
+                        </div>
+                        <div class="col-md-3">
+                            <strong>Last Backup:</strong> {{ now().strftime('%Y-%m-%d %H:%M') }}
+                        </div>
+                        <div class="col-md-3">
+                            <strong>System Status:</strong> <span class="badge badge-success">Operational</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Initialize settings forms
+    $(document).ready(function() {
+        // Handle form submissions
+        $('#generalSettingsForm').on('submit', function(e) {
+            e.preventDefault();
+            saveSettings('general', $(this).serialize());
+        });
+
+        $('#paymentSettingsForm').on('submit', function(e) {
+            e.preventDefault();
+            saveSettings('payment', $(this).serialize());
+        });
+
+        $('#deliverySettingsForm').on('submit', function(e) {
+            e.preventDefault();
+            saveSettings('delivery', $(this).serialize());
+        });
+
+        $('#notificationSettingsForm').on('submit', function(e) {
+            e.preventDefault();
+            saveSettings('notification', $(this).serialize());
+        });
+
+        $('#securitySettingsForm').on('submit', function(e) {
+            e.preventDefault();
+            saveSettings('security', $(this).serialize());
+        });
+
+        // Generate new API key
+        $('#generateApiKey').on('click', function() {
+            const newKey = 'sk_live_' + Math.random().toString(36).substr(2, 32);
+            $('#apiKey').val(newKey);
+            showAlert('New API key generated!', 'success');
+        });
+    });
+
+    function saveSettings(type, data) {
+        // Simulate API call
+        setTimeout(() => {
+            showAlert(`${type.charAt(0).toUpperCase() + type.slice(1)} settings saved successfully!`, 'success');
+        }, 1000);
+    }
+
+    function showAlert(message, type) {
+        const alertClass = type === 'success' ? 'alert-success' : 'alert-danger';
+        const alert = $(`<div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>`);
+        
+        $('.container-fluid').prepend(alert);
+        
+        setTimeout(() => {
+            alert.alert('close');
+        }, 5000);
+    }
+</script>
+{% endblock %}

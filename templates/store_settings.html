@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Settings - ShopMax</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            background: #2c3e50;
+            min-height: 100vh;
+            padding-top: 20px;
+        }
+        
+        .sidebar .nav-link {
+            color: #ecf0f1;
+            padding: 10px 15px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+        
+        .sidebar .nav-link:hover, .sidebar .nav-link.active {
+            background: #34495e;
+            color: #3498db;
+        }
+        
+        .settings-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            border: 1px solid #e9ecef;
+        }
+        
+        .settings-section {
+            border-bottom: 1px solid #e9ecef;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .settings-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .form-switch .form-check-input {
+            width: 3em;
+            height: 1.5em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-3 col-lg-2 sidebar">
+                <div class="position-sticky pt-3">
+                    <div class="text-center mb-4">
+                        <h4 class="text-white">Seller Hub</h4>
+                        <small class="text-white-50">{{ user.business_name or user.fullname }}</small>
+                    </div>
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('dashboard') }}">
+                                <i class="fas fa-tachometer-alt me-2"></i>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('manage_products') }}">
+                                <i class="fas fa-box me-2"></i>
+                                Products
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('my_orders') }}">
+                                <i class="fas fa-shopping-cart me-2"></i>
+                                Orders
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('seller_analytics') }}">
+                                <i class="fas fa-chart-line me-2"></i>
+                                Analytics
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{{ url_for('store_settings') }}">
+                                <i class="fas fa-cog me-2"></i>
+                                Settings
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('profile') }}">
+                                <i class="fas fa-user me-2"></i>
+                                Profile
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout') }}">
+                                <i class="fas fa-sign-out-alt me-2"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
+                <!-- Header -->
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Store Settings</h1>
+                    <div class="text-muted">
+                        Manage your store preferences
+                    </div>
+                </div>
+
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <div class="row">
+                    <div class="col-lg-8">
+                        <!-- Store Information -->
+                        <div class="settings-card">
+                            <h4 class="mb-4">
+                                <i class="fas fa-store me-2"></i>Store Information
+                            </h4>
+                            
+                            <form method="POST" action="{{ url_for('store_settings') }}">
+                                <div class="settings-section">
+                                    <h6 class="text-muted mb-3">Basic Information</h6>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="business_name" class="form-label">Business Name *</label>
+                                            <input type="text" class="form-control" id="business_name" name="business_name" 
+                                                   value="{{ user.business_name or '' }}" required>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="business_type" class="form-label">Business Type</label>
+                                            <select class="form-select" id="business_type" name="business_type">
+                                                <option value="individual" {% if user.business_type == 'individual' %}selected{% endif %}>Individual</option>
+                                                <option value="company" {% if user.business_type == 'company' %}selected{% endif %}>Company</option>
+                                                <option value="partnership" {% if user.business_type == 'partnership' %}selected{% endif %}>Partnership</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="business_description" class="form-label">Business Description</label>
+                                        <textarea class="form-control" id="business_description" name="business_description" 
+                                                  rows="3" placeholder="Tell customers about your business...">{{ user.business_description or '' }}</textarea>
+                                    </div>
+                                </div>
+
+                                <div class="settings-section">
+                                    <h6 class="text-muted mb-3">Contact Information</h6>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="business_phone" class="form-label">Business Phone</label>
+                                            <input type="tel" class="form-control" id="business_phone" name="business_phone" 
+                                                   value="{{ user.business_phone or user.phone }}">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="business_email" class="form-label">Business Email</label>
+                                            <input type="email" class="form-control" id="business_email" name="business_email" 
+                                                   value="{{ user.business_email or user.email }}">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="business_address" class="form-label">Business Address</label>
+                                        <textarea class="form-control" id="business_address" name="business_address" 
+                                                  rows="2">{{ user.business_address or '' }}</textarea>
+                                    </div>
+                                </div>
+
+                                <div class="settings-section">
+                                    <h6 class="text-muted mb-3">Store Preferences</h6>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="currency" class="form-label">Currency</label>
+                                            <select class="form-select" id="currency" name="currency">
+                                                <option value="NGN" selected>Ugandan Shilling (UGX)</option>
+                                                <option value="USD">US Dollar ($)</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="timezone" class="form-label">Timezone</label>
+                                            <select class="form-select" id="timezone" name="timezone">
+                                                <option value="WAT" selected>West Africa Time (WAT)</option>
+                                                <option value="UTC">UTC</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="auto_confirm_orders" name="auto_confirm_orders" checked>
+                                        <label class="form-check-label" for="auto_confirm_orders">
+                                            Automatically confirm new orders
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check form-switch mb-3">
+                                        <input class="form-check-input" type="checkbox" id="low_stock_alerts" name="low_stock_alerts" checked>
+                                        <label class="form-check-label" for="low_stock_alerts">
+                                            Send low stock alerts
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="new_order_notifications" name="new_order_notifications" checked>
+                                        <label class="form-check-label" for="new_order_notifications">
+                                            Notify on new orders
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center mt-4">
+                                    <button type="button" class="btn btn-outline-secondary">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Shipping Settings -->
+                        <div class="settings-card">
+                            <h4 class="mb-4">
+                                <i class="fas fa-shipping-fast me-2"></i>Shipping Settings
+                            </h4>
+                            
+                            <div class="settings-section">
+                                <h6 class="text-muted mb-3">Delivery Options</h6>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="free_shipping" checked>
+                                    <label class="form-check-label" for="free_shipping">
+                                        Offer free shipping
+                                    </label>
+                                </div>
+                                
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="express_shipping">
+                                    <label class="form-check-label" for="express_shipping">
+                                        Express shipping (additional fee)
+                                    </label>
+                                </div>
+                                
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="pickup_option" checked>
+                                    <label class="form-check-label" for="pickup_option">
+                                        Allow store pickup
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="settings-section">
+                                <h6 class="text-muted mb-3">Processing Time</h6>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="processing_time" class="form-label">Order Processing Time</label>
+                                        <select class="form-select" id="processing_time">
+                                            <option value="1">1 business day</option>
+                                            <option value="2" selected>2 business days</option>
+                                            <option value="3">3 business days</option>
+                                            <option value="5">5 business days</option>
+                                            <option value="7">1 week</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end">
+                                <button type="button" class="btn btn-primary">Update Shipping</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <!-- Store Status -->
+                        <div class="settings-card">
+                            <h5 class="mb-3">Store Status</h5>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span>Store Visibility</span>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="store_visibility" checked>
+                                    <label class="form-check-label" for="store_visibility"></label>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span>Accepting Orders</span>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="accept_orders" checked>
+                                    <label class="form-check-label" for="accept_orders"></label>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>Vacation Mode</span>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="vacation_mode">
+                                    <label class="form-check-label" for="vacation_mode"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Subscription Info -->
+                        <div class="settings-card">
+                            <h5 class="mb-3">Subscription</h5>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-muted">Current Plan:</span>
+                                <span class="badge bg-success">{{ user.subscription_tier|title }} Plan</span>
+                            </div>
+                            {% if user.subscription_expiry %}
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-muted">Renews:</span>
+                                <span>{{ user.subscription_expiry.strftime('%b %d, %Y') }}</span>
+                            </div>
+                            {% endif %}
+                            <a href="{{ url_for('seller_subscription') }}" class="btn btn-outline-primary w-100">
+                                Manage Subscription
+                            </a>
+                        </div>
+
+                        <!-- Store Statistics -->
+                        <div class="settings-card">
+                            <h5 class="mb-3">Store Statistics</h5>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-muted">Active Products:</span>
+                                <span class="fw-bold">{{ user.products|selectattr('is_active')|list|length }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-muted">Total Orders:</span>
+                                <span class="fw-bold">{{ analytics_data.total_orders if analytics_data else 0 }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="text-muted">Store Rating:</span>
+                                <span class="fw-bold">{{ "%.1f"|format(analytics_data.store_rating) if analytics_data else 0.0 }}/5.0</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted">Total Revenue:</span>
+                                <span class="fw-bold">₦{{ "{:,.0f}".format(analytics_data.total_revenue) if analytics_data else 0 }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="settings-card">
+                            <h5 class="mb-3">Quick Actions</h5>
+                            <div class="d-grid gap-2">
+                                <a href="{{ url_for('add_product') }}" class="btn btn-outline-primary">
+                                    <i class="fas fa-plus me-2"></i>Add New Product
+                                </a>
+                                <a href="{{ url_for('manage_products') }}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-box me-2"></i>Manage Products
+                                </a>
+                                <a href="{{ url_for('seller_analytics') }}" class="btn btn-outline-secondary">
+                                    <i class="fas fa-chart-bar me-2"></i>View Analytics
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Simple form validation and interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle vacation mode message
+            const vacationMode = document.getElementById('vacation_mode');
+            if (vacationMode) {
+                vacationMode.addEventListener('change', function() {
+                    if (this.checked) {
+                        if (confirm('Enabling vacation mode will pause your store and stop accepting new orders. Continue?')) {
+                            // Enable vacation mode
+                            showAlert('Vacation mode enabled. Your store is now paused.', 'warning');
+                        } else {
+                            this.checked = false;
+                        }
+                    } else {
+                        showAlert('Vacation mode disabled. Your store is now active.', 'success');
+                    }
+                });
+            }
+
+            // Store visibility toggle
+            const storeVisibility = document.getElementById('store_visibility');
+            if (storeVisibility) {
+                storeVisibility.addEventListener('change', function() {
+                    const message = this.checked ? 
+                        'Your store is now visible to customers.' : 
+                        'Your store is now hidden from customers.';
+                    showAlert(message, this.checked ? 'success' : 'warning');
+                });
+            }
+
+            function showAlert(message, type) {
+                // Create alert element
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+                alertDiv.innerHTML = `
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                
+                // Insert after the header
+                const header = document.querySelector('.border-bottom');
+                header.parentNode.insertBefore(alertDiv, header.nextSibling);
+                
+                // Auto remove after 5 seconds
+                setTimeout(() => {
+                    if (alertDiv.parentNode) {
+                        alertDiv.remove();
+                    }
+                }, 5000);
+            }
+
+            // Form submission handling
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    // Simulate form submission
+                    const submitBtn = this.querySelector('button[type="submit"]');
+                    const originalText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving...';
+                    submitBtn.disabled = true;
+                    
+                    setTimeout(() => {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                        showAlert('Settings updated successfully!', 'success');
+                    }, 1500);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

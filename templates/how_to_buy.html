@@ -1,0 +1,899 @@
+{% extends "base.html" %}
+
+{% block title %}How to Buy - ShopMax{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-lg-10 mx-auto text-center">
+            <h1 class="display-4 fw-bold text-primary mb-4">How to Buy on ShopMax</h1>
+            <p class="lead text-muted">Your step-by-step guide to safe and successful shopping</p>
+            <div class="alert alert-info">
+                <i class="fas fa-graduation-cap me-2"></i>
+                New to ShopMax? Follow this guide for the best shopping experience.
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <!-- Quick Navigation -->
+            <div class="card shadow-sm mb-5">
+                <div class="card-body text-center">
+                    <h5 class="card-title mb-3">Quick Navigation</h5>
+                    <div class="d-flex flex-wrap gap-2 justify-content-center">
+                        <a href="#getting-started" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-play-circle me-1"></i>Getting Started
+                        </a>
+                        <a href="#browsing" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-search me-1"></i>Finding Products
+                        </a>
+                        <a href="#ordering" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-shopping-cart me-1"></i>Placing Orders
+                        </a>
+                        <a href="#payment" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-credit-card me-1"></i>Payment
+                        </a>
+                        <a href="#delivery" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-truck me-1"></i>Delivery
+                        </a>
+                        <a href="#after-purchase" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-box-open me-1"></i>After Purchase
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Getting Started -->
+            <section id="getting-started" class="mb-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-primary text-white rounded-circle p-3 me-3">
+                        <i class="fas fa-play-circle fa-2x"></i>
+                    </div>
+                    <div>
+                        <h2 class="h3 text-primary mb-1">Getting Started</h2>
+                        <p class="text-muted">Create your account and get ready to shop</p>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card text-center h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="bg-primary text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <span class="h4 mb-0">1</span>
+                                </div>
+                                <h5>Create Account</h5>
+                                <p class="small text-muted">Sign up as a buyer with your UCU email or Gmail</p>
+                                <a href="{{ url_for('register_buyer') }}" class="btn btn-outline-primary btn-sm">Register Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="bg-primary text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <span class="h4 mb-0">2</span>
+                                </div>
+                                <h5>Verify Email</h5>
+                                <p class="small text-muted">Check your email and click verification link</p>
+                                <div class="text-warning small">
+                                    <i class="fas fa-envelope"></i> Required for security
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center h-100 border-0 shadow-sm">
+                            <div class="card-body">
+                                <div class="bg-primary text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                                    <span class="h4 mb-0">3</span>
+                                </div>
+                                <h5>Complete Profile</h5>
+                                <p class="small text-muted">Add delivery address and contact information</p>
+                                <div class="text-info small">
+                                    <i class="fas fa-map-marker-alt"></i> Essential for delivery
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Account Benefits -->
+                <div class="card mt-4 bg-light border-0">
+                    <div class="card-body">
+                        <h5 class="card-title">🎁 Buyer Account Benefits</h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Access to thousands of products</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Secure payment options</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Order tracking</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Buyer protection</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Wishlist feature</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i>24/7 customer support</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Finding Products -->
+            <section id="browsing" class="mb-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-success text-white rounded-circle p-3 me-3">
+                        <i class="fas fa-search fa-2x"></i>
+                    </div>
+                    <div>
+                        <h2 class="h3 text-primary mb-1">Finding Products</h2>
+                        <p class="text-muted">Discover great deals and products you'll love</p>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-success text-white">
+                                <i class="fas fa-compass me-2"></i>Browse Categories
+                            </div>
+                            <div class="card-body">
+                                <p>Explore our organized product categories:</p>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <ul class="list-unstyled">
+                                            <li class="mb-2"><i class="fas fa-laptop text-primary me-2"></i>Electronics</li>
+                                            <li class="mb-2"><i class="fas fa-tshirt text-primary me-2"></i>Clothing</li>
+                                            <li class="mb-2"><i class="fas fa-book text-primary me-2"></i>Books</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-6">
+                                        <ul class="list-unstyled">
+                                            <li class="mb-2"><i class="fas fa-home text-primary me-2"></i>Home & Living</li>
+                                            <li class="mb-2"><i class="fas fa-basketball-ball text-primary me-2"></i>Sports</li>
+                                            <li class="mb-2"><i class="fas fa-ellipsis-h text-primary me-2"></i>More...</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <a href="{{ url_for('products') }}" class="btn btn-success btn-sm">Browse All Categories</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-info text-white">
+                                <i class="fas fa-search me-2"></i>Search & Filters
+                            </div>
+                            <div class="card-body">
+                                <p>Use our powerful search and filtering tools:</p>
+                                <ul>
+                                    <li class="mb-2"><strong>Keyword Search:</strong> Find specific products</li>
+                                    <li class="mb-2"><strong>Price Range:</strong> Filter by your budget</li>
+                                    <li class="mb-2"><strong>Location:</strong> Find sellers near you</li>
+                                    <li class="mb-2"><strong>Seller Rating:</strong> Shop from trusted sellers</li>
+                                    <li><strong>Condition:</strong> New or used items</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product Evaluation Tips -->
+                <div class="card mt-4 border-warning">
+                    <div class="card-header bg-warning text-dark">
+                        <i class="fas fa-lightbulb me-2"></i>Smart Shopping Tips
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 text-center mb-3">
+                                <i class="fas fa-star fa-2x text-warning mb-2"></i>
+                                <h6>Check Ratings</h6>
+                                <p class="small">Look for sellers with 4+ star ratings and multiple reviews</p>
+                            </div>
+                            <div class="col-md-4 text-center mb-3">
+                                <i class="fas fa-camera fa-2x text-warning mb-2"></i>
+                                <h6>Examine Photos</h6>
+                                <p class="small">Look for clear, multiple photos from different angles</p>
+                            </div>
+                            <div class="col-md-4 text-center mb-3">
+                                <i class="fas fa-comment-alt fa-2x text-warning mb-2"></i>
+                                <h6>Read Descriptions</h6>
+                                <p class="small">Check product details, condition, and specifications</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Placing Orders -->
+            <section id="ordering" class="mb-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-warning text-white rounded-circle p-3 me-3">
+                        <i class="fas fa-shopping-cart fa-2x"></i>
+                    </div>
+                    <div>
+                        <h2 class="h3 text-primary mb-1">Placing Orders</h2>
+                        <p class="text-muted">Add to cart and checkout securely</p>
+                    </div>
+                </div>
+
+                <!-- Order Process Steps -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card border-0">
+                            <div class="card-body">
+                                <div class="steps">
+                                    <div class="step completed">
+                                        <div class="step-number">1</div>
+                                        <div class="step-content">
+                                            <h6>Add to Cart</h6>
+                                            <p class="small mb-0">Click "Add to Cart" on any product page</p>
+                                        </div>
+                                    </div>
+                                    <div class="step completed">
+                                        <div class="step-number">2</div>
+                                        <div class="step-content">
+                                            <h6>Review Cart</h6>
+                                            <p class="small mb-0">Check quantities and total before proceeding</p>
+                                        </div>
+                                    </div>
+                                    <div class="step current">
+                                        <div class="step-number">3</div>
+                                        <div class="step-content">
+                                            <h6>Checkout</h6>
+                                            <p class="small mb-0">Select delivery address and payment method</p>
+                                        </div>
+                                    </div>
+                                    <div class="step">
+                                        <div class="step-number">4</div>
+                                        <div class="step-content">
+                                            <h6>Confirm Order</h6>
+                                            <p class="small mb-0">Review and place your order</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4 g-4">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-primary text-white">
+                                <i class="fas fa-cart-plus me-2"></i>Adding to Cart
+                            </div>
+                            <div class="card-body">
+                                <ul>
+                                    <li class="mb-2">Select desired quantity</li>
+                                    <li class="mb-2">Choose variations (size, color)</li>
+                                    <li class="mb-2">Click "Add to Cart" button</li>
+                                    <li class="mb-2">Continue shopping or proceed to checkout</li>
+                                    <li>Cart saves items for 30 days</li>
+                                </ul>
+                                <div class="alert alert-info small">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    You can add multiple items from different sellers
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-info text-white">
+                                <i class="fas fa-clipboard-check me-2"></i>Order Confirmation
+                            </div>
+                            <div class="card-body">
+                                <p>After placing your order:</p>
+                                <ul>
+                                    <li class="mb-2">You'll receive order confirmation email</li>
+                                    <li class="mb-2">Order appears in "My Orders" section</li>
+                                    <li class="mb-2">Seller is notified to prepare your order</li>
+                                    <li class="mb-2">You can track order status in real-time</li>
+                                    <li>Contact seller directly for order questions</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Payment Methods -->
+            <section id="payment" class="mb-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-danger text-white rounded-circle p-3 me-3">
+                        <i class="fas fa-credit-card fa-2x"></i>
+                    </div>
+                    <div>
+                        <h2 class="h3 text-primary mb-1">Payment Options</h2>
+                        <p class="text-muted">Secure and convenient payment methods</p>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card text-center h-100 border-success">
+                            <div class="card-header bg-success text-white">
+                                <i class="fas fa-mobile-alt me-2"></i>Mobile Money
+                            </div>
+                            <div class="card-body">
+                                <div class="payment-method">
+                                    <img src="https://via.placeholder.com/60x30/00a8ff/ffffff?text=MTN" alt="MTN" class="img-fluid mb-2">
+                                    <img src="https://via.placeholder.com/60x30/ff6b00/ffffff?text=Airtel" alt="Airtel" class="img-fluid mb-3">
+                                </div>
+                                <h6>MTN & Airtel Money</h6>
+                                <p class="small text-muted">Instant, secure mobile payments</p>
+                                <ul class="list-unstyled small text-start">
+                                    <li class="mb-1"><i class="fas fa-check text-success me-1"></i> Instant processing</li>
+                                    <li class="mb-1"><i class="fas fa-check text-success me-1"></i> No extra fees</li>
+                                    <li><i class="fas fa-check text-success me-1"></i> SMS confirmation</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center h-100 border-primary">
+                            <div class="card-header bg-primary text-white">
+                                <i class="fas fa-university me-2"></i>Bank Transfer
+                            </div>
+                            <div class="card-body">
+                                <div class="payment-method">
+                                    <i class="fas fa-university fa-3x text-primary mb-3"></i>
+                                </div>
+                                <h6>Bank Transfer</h6>
+                                <p class="small text-muted">Direct bank-to-bank transfer</p>
+                                <ul class="list-unstyled small text-start">
+                                    <li class="mb-1"><i class="fas fa-check text-success me-1"></i> Secure transfer</li>
+                                    <li class="mb-1"><i class="fas fa-check text-success me-1"></i> All major banks</li>
+                                    <li><i class="fas fa-check text-success me-1"></i> 1-2 day processing</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center h-100 border-info">
+                            <div class="card-header bg-info text-white">
+                                <i class="fas fa-credit-card me-2"></i>Card Payments
+                            </div>
+                            <div class="card-body">
+                                <div class="payment-method">
+                                    <i class="fab fa-cc-visa fa-2x text-primary me-2"></i>
+                                    <i class="fab fa-cc-mastercard fa-2x text-danger me-2"></i>
+                                    <i class="fab fa-cc-amex fa-2x text-info"></i>
+                                </div>
+                                <h6>Credit/Debit Cards</h6>
+                                <p class="small text-muted">Visa, Mastercard, American Express</p>
+                                <ul class="list-unstyled small text-start">
+                                    <li class="mb-1"><i class="fas fa-check text-success me-1"></i> PCI-DSS compliant</li>
+                                    <li class="mb-1"><i class="fas fa-check text-success me-1"></i> Instant processing</li>
+                                    <li><i class="fas fa-check text-success me-1"></i> 3D Secure</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Security -->
+                <div class="card mt-4 bg-light border-0">
+                    <div class="card-body">
+                        <h5 class="card-title">🔒 Payment Security Guarantee</h5>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <p class="mb-3">Your payments are protected with ShopMax's secure payment system:</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul>
+                                            <li class="mb-2"><i class="fas fa-shield-alt text-success me-2"></i>SSL Encryption</li>
+                                            <li class="mb-2"><i class="fas fa-lock text-success me-2"></i>Secure Storage</li>
+                                            <li><i class="fas fa-user-shield text-success me-2"></i>Fraud Protection</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul>
+                                            <li class="mb-2"><i class="fas fa-money-bill-wave text-success me-2"></i>Payment Escrow</li>
+                                            <li class="mb-2"><i class="fas fa-redo text-success me-2"></i>Refund Protection</li>
+                                            <li><i class="fas fa-headset text-success me-2"></i>24/7 Support</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div class="bg-white p-3 rounded border">
+                                    <i class="fas fa-lock fa-3x text-success mb-2"></i>
+                                    <p class="small mb-0">Your financial information is never shared with sellers</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Delivery -->
+            <section id="delivery" class="mb-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-info text-white rounded-circle p-3 me-3">
+                        <i class="fas fa-truck fa-2x"></i>
+                    </div>
+                    <div>
+                        <h2 class="h3 text-primary mb-1">Delivery & Shipping</h2>
+                        <p class="text-muted">Get your orders delivered safely</p>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-info text-white">
+                                <i class="fas fa-map-marker-alt me-2"></i>Delivery Areas
+                            </div>
+                            <div class="card-body">
+                                <h6>🏢 UCU Campus Delivery</h6>
+                                <ul>
+                                    <li class="mb-2"><strong>Free Delivery:</strong> All orders within UCU campus</li>
+                                    <li class="mb-2"><strong>Delivery Time:</strong> 1-2 business days</li>
+                                    <li class="mb-2"><strong>Delivery Hours:</strong> 8:00 AM - 6:00 PM</li>
+                                    <li><strong>Meet-up Points:</strong> Library, Cafeteria, Main Gate</li>
+                                </ul>
+                                
+                                <h6 class="mt-3">📍 Mukono Area</h6>
+                                <ul>
+                                    <li class="mb-2"><strong>Delivery Fee:</strong> UGX 5,000</li>
+                                    <li class="mb-2"><strong>Delivery Time:</strong> 2-3 business days</li>
+                                    <li><strong>Free over:</strong> UGX 50,000</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header bg-warning text-dark">
+                                <i class="fas fa-box-open me-2"></i>Delivery Process
+                            </div>
+                            <div class="card-body">
+                                <div class="delivery-timeline">
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker bg-primary"></div>
+                                        <div class="timeline-content">
+                                            <h6 class="mb-1">Order Confirmed</h6>
+                                            <p class="small mb-0 text-muted">Seller prepares your order</p>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker bg-info"></div>
+                                        <div class="timeline-content">
+                                            <h6 class="mb-1">Ready for Pickup</h6>
+                                            <p class="small mb-0 text-muted">Assigned to delivery partner</p>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker bg-warning"></div>
+                                        <div class="timeline-content">
+                                            <h6 class="mb-1">Out for Delivery</h6>
+                                            <p class="small mb-0 text-muted">On the way to you</p>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="timeline-marker bg-success"></div>
+                                        <div class="timeline-content">
+                                            <h6 class="mb-1">Delivered</h6>
+                                            <p class="small mb-0 text-muted">Order received successfully</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tracking Your Order -->
+                <div class="card mt-4 border-primary">
+                    <div class="card-header bg-primary text-white">
+                        <i class="fas fa-map-marked-alt me-2"></i>Tracking Your Order
+                    </div>
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h6>Real-time Order Tracking</h6>
+                                <p>Track your order every step of the way:</p>
+                                <ul>
+                                    <li class="mb-2">Receive SMS/email notifications</li>
+                                    <li class="mb-2">View delivery partner details</li>
+                                    <li class="mb-2">Track on interactive map</li>
+                                    <li>Estimated delivery time updates</li>
+                                </ul>
+                                <a href="{{ url_for('user_orders') }}" class="btn btn-primary">Track My Orders</a>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <i class="fas fa-shipping-fast fa-4x text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- After Purchase -->
+            <section id="after-purchase" class="mb-5">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="bg-secondary text-white rounded-circle p-3 me-3">
+                        <i class="fas fa-box-open fa-2x"></i>
+                    </div>
+                    <div>
+                        <h2 class="h3 text-primary mb-1">After Purchase</h2>
+                        <p class="text-muted">What happens after you receive your order</p>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card text-center h-100">
+                            <div class="card-body">
+                                <i class="fas fa-clipboard-check fa-2x text-success mb-3"></i>
+                                <h5>Confirm Delivery</h5>
+                                <p class="small">Mark your order as received and confirm everything is correct</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center h-100">
+                            <div class="card-body">
+                                <i class="fas fa-star fa-2x text-warning mb-3"></i>
+                                <h5>Leave Review</h5>
+                                <p class="small">Share your experience to help other buyers</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card text-center h-100">
+                            <div class="card-body">
+                                <i class="fas fa-redo fa-2x text-info mb-3"></i>
+                                <h5>Returns & Support</h5>
+                                <p class="small">Contact support if you need help with returns or issues</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Return Policy -->
+                <div class="card mt-4 border-info">
+                    <div class="card-header bg-info text-white">
+                        <i class="fas fa-exchange-alt me-2"></i>Return & Refund Policy
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>✅ Eligible for Return</h6>
+                                <ul class="small">
+                                    <li class="mb-2">Wrong item received</li>
+                                    <li class="mb-2">Item not as described</li>
+                                    <li class="mb-2">Damaged during shipping</li>
+                                    <li>Defective products</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>❌ Not Eligible for Return</h6>
+                                <ul class="small">
+                                    <li class="mb-2">Change of mind</li>
+                                    <li class="mb-2">Items used or damaged by buyer</li>
+                                    <li class="mb-2">Perishable goods</li>
+                                    <li>Personalized items</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="alert alert-warning mt-3">
+                            <i class="fas fa-clock me-2"></i>
+                            <strong>Return Window:</strong> 7 days from delivery date
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ Section -->
+            <section class="mb-5">
+                <h2 class="h3 text-primary mb-4 text-center">Frequently Asked Questions</h2>
+                <div class="accordion" id="buyingFAQ">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                How long does delivery take?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#buyingFAQ">
+                            <div class="accordion-body">
+                                Delivery within UCU campus takes 1-2 business days. For Mukono area, it takes 2-3 business days. You'll receive real-time tracking updates.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                What if I receive a damaged item?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#buyingFAQ">
+                            <div class="accordion-body">
+                                Contact the seller immediately and take photos of the damage. If the seller doesn't respond within 24 hours, contact our support team for assistance.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                Can I cancel my order?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#buyingFAQ">
+                            <div class="accordion-body">
+                                You can cancel your order within 1 hour of placing it, as long as the seller hasn't confirmed it yet. After confirmation, contact the seller directly.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                                Is my payment information safe?
+                            </button>
+                        </h2>
+                        <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#buyingFAQ">
+                            <div class="accordion-body">
+                                Yes! We use industry-standard SSL encryption and never store your full payment details. All transactions are processed through secure payment gateways.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Call to Action -->
+            <section class="text-center p-5 bg-primary text-white rounded">
+                <h3 class="mb-3">Ready to Start Shopping?</h3>
+                <p class="lead mb-4">Join thousands of UCU students who shop safely and conveniently on ShopMax</p>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    <a href="{{ url_for('products') }}" class="btn btn-light btn-lg">
+                        <i class="fas fa-shopping-bag me-2"></i>Start Shopping
+                    </a>
+                    <a href="{{ url_for('register_buyer') }}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-user-plus me-2"></i>Create Account
+                    </a>
+                </div>
+            </section>
+
+            <!-- Support Section -->
+            <div class="text-center mt-4">
+                <p class="text-muted">Need help? Our support team is here for you</p>
+                <a href="{{ url_for('contact_us') }}" class="btn btn-outline-primary me-2">
+                    <i class="fas fa-envelope me-2"></i>Contact Support
+                </a>
+                <a href="{{ url_for('help_center') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-life-ring me-2"></i>Visit Help Center
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+section {
+    scroll-margin-top: 100px;
+}
+
+.card {
+    border-radius: 12px;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+/* Steps Timeline */
+.steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+.steps::before {
+    content: '';
+    position: absolute;
+    top: 30px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: #e9ecef;
+    z-index: 1;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+    flex: 1;
+}
+
+.step-number {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #6c757d;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.step.completed .step-number {
+    background: var(--success);
+}
+
+.step.current .step-number {
+    background: var(--primary);
+    animation: pulse 2s infinite;
+}
+
+.step-content {
+    text-align: center;
+    max-width: 150px;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Delivery Timeline */
+.delivery-timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+.timeline-marker {
+    position: absolute;
+    left: -30px;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 3px solid white;
+}
+
+.timeline-content {
+    margin-left: 0;
+}
+
+/* Accordion Styles */
+.accordion-button:not(.collapsed) {
+    background-color: var(--primary);
+    color: white;
+}
+
+.accordion-button:focus {
+    box-shadow: 0 0 0 0.25rem rgba(255, 107, 0, 0.25);
+    border-color: var(--primary);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+
+    // Add active class to navigation buttons when section is in view
+    const sections = document.querySelectorAll('section');
+    const navButtons = document.querySelectorAll('.btn-outline-primary');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                navButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.getAttribute('href') === `#${id}`) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+        });
+    }, {
+        threshold: 0.5,
+        rootMargin: '-100px 0px -100px 0px'
+    });
+
+    sections.forEach(section => {
+        observer.observe(section);
+    });
+
+    // Animate step progression
+    const steps = document.querySelectorAll('.step');
+    let currentStep = 0;
+    
+    function animateSteps() {
+        steps.forEach((step, index) => {
+            if (index <= currentStep) {
+                step.classList.add('completed');
+                step.classList.remove('current');
+            } else if (index === currentStep + 1) {
+                step.classList.add('current');
+                step.classList.remove('completed');
+            } else {
+                step.classList.remove('completed', 'current');
+            }
+        });
+        
+        currentStep = (currentStep + 1) % steps.length;
+    }
+    
+    // Animate steps every 3 seconds
+    setInterval(animateSteps, 3000);
+
+    // Print guide functionality
+    const printButton = document.createElement('button');
+    printButton.innerHTML = '<i class="fas fa-print me-2"></i>Print Guide';
+    printButton.className = 'btn btn-outline-secondary position-fixed';
+    printButton.style.bottom = '20px';
+    printButton.style.right = '20px';
+    printButton.style.zIndex = '1000';
+    
+    printButton.addEventListener('click', function() {
+        window.print();
+    });
+    
+    document.body.appendChild(printButton);
+});
+
+// Print styles
+</script>
+
+<style media="print">
+.btn, .position-fixed, .alert, .steps::before {
+    display: none !important;
+}
+
+.card {
+    break-inside: avoid;
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+}
+
+section {
+    break-after: page;
+}
+
+h1, h2, h3, h4, h5 {
+    color: #000 !important;
+}
+
+.step-number {
+    background: #000 !important;
+    color: white !important;
+}
+</style>
+{% endblock %}

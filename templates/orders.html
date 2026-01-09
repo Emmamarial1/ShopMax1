@@ -1,0 +1,731 @@
+{% extends "base.html" %}
+
+{% block title %}My Orders - ShopMax{% endblock %}
+
+{% block content %}
+<div class="orders-page">
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>📦 My Orders</h1>
+        <p>Track and manage your purchases</p>
+    </div>
+
+    <!-- Orders Filter -->
+    <div class="orders-filter">
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">All Orders</button>
+            <button class="filter-tab" data-filter="pending">Pending</button>
+            <button class="filter-tab" data-filter="confirmed">Confirmed</button>
+            <button class="filter-tab" data-filter="processing">Processing</button>
+            <button class="filter-tab" data-filter="in_transit">In Transit</button>
+            <button class="filter-tab" data-filter="delivered">Delivered</button>
+            <button class="filter-tab" data-filter="completed">Completed</button>
+        </div>
+        <div class="search-box">
+            <input type="text" placeholder="Search orders..." class="search-input">
+            <button class="search-btn">🔍</button>
+        </div>
+    </div>
+
+    <!-- Orders Stats - Real Data -->
+    <div class="orders-stats">
+        <div class="stat-card">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-info">
+                <h3>{{ orders|selectattr("status", "in", ["pending", "confirmed", "processing"])|list|length }}</h3>
+                <p>Active Orders</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🚚</div>
+            <div class="stat-info">
+                <h3>{{ orders|selectattr("status", "equalto", "in_transit")|list|length }}</h3>
+                <p>In Transit</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-info">
+                <h3>{{ orders|selectattr("status", "in", ["delivered", "completed"])|list|length }}</h3>
+                <p>Delivered</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-info">
+                <h3>₦{{ "{:,.0f}".format(orders|sum(attribute='total_amount')) }}</h3>
+                <p>Total Spent</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Orders List - Real Data -->
+    {% if orders %}
+    <div class="orders-list">
+        {% for order in orders %}
+        <div class="order-card" data-status="{{ order.status }}">
+            <div class="order-header">
+                <div class="order-meta">
+                    <h3>Order #{{ order.id }}</h3>
+                    <span class="order-date">Placed on {{ order.created_at.strftime('%B %d, %Y at %I:%M %p') }}</span>
+                </div>
+                <div class="order-status {{ order.status }}">
+                    {% if order.status == 'pending' %}⏳{% endif %}
+                    {% if order.status == 'confirmed' %}✅{% endif %}
+                    {% if order.status == 'processing' %}🔄{% endif %}
+                    {% if order.status == 'picked_up' %}📦{% endif %}
+                    {% if order.status == 'in_transit' %}🚚{% endif %}
+                    {% if order.status == 'delivered' %}📬{% endif %}
+                    {% if order.status == 'completed' %}🎉{% endif %}
+                    {{ order.status|replace('_', ' ')|title }}
+                </div>
+            </div>
+
+            <div class="order-items">
+                {% for item in order.order_items %}
+                <div class="order-item">
+                    {% if item.product.image %}
+                        <img src="{{ url_for('static', filename='uploads/' + item.product.image) }}" alt="{{ item.product.name }}" class="item-image">
+                    {% else %}
+                        <div class="item-image placeholder">📦</div>
+                    {% endif %}
+                    <div class="item-details">
+                        <h4>{{ item.product.name }}</h4>
+                        <p>Quantity: {{ item.quantity }} • ₦{{ "{:,.0f}".format(item.price) }}</p>
+                        <p class="seller">Seller: {{ item.seller.business_name or item.seller.fullname }}</p>
+                    </div>
+                    <div class="item-total">
+                        ₦{{ "{:,.0f}".format(item.quantity * item.price) }}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="order-footer">
+                <div class="order-total">
+                    <strong>Total: ₦{{ "{:,.0f}".format(order.total_amount) }}</strong>
+                </div>
+                <div class="order-actions">
+                    {% if order.status in ['processing', 'picked_up', 'in_transit'] %}
+                        <a href="{{ url_for('order_details', order_id=order.id) }}" class="action-btn track-btn">📱 Track Order</a>
+                    {% elif order.status == 'delivered' and not order.delivery_confirmation %}
+                        <button class="action-btn confirm-btn" onclick="confirmDelivery({{ order.id }})">✅ Confirm Delivery</button>
+                    {% elif order.status == 'completed' %}
+                        <button class="action-btn review-btn" onclick="writeReview({{ order.id }})">⭐ Write Review</button>
+                    {% elif order.status == 'pending' %}
+                        <button class="action-btn cancel-btn" onclick="cancelOrder({{ order.id }})">❌ Cancel Order</button>
+                    {% endif %}
+                    <a href="{{ url_for('order_details', order_id=order.id) }}" class="action-btn view-btn">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="empty-orders">
+        <div class="empty-icon">📦</div>
+        <h3>No Orders Yet</h3>
+        <p>You haven't placed any orders. Start shopping to see your orders here!</p>
+        <!-- FIXED: Changed from all_products to products -->
+       <a href="{{ url_for('products') }}" class="shop-btn">Start Shopping</a>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.orders-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.page-header h1 {
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.page-header p {
+    color: #7f8c8d;
+    font-size: 1.1rem;
+}
+
+/* Orders Filter */
+.orders-filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.filter-tab {
+    padding: 8px 16px;
+    border: 2px solid #e9ecef;
+    background: white;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.filter-tab.active,
+.filter-tab:hover {
+    background: #3498db;
+    color: white;
+    border-color: #3498db;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.search-input {
+    padding: 8px 12px;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    width: 200px;
+}
+
+.search-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* Orders Stats */
+.orders-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+}
+
+.stat-info h3 {
+    color: #2c3e50;
+    margin: 0;
+    font-size: 1.8rem;
+}
+
+.stat-info p {
+    color: #7f8c8d;
+    margin: 0;
+}
+
+/* Orders List */
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.order-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.order-card:hover {
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    transform: translateY(-2px);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e9ecef;
+    background: #f8f9fa;
+}
+
+.order-meta h3 {
+    color: #2c3e50;
+    margin: 0 0 0.5rem 0;
+}
+
+.order-date {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+.order-status {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.order-status.pending {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.order-status.confirmed {
+    background: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+.order-status.processing {
+    background: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+.order-status.picked_up {
+    background: #e8f4fd;
+    color: #0c5460;
+    border: 1px solid #b6e0fe;
+}
+
+.order-status.in_transit {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.order-status.delivered {
+    background: #d1f7e9;
+    color: #0d5c3e;
+    border: 1px solid #b8f0db;
+}
+
+.order-status.completed {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.order-items {
+    padding: 1.5rem;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #f8f9fa;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.item-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.item-image.placeholder {
+    font-size: 1.5rem;
+    color: #6c757d;
+}
+
+.item-details {
+    flex: 1;
+}
+
+.item-details h4 {
+    color: #2c3e50;
+    margin: 0 0 0.3rem 0;
+}
+
+.item-details p {
+    color: #7f8c8d;
+    margin: 0.2rem 0;
+    font-size: 0.9rem;
+}
+
+.seller {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.item-total {
+    font-weight: bold;
+    color: #2c3e50;
+    min-width: 80px;
+    text-align: right;
+}
+
+.order-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+.order-total {
+    color: #2c3e50;
+    font-size: 1.1rem;
+}
+
+.order-actions {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.action-btn {
+    padding: 8px 16px;
+    border: 1px solid #3498db;
+    background: white;
+    color: #3498db;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.action-btn:hover {
+    background: #3498db;
+    color: white;
+}
+
+.track-btn {
+    background: #27ae60;
+    color: white;
+    border-color: #27ae60;
+}
+
+.track-btn:hover {
+    background: #219a52;
+}
+
+.confirm-btn {
+    background: #27ae60;
+    color: white;
+    border-color: #27ae60;
+}
+
+.confirm-btn:hover {
+    background: #219a52;
+}
+
+.review-btn {
+    background: #f39c12;
+    color: white;
+    border-color: #f39c12;
+}
+
+.review-btn:hover {
+    background: #e67e22;
+}
+
+.cancel-btn {
+    background: #e74c3c;
+    color: white;
+    border-color: #e74c3c;
+}
+
+.cancel-btn:hover {
+    background: #c0392b;
+}
+
+/* Empty State */
+.empty-orders {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.empty-orders h3 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.empty-orders p {
+    color: #7f8c8d;
+    margin-bottom: 2rem;
+}
+
+.shop-btn {
+    background: #3498db;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.shop-btn:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .orders-page {
+        padding: 1rem;
+    }
+    
+    .orders-filter {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+    
+    .filter-tabs {
+        justify-content: center;
+    }
+    
+    .search-box {
+        width: 100%;
+    }
+    
+    .search-input {
+        flex: 1;
+    }
+    
+    .order-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .order-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+    
+    .order-actions {
+        justify-content: center;
+    }
+    
+    .order-item {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+    }
+    
+    .item-total {
+        text-align: left;
+        margin-top: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .orders-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .filter-tabs {
+        gap: 0.3rem;
+    }
+    
+    .filter-tab {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .order-actions {
+        flex-direction: column;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Filter functionality
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const orderCards = document.querySelectorAll('.order-card');
+    
+    filterTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            const filter = this.getAttribute('data-filter');
+            
+            // Update active tab
+            filterTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Filter orders
+            orderCards.forEach(card => {
+                if (filter === 'all') {
+                    card.style.display = 'block';
+                } else {
+                    const status = card.getAttribute('data-status');
+                    if (status === filter) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                }
+            });
+        });
+    });
+    
+    // Search functionality
+    const searchInput = document.querySelector('.search-input');
+    const searchBtn = document.querySelector('.search-btn');
+    
+    function performSearch() {
+        const query = searchInput.value.toLowerCase();
+        
+        orderCards.forEach(card => {
+            const orderNumber = card.querySelector('h3').textContent.toLowerCase();
+            const items = card.querySelectorAll('.item-details h4');
+            let found = false;
+            
+            if (orderNumber.includes(query)) {
+                found = true;
+            } else {
+                items.forEach(item => {
+                    if (item.textContent.toLowerCase().includes(query)) {
+                        found = true;
+                    }
+                });
+            }
+            
+            card.style.display = found ? 'block' : 'none';
+        });
+    }
+    
+    searchBtn.addEventListener('click', performSearch);
+    searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            performSearch();
+        }
+    });
+});
+
+// Delivery confirmation function
+async function confirmDelivery(orderId) {
+    if (!confirm('Please confirm that:\n\n1. All items are correct\n2. Items are in good condition\n3. You received everything\n\nClick OK to confirm delivery.')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch('/api/delivery/confirm', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                order_id: orderId,
+                items_correct: true,
+                condition_good: true,
+                received_complete: true,
+                buyer_notes: 'Order received successfully. Thank you!'
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert('✅ Delivery confirmed successfully! Thank you for your purchase.');
+            window.location.reload();
+        } else {
+            alert('❌ ' + data.message);
+        }
+    } catch (error) {
+        console.error('Error confirming delivery:', error);
+        alert('❌ Error confirming delivery. Please try again.');
+    }
+}
+
+// Cancel order function
+async function cancelOrder(orderId) {
+    if (!confirm('Are you sure you want to cancel this order? This action cannot be undone.')) {
+        return;
+    }
+    
+    try {
+        // You'll need to implement this endpoint in your backend
+        const response = await fetch('/api/order/cancel', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                order_id: orderId
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert('✅ Order cancelled successfully.');
+            window.location.reload();
+        } else {
+            alert('❌ ' + data.message);
+        }
+    } catch (error) {
+        console.error('Error cancelling order:', error);
+        alert('❌ Error cancelling order. Please try again.');
+    }
+}
+
+// Write review function
+function writeReview(orderId) {
+    // This would open a review modal or redirect to review page
+    alert('Review feature coming soon! You will be able to review products from order #' + orderId);
+    // window.location.href = '/review/' + orderId;
+}
+</script>
+{% endblock %}
