@@ -39,6 +39,41 @@ with app.app_context():
     # You can also call your existing initialize_database() function here if needed
     # initialize_database()
 
+
+@app.route('/debug-db')
+def debug_database():
+    """Debug route to check database status"""
+    import os
+    from sqlalchemy import inspect
+    
+    output = []
+    
+    # Check if database file exists
+    db_path = 'instance/shopmax.db'  # Flask's default SQLite location
+    output.append(f"Database file exists: {os.path.exists(db_path)}")
+    if os.path.exists(db_path):
+        output.append(f"Database file size: {os.path.getsize(db_path)} bytes")
+    
+    # Check which tables exist
+    inspector = inspect(db.engine)
+    existing_tables = inspector.get_table_names()
+    output.append(f"Existing tables: {existing_tables}")
+    
+    # Try to create tables
+    try:
+        db.create_all()
+        output.append("db.create_all() ran successfully")
+        
+        # Check tables again
+        inspector = inspect(db.engine)
+        existing_tables = inspector.get_table_names()
+        output.append(f"Tables after create_all: {existing_tables}")
+    except Exception as e:
+        output.append(f"ERROR in db.create_all(): {str(e)}")
+    
+    return "<br>".join(output)
+
+
 @app.route('/')
 def home():
     return "Welcome to ShopMax - Home page is loading..."
@@ -4835,6 +4870,7 @@ if __name__ == '__main__':
 
 
     
+
 
 
 
