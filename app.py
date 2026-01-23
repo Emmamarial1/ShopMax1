@@ -44,10 +44,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your-secret-key'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///shopmax.db'  # <-- MUST BE SET HERE
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# ... any other config ...
-
-db = SQLAlchemy(app)  # <-- db is created AFTER config is set
-migrate = Migrate(app, db)
+# ... any other config ...)
 
 # Add to your app configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -4875,6 +4872,7 @@ if __name__ == '__main__':
 
 
     
+
 
 
 
