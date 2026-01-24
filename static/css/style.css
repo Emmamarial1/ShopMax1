@@ -1276,3 +1276,123 @@ h1, h2, h3, h4, h5, h6 {
 .action-buttons {
     display: flex;
     gap: 0.5rem;
+
+
+
+
+
+    <style>
+.ucu-badge {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.contact-method {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.contact-method:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+}
+
+.contact-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.contact-details {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.response-time .time-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.response-time .time-item:last-child {
+    border-bottom: none;
+}
+
+.department-contacts li {
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.department-contacts li:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.campus-map {
+    background: #f8f9fa;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.map-placeholder {
+    width: 100%;
+}
+
+.social-link {
+    transition: transform 0.3s ease;
+}
+
+.social-link:hover {
+    transform: scale(1.2);
+}
+
+.ucu-logo {
+    background: white;
+    border-radius: 8px;
+    border: 2px solid #003366;
+}
+
+/* Form styling */
+.form-label {
+    font-weight: 600;
+    color: #495057;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .contact-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 1.25rem;
+    }
+    
+    .display-4 {
+        font-size: 2rem;
+    }
+    
+    .btn-lg {
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+</style>
+
+
